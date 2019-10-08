@@ -270,5 +270,15 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1839666579, guid: 502cef8e59113d74bbc2b13b077071b4, type: 3}
+      propertyPath: stick_threshold
+      value: 0.3
+      objectReference: {fileID: 0}
+    - target: {fileID: 893678861556139314, guid: 502cef8e59113d74bbc2b13b077071b4,
+        type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: -3350423642672096694, guid: 5173e0a1e7a31e94b90b71fa647e8ac4,
+        type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 502cef8e59113d74bbc2b13b077071b4, type: 3}
