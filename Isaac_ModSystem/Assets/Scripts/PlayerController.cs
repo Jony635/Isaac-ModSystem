@@ -80,7 +80,9 @@ public class PlayerController : MonoBehaviour
             if(move.magnitude < stick_threshold)
             {
                 bodyCtrl.SetBool("walking_horizontal", false);
-                bodyCtrl.SetBool("walking_vertical", false);
+
+                bodyCtrl.SetBool("walking_upwards", false);
+                bodyCtrl.SetBool("walking_downwards", false);
             }
             else
             {
@@ -88,9 +90,11 @@ public class PlayerController : MonoBehaviour
                 {
                     //Move horizontal
                     bodyCtrl.SetBool("walking_horizontal", true);
-                    bodyCtrl.SetBool("walking_vertical", false);
 
-                    if(move.x >= 0)
+                    bodyCtrl.SetBool("walking_upwards", false);
+                    bodyCtrl.SetBool("walking_downwards", false);
+
+                    if (move.x >= 0)
                     {
                         body.transform.localScale = new Vector3(1, 1, 1);
                     }
@@ -103,7 +107,9 @@ public class PlayerController : MonoBehaviour
                 {
                     //Move vertical
                     bodyCtrl.SetBool("walking_horizontal", false);
-                    bodyCtrl.SetBool("walking_vertical", true);
+
+                    bodyCtrl.SetBool("walking_upwards", move.y > 0 ? true : false);
+                    bodyCtrl.SetBool("walking_downwards", move.y > 0 ? false : true);                                   
                 }
 
                 //Apply actual movement

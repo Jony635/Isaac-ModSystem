@@ -78,6 +78,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   head: {fileID: 8041023832312522774}
   body: {fileID: 8478349289276028977}
+  stick_threshold: 0.3
 --- !u!1 &8041023832312522774
 GameObject:
   m_ObjectHideFlags: 0
@@ -148,7 +149,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 1
-  m_Sprite: {fileID: 8774462386627379733, guid: 5173e0a1e7a31e94b90b71fa647e8ac4,
+  m_Sprite: {fileID: -3350423642672096694, guid: 5173e0a1e7a31e94b90b71fa647e8ac4,
     type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
