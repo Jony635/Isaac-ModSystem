@@ -15,8 +15,12 @@ public class PlayerController : MonoBehaviour
     private Gamepad gamepad;
     public float stick_threshold = 0.1f;
 
+    public static PlayerController Instance = null;
+
     private void Awake()
     {
+        Instance = this;
+
         if(head != null)
         {
             headCtrl = head.GetComponent<Animator>();
@@ -119,5 +123,12 @@ public class PlayerController : MonoBehaviour
 
             #endregion
         }
+    }
+
+    public void OnShootEvent()
+    {
+        //Shoot tears logic.
+
+        Debug.Log("Shooting");
     }
 }
