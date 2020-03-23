@@ -17,6 +17,10 @@ public class PlayerController : MonoBehaviour
 
     public static PlayerController Instance = null;
 
+    public Transform[] tearPositions;
+    public GameObject tearPrefab;
+    public float tearImpulse = 15f;
+
     private void Awake()
     {
         Instance = this;
@@ -127,8 +131,37 @@ public class PlayerController : MonoBehaviour
 
     public void OnShootEvent()
     {
-        //Shoot tears logic.
+        Vector2 direction = Vector2.zero;
+        int index = -1;
 
-        Debug.Log("Shooting");
+        AnimatorStateInfo info = headCtrl.GetCurrentAnimatorStateInfo(0);
+
+        if(info.IsName("Isaac_Shoot_Front"))
+        {
+            Debug.Log("Shooting Bottom");
+            direction = new Vector2(0, -1);
+            index = 2;
+        }
+        if (info.IsName("Isaac_Shoot_Right"))
+        {
+            Debug.Log("Shooting Right");
+            direction = new Vector2(1, 0);
+            index = 1;
+        }
+        if (info.IsName("Isaac_Shoot_Left"))
+        {
+            Debug.Log("Shooting Left");
+            direction = new Vector2(-1, 0);
+            index = 0;
+        }
+        if (info.IsName("Isaac_Shoot_Back"))
+        {
+            Debug.Log("Shooting Up");
+            direction = new Vector2(0, 1);
+            index = 3;
+        }
+
+        GameObject tear = Instantiate(tearPrefab, tearPositions[index]);
+        tear.GetComponent<Rigidbody2D>().AddForce(direction * tearImpulse, ForceMode2D.Impulse);
     }
 }

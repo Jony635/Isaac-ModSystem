@@ -1,0 +1,487 @@
+fileFormatVersion: 2
+guid: 24aa0ec73521fa941b1c964f7485e30a
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: -6994444019082490677
+    second: Tears_0
+  - first:
+      213: -6903074341894718169
+    second: Tears_1
+  - first:
+      213: -3250114073089126326
+    second: Tears_2
+  - first:
+      213: 8847170909814735712
+    second: Tears_3
+  - first:
+      213: -7565444546833144198
+    second: Tears_4
+  - first:
+      213: 5619204334954691152
+    second: Tears_5
+  - first:
+      213: -6061442819326021872
+    second: Tears_6
+  - first:
+      213: -7570797196759925391
+    second: Tears_7
+  - first:
+      213: -4106389411223890233
+    second: Tears_8
+  - first:
+      213: -4083112227546798895
+    second: Tears_9
+  - first:
+      213: -4966307636296568845
+    second: Tears_10
+  - first:
+      213: -4289092949205151841
+    second: Tears_11
+  - first:
+      213: 6829724563026429206
+    second: Tears_12
+  - first:
+      213: -6108474448045764275
+    second: Tears_13
+  - first:
+      213: -657681045275886110
+    second: Tears_14
+  - first:
+      213: -8069338703108170954
+    second: Tears_15
+  externalObjects: {}
+  serializedVersion: 10
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: -1
+    mipBias: -100
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 40
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  platformSettings:
+  - serializedVersion: 3
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: Tears_0
+      rect:
+        serializedVersion: 2
+        x: 25
+        y: 218
+        width: 15
+        height: 15
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b3accbb1377438547a669f3d454d777f
+      internalID: -6994444019082490677
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Tears_1
+      rect:
+        serializedVersion: 2
+        x: 89
+        y: 218
+        width: 15
+        height: 15
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2d988adb57f542f4d96b724e2ed870fe
+      internalID: -6903074341894718169
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Tears_2
+      rect:
+        serializedVersion: 2
+        x: 152
+        y: 213
+        width: 20
+        height: 24
+      alignment: 9
+      pivot: {x: 0.4709755, y: 0.53628224}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e6faf5f1e2ec8d6429558a298c274f83
+      internalID: -3250114073089126326
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Tears_3
+      rect:
+        serializedVersion: 2
+        x: 214
+        y: 210
+        width: 25
+        height: 32
+      alignment: 9
+      pivot: {x: 0.43034118, y: 0.50000095}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b267c86f488378f40afbe0b7bbe493d3
+      internalID: 8847170909814735712
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Tears_4
+      rect:
+        serializedVersion: 2
+        x: 17
+        y: 127
+        width: 37
+        height: 60
+      alignment: 9
+      pivot: {x: 0.44508794, y: 0.5822378}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7e984d04cfb58a844815d18cf603feea
+      internalID: -7565444546833144198
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Tears_5
+      rect:
+        serializedVersion: 2
+        x: 76
+        y: 137
+        width: 49
+        height: 53
+      alignment: 9
+      pivot: {x: 0.44076553, y: 0.4616656}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4107b23e5ec5e9a428a6edf8777d3417
+      internalID: 5619204334954691152
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Tears_6
+      rect:
+        serializedVersion: 2
+        x: 138
+        y: 134
+        width: 54
+        height: 58
+      alignment: 9
+      pivot: {x: 0.4408753, y: 0.5350305}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 517d31b37caf53a45acf35c3bac4b9f5
+      internalID: -6061442819326021872
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Tears_7
+      rect:
+        serializedVersion: 2
+        x: 200
+        y: 130
+        width: 56
+        height: 62
+      alignment: 9
+      pivot: {x: 0.49481747, y: 0.5514962}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f32ca4df959f35c42b66dddee9db7da8
+      internalID: -7570797196759925391
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Tears_8
+      rect:
+        serializedVersion: 2
+        x: 18
+        y: 88
+        width: 35
+        height: 28
+      alignment: 9
+      pivot: {x: 0.49170718, y: 0.5414649}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 38232770a5985e94fac68baaa1712bcb
+      internalID: -4106389411223890233
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Tears_9
+      rect:
+        serializedVersion: 2
+        x: 80
+        y: 92
+        width: 42
+        height: 27
+      alignment: 9
+      pivot: {x: 0.5414643, y: 0.4140009}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 700cc94e86390a04e8e08981d9f27ab9
+      internalID: -4083112227546798895
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Tears_10
+      rect:
+        serializedVersion: 2
+        x: 148
+        y: 87
+        width: 54
+        height: 29
+      alignment: 9
+      pivot: {x: 0.36025068, y: 0.50000054}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d0406d11b1daa60488f4d110f3671a98
+      internalID: -4966307636296568845
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Tears_11
+      rect:
+        serializedVersion: 2
+        x: 218
+        y: 83
+        width: 27
+        height: 32
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ba5638a6228649641a779defd1f6b43b
+      internalID: -4289092949205151841
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Tears_12
+      rect:
+        serializedVersion: 2
+        x: 7
+        y: 30
+        width: 57
+        height: 51
+      alignment: 9
+      pivot: {x: 0.5865656, y: 0.0674716}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f3cddb7bfb63edf46a77f974d1d2e29b
+      internalID: 6829724563026429206
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Tears_13
+      rect:
+        serializedVersion: 2
+        x: 95
+        y: 26
+        width: 16
+        height: 14
+      alignment: 9
+      pivot: {x: 0.59929657, y: 0.44298744}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8a850d5bc2ea82240b853ddc4a9d1832
+      internalID: -6108474448045764275
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Tears_14
+      rect:
+        serializedVersion: 2
+        x: 154
+        y: 19
+        width: 29
+        height: 24
+      alignment: 9
+      pivot: {x: 0.4699749, y: 0.46371922}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 61ed9dc028c73ec49925632a17d8a16e
+      internalID: -657681045275886110
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Tears_15
+      rect:
+        serializedVersion: 2
+        x: 201
+        y: 28
+        width: 14
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 646f07c891500f847b3e2feadc277db2
+      internalID: -8069338703108170954
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    physicsShape: []
+    bones: []
+    spriteID: 5e97eb03825dee720800000000000000
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+  spritePackingTag: 
+  pSDRemoveMatte: 0
+  pSDShowRemoveMatteOption: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
