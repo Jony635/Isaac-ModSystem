@@ -21,6 +21,14 @@ public class PlayerController : MonoBehaviour
     public GameObject tearPrefab;
     public float tearImpulse = 15f;
 
+    public float moveSpeed = 30f;
+
+    public GameObject tearsContainer;
+
+    private Rigidbody2D rb;
+
+    private Vector2 move = Vector2.zero;
+
     private void Awake()
     {
         Instance = this;
@@ -34,6 +42,8 @@ public class PlayerController : MonoBehaviour
         {
             bodyCtrl = body.GetComponent<Animator>();
         }
+
+        rb = GetComponent<Rigidbody2D>();
     }
 
     // Update is called once per frame
@@ -84,7 +94,7 @@ public class PlayerController : MonoBehaviour
             #endregion
 
             #region MOVEMENT
-            Vector2 move = gamepad.leftStick.ReadValue();
+            move = gamepad.leftStick.ReadValue();
             if(move.magnitude < stick_threshold)
             {
                 bodyCtrl.SetBool("walking_horizontal", false);
@@ -119,14 +129,18 @@ public class PlayerController : MonoBehaviour
                     bodyCtrl.SetBool("walking_upwards", move.y > 0 ? true : false);
                     bodyCtrl.SetBool("walking_downwards", move.y > 0 ? false : true);                                   
                 }
-
-                //Apply actual movement
+                
+                //Movement is being applied on FixedUpdate
             }
-
-
 
             #endregion
         }
+    }
+
+    private void FixedUpdate()
+    {
+        //Apply actual movement
+        rb.MovePosition((Vector2)(transform.position) + (move * moveSpeed * Time.fixedDeltaTime));
     }
 
     public void OnShootEvent()
@@ -163,5 +177,6 @@ public class PlayerController : MonoBehaviour
 
         GameObject tear = Instantiate(tearPrefab, tearPositions[index]);
         tear.GetComponent<Rigidbody2D>().AddForce(direction * tearImpulse, ForceMode2D.Impulse);
+        tear.transform.SetParent(tearsContainer.transform);
     }
 }
