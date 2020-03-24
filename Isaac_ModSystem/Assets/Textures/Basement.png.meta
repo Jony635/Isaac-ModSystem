@@ -5,6 +5,18 @@ TextureImporter:
   - first:
       213: 5400464714378161237
     second: BasementClean
+  - first:
+      213: -4604641305038858611
+    second: BasementWorm
+  - first:
+      213: 8550505556435040874
+    second: BasementDecoration
+  - first:
+      213: -7909113336684485356
+    second: BasementCorner
+  - first:
+      213: 3444358558833088091
+    second: BasementBlood
   externalObjects: {}
   serializedVersion: 10
   mipmaps:
@@ -97,7 +109,7 @@ TextureImporter:
         width: 234
         height: 156
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -105,6 +117,90 @@ TextureImporter:
       bones: []
       spriteID: 5d4b31e07d23a584db9c20ce294fc626
       internalID: 5400464714378161237
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BasementWorm
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 156
+        width: 234
+        height: 156
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5b263d4f84dad1149a6392761a569ce3
+      internalID: -4604641305038858611
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BasementDecoration
+      rect:
+        serializedVersion: 2
+        x: 234
+        y: 312
+        width: 234
+        height: 156
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a7c486ea333404e4eaabd94127fb62fe
+      internalID: 8550505556435040874
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BasementCorner
+      rect:
+        serializedVersion: 2
+        x: 468
+        y: 417
+        width: 52
+        height: 51
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c4e69ff1a8d366040b1550001fa9f14f
+      internalID: -7909113336684485356
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BasementBlood
+      rect:
+        serializedVersion: 2
+        x: 234
+        y: 156
+        width: 234
+        height: 156
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1a780f12f12bfe447b265e6b3c3a8580
+      internalID: 3444358558833088091
       vertices: []
       indices: 
       edges: []
