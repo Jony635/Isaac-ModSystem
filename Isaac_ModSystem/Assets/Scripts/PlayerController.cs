@@ -152,25 +152,25 @@ public class PlayerController : MonoBehaviour
 
         if(info.IsName("Isaac_Shoot_Front"))
         {
-            Debug.Log("Shooting Bottom");
+            //Debug.Log("Shooting Bottom");
             direction = new Vector2(0, -1);
             index = 2;
         }
         if (info.IsName("Isaac_Shoot_Right"))
         {
-            Debug.Log("Shooting Right");
+            //Debug.Log("Shooting Right");
             direction = new Vector2(1, 0);
             index = 1;
         }
         if (info.IsName("Isaac_Shoot_Left"))
         {
-            Debug.Log("Shooting Left");
+            //Debug.Log("Shooting Left");
             direction = new Vector2(-1, 0);
             index = 0;
         }
         if (info.IsName("Isaac_Shoot_Back"))
         {
-            Debug.Log("Shooting Up");
+            //Debug.Log("Shooting Up");
             direction = new Vector2(0, 1);
             index = 3;
         }

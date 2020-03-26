@@ -33,4 +33,14 @@ public class TearController : MonoBehaviour
     {
         Destroy(gameObject);
     }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if(collision.CompareTag("Wall"))
+        {
+            rb.isKinematic = true;
+            rb.velocity = Vector2.zero;
+            animator.SetTrigger("Destroy");
+        }
+    }
 }
