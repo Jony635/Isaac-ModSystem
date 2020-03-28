@@ -20,6 +20,7 @@ public class PlayerController : MonoBehaviour
     public Transform[] tearPositions;
     public GameObject tearPrefab;
     public float tearImpulse = 15f;
+    public float tearMaxInertia = 0.4f;
 
     public float moveSpeed = 30f;
 
@@ -175,8 +176,27 @@ public class PlayerController : MonoBehaviour
             index = 3;
         }
 
+        Vector2 inertia = Vector2.zero;
+
+        if (Mathf.Abs(direction.y) > 0) //If shooting vertical
+        {
+            if (Mathf.Abs(move.x) > stick_threshold) //If moving horizontal
+            {
+                //Apply inertia
+                inertia.x = move.x * tearMaxInertia;
+            }        
+        }  
+        else if (Mathf.Abs(direction.x) > 0) //If shooting horizontal
+        {
+            if (Mathf.Abs(move.y) > stick_threshold) //If moving vertical
+            {
+                //Apply inertia
+                inertia.y = move.y * tearMaxInertia;
+            }           
+        }
+       
         GameObject tear = Instantiate(tearPrefab, tearPositions[index]);
-        tear.GetComponent<Rigidbody2D>().AddForce(direction * tearImpulse, ForceMode2D.Impulse);
+        tear.GetComponent<Rigidbody2D>().AddForce(direction * tearImpulse + inertia * moveSpeed, ForceMode2D.Impulse);
         tear.transform.SetParent(tearsContainer.transform);
     }
 }
