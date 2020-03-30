@@ -144,6 +144,11 @@ public class PlayerController : MonoBehaviour
         rb.MovePosition((Vector2)(transform.position) + (move * moveSpeed * Time.fixedDeltaTime));
     }
 
+    private void OnTriggerEnter2D(Collider2D collider)
+    {
+        Debug.Log("I collided with a door!");
+    }
+
     public void OnShootEvent()
     {
         Vector2 direction = Vector2.zero;
