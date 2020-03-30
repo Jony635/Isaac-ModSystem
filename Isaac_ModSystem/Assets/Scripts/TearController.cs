@@ -36,7 +36,7 @@ public class TearController : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (!collision.CompareTag("PlayerTear"))
+        if (!collision.CompareTag("PlayerTear") && !collision.CompareTag("Player"))
         {
             rb.isKinematic = true;
             rb.velocity = Vector2.zero;
