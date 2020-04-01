@@ -14,12 +14,17 @@ public class Room : MonoBehaviour
             if(Keyboard.current.digit1Key.isPressed)
             {
                 foreach (Door door in doors)
+                {
                     door.LockDoor();
+                }
             }
+
             if(Keyboard.current.digit2Key.isPressed)
             {
                 foreach (Door door in doors)
+                {
                     door.UnLockDoor();
+                }
             }
         }
     }

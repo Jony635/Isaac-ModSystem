@@ -291,6 +291,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   lockedSprite: {fileID: 1610268671}
+  doorLocation: 0
+  thisRoom: {fileID: 5753106078741565313}
+  connectedDoor: {fileID: 0}
 --- !u!1 &1546905089
 GameObject:
   m_ObjectHideFlags: 0
@@ -364,7 +367,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1610268672
 Transform:
   m_ObjectHideFlags: 0
@@ -585,7 +588,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &8174908566524531857
 Transform:
   m_ObjectHideFlags: 0
@@ -644,7 +647,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &4838493420758223511
 Transform:
   m_ObjectHideFlags: 0
@@ -1303,7 +1306,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &274952582241803082
 Transform:
   m_ObjectHideFlags: 0
@@ -1496,6 +1499,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   lockedSprite: {fileID: 733552406916932733}
+  doorLocation: 3
+  thisRoom: {fileID: 5753106078741565313}
+  connectedDoor: {fileID: 0}
 --- !u!1 &4659095872305710944
 GameObject:
   m_ObjectHideFlags: 0
@@ -1512,7 +1518,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &2996662100519511777
 Transform:
   m_ObjectHideFlags: 0
@@ -1603,6 +1609,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   lockedSprite: {fileID: 4659095872305710944}
+  doorLocation: 1
+  thisRoom: {fileID: 5753106078741565313}
+  connectedDoor: {fileID: 0}
 --- !u!1 &5247265070139857107
 GameObject:
   m_ObjectHideFlags: 0
@@ -1743,7 +1752,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5753106077943362403}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 3.9, y: -2.69, z: 0}
+  m_LocalPosition: {x: 3.9, y: -2.63, z: 0}
   m_LocalScale: {x: -1, y: -1, z: 1}
   m_Children: []
   m_Father: {fileID: 2957939820203134695}
@@ -1824,7 +1833,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5753106078021087138}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -3.899, y: 2.47, z: 0}
+  m_LocalPosition: {x: -3.82, y: 2.5, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 2957939820203134695}
@@ -1905,7 +1914,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5753106078047939222}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 3.9, y: 2.47, z: 0}
+  m_LocalPosition: {x: 3.9, y: 2.5, z: 0}
   m_LocalScale: {x: -1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 2957939820203134695}
@@ -1986,7 +1995,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5753106078827790440}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -3.9, y: -2.69, z: 0}
+  m_LocalPosition: {x: -3.82, y: -2.63, z: 0}
   m_LocalScale: {x: 1, y: -1, z: 1}
   m_Children: []
   m_Father: {fileID: 2957939820203134695}
@@ -2061,7 +2070,7 @@ GameObject:
   - component: {fileID: 7230108358802824068}
   - component: {fileID: 5753106078741565313}
   m_Layer: 0
-  m_Name: Basement
+  m_Name: Basement Room
   m_TagString: Wall
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2660,3 +2669,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   lockedSprite: {fileID: 594624846174328910}
+  doorLocation: 2
+  thisRoom: {fileID: 5753106078741565313}
+  connectedDoor: {fileID: 0}

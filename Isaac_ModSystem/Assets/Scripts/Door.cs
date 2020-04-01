@@ -2,9 +2,20 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum DoorPosition { TOP, BOTTOM, LEFT, RIGHT };
+
 public class Door : MonoBehaviour
 {
     public GameObject lockedSprite;
+    public DoorPosition doorLocation;
+
+    public Room thisRoom;
+    public Door connectedDoor = null;
+
+    public void Awake()
+    {
+        thisRoom = GetComponentInParent<Room>();
+    }
 
     public void LockDoor()
     {
@@ -15,5 +26,4 @@ public class Door : MonoBehaviour
     {
         lockedSprite.SetActive(false);
     }
-
 }

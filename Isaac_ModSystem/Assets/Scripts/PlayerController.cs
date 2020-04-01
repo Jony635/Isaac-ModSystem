@@ -6,16 +6,16 @@ using UnityEngine.InputSystem;
 
 public class PlayerController : MonoBehaviour
 {
+    public static PlayerController Instance = null;
+ 
     public GameObject head;
     public GameObject body;
 
-    private Animator headCtrl;
-    private Animator bodyCtrl;
+    public Animator headCtrl;
+    public Animator bodyCtrl;
 
     private Gamepad gamepad;
     public float stick_threshold = 0.1f;
-
-    public static PlayerController Instance = null;
 
     public Transform[] tearPositions;
     public GameObject tearPrefab;
@@ -146,7 +146,8 @@ public class PlayerController : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collider)
     {
-        Debug.Log("I collided with a door!");
+        Door door = collider.GetComponentInParent<Door>();
+        RoomManager.Instance.DoorTrespassed(door);
     }
 
     public void OnShootEvent()
@@ -203,5 +204,24 @@ public class PlayerController : MonoBehaviour
         GameObject tear = Instantiate(tearPrefab, tearPositions[index]);
         tear.GetComponent<Rigidbody2D>().AddForce(direction * tearImpulse + inertia * moveSpeed, ForceMode2D.Impulse);
         tear.transform.SetParent(tearsContainer.transform);
+    }
+
+    public void ResetHeadAnimator()
+    {
+        headCtrl.SetBool("shootRight", false);
+        headCtrl.SetBool("shootLeft", false);
+        headCtrl.SetBool("shootDown", false);
+        headCtrl.SetBool("shootUp", false);
+        headCtrl.SetBool("facingRight", false);
+        headCtrl.SetBool("facingLeft", false);
+        headCtrl.SetBool("facingDown", false);
+        headCtrl.SetBool("facingUp", false);
+    }
+
+    public void ResetBodyAnimator()
+    {
+        bodyCtrl.SetBool("walking_upwards", false);
+        bodyCtrl.SetBool("walking_downwards", false);
+        bodyCtrl.SetBool("walking_horizontal", false);
     }
 }
