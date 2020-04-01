@@ -154,7 +154,7 @@ MonoBehaviour:
   roomsContainer: {fileID: 134514541}
   currentRoom: {fileID: 0}
   initialRoom: {fileID: 5753106078741565312}
-  rooms: []
+  amountRooms: 6
 --- !u!4 &77994073
 Transform:
   m_ObjectHideFlags: 0
@@ -403,11 +403,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Basement Room
-      objectReference: {fileID: 0}
-    - target: {fileID: 5753106079403700728, guid: be029015e1c0b484c95166d98057b746,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5753106079403700727, guid: be029015e1c0b484c95166d98057b746,
         type: 3}
