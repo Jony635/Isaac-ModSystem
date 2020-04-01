@@ -15,7 +15,7 @@ public class Room : MonoBehaviour
             {
                 foreach (Door door in doors)
                 {
-                    door.LockDoor();
+                    //door.LockDoor();
                 }
             }
 
@@ -23,7 +23,7 @@ public class Room : MonoBehaviour
             {
                 foreach (Door door in doors)
                 {
-                    door.UnLockDoor();
+                    //door.UnLockDoor();
                 }
             }
         }

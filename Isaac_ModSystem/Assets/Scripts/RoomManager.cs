@@ -52,8 +52,6 @@ public class RoomManager : MonoBehaviour
                         if (door.connectedDoor != null)
                             continue;
 
-                        generatedRooms++;
-
                         Vector3 newRoomPosition = Vector3.zero;
 
                         switch (door.doorLocation)
@@ -82,8 +80,14 @@ public class RoomManager : MonoBehaviour
                             default:
                                 break;
                         }
+
+                        if (Physics2D.OverlapCircle(newRoomPosition, 1, LayerMask.GetMask("RoomIndicator")) != null)                       
+                            continue;                     
+
+                        generatedRooms++;
                      
                         GameObject newRoom = Instantiate(roomPrefab, newRoomPosition, Quaternion.identity, roomsContainer.transform);
+                        newRoom.SetActive(false);
 
                         rooms.Add(newRoom.GetComponent<Room>());
                         storedRooms++;
@@ -128,7 +132,6 @@ public class RoomManager : MonoBehaviour
                     }               
                 }
             }
-
         }
     }
 
@@ -163,7 +166,7 @@ public class RoomManager : MonoBehaviour
                 break;
         }
 
-        //door.connectedDoor.thisRoom.gameObject.SetActive(true);
+        door.connectedDoor.thisRoom.gameObject.SetActive(true);
 
         PlayerController.Instance.enabled = false;
 
@@ -173,7 +176,7 @@ public class RoomManager : MonoBehaviour
         //Camera.main.transform.position = new Vector3(newRoomPosition.x, newRoomPosition.y, -1);
         StartCoroutine(CameraTranslation(mainCamera, new Vector3(door.connectedDoor.thisRoom.transform.position.x, door.connectedDoor.thisRoom.transform.position.y, -1), 0.1f, () =>
         {
-            //door.thisRoom.gameObject.SetActive(false);
+            door.thisRoom.gameObject.SetActive(false);
             PlayerController.Instance.enabled = true;
         }));
 
@@ -182,13 +185,19 @@ public class RoomManager : MonoBehaviour
 
     private IEnumerator CameraTranslation(Camera camera, Vector3 desiredPosition, float time, Action callback)
     {
-        Vector3 currentVelocity = Vector3.zero;
+        Vector3 initialPosition = camera.transform.position;
+        float timePassed = 0f;
 
-        while (camera.transform.position != desiredPosition)
+        while(camera.transform.position != desiredPosition)
         {
-            camera.transform.position = Vector3.SmoothDamp(camera.transform.position, desiredPosition, ref currentVelocity, time);      
-            yield return null;
+            camera.transform.position = Vector3.Lerp(initialPosition, desiredPosition, timePassed / time);
+            
+            if(camera.transform.position != desiredPosition)
+                yield return null;
+
+            timePassed += Time.deltaTime;
         }
+
         callback.Invoke();
     }  
 }
