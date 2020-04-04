@@ -6,12 +6,30 @@ using UnityEngine.InputSystem;
 
 public class PlayerController : MonoBehaviour
 {
+    [System.Serializable]
+    public struct Stats
+    {
+        public float damage;
+        public float speed;
+        public float hp;
+        public float maxHp;
+
+        public Stats(string useless)
+        {
+            damage = 3f;
+            speed = 30f;
+            maxHp = hp = 10f;
+        }
+    }
+
     public static PlayerController Instance = null;
  
     public GameObject head;
     public GameObject body;
 
+    [HideInInspector]
     public Animator headCtrl;
+    [HideInInspector]
     public Animator bodyCtrl;
 
     private Gamepad gamepad;
@@ -29,6 +47,12 @@ public class PlayerController : MonoBehaviour
     private Rigidbody2D rb;
 
     private Vector2 move = Vector2.zero;
+
+    [Header("Character Stats")]
+    [SerializeField]
+    private Stats _stats;
+
+    public Stats stats { get { return _stats; } }
 
     private void Awake()
     {
