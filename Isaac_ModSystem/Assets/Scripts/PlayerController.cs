@@ -40,19 +40,18 @@ public class PlayerController : MonoBehaviour
     public float tearImpulse = 15f;
     public float tearMaxInertia = 0.4f;
 
-    public float moveSpeed = 30f;
-
     public GameObject tearsContainer;
+
+    public SpriteRenderer pickedItemRenderer;
 
     private Rigidbody2D rb;
 
     private Vector2 move = Vector2.zero;
 
-    [Header("Character Stats")]
-    [SerializeField]
-    private Stats _stats;
+    private bool detectPickUp = true;
 
-    public Stats stats { get { return _stats; } }
+    [Header("Character Stats")]
+    public Stats stats;
 
     private void Awake()
     {
@@ -165,7 +164,7 @@ public class PlayerController : MonoBehaviour
     private void FixedUpdate()
     {
         //Apply actual movement
-        rb.MovePosition((Vector2)(transform.position) + (move * moveSpeed * Time.fixedDeltaTime));
+        rb.MovePosition((Vector2)(transform.position) + (move * stats.speed * Time.fixedDeltaTime));
     }
 
     private void OnTriggerEnter2D(Collider2D collider)
@@ -178,7 +177,20 @@ public class PlayerController : MonoBehaviour
     {
         if (collision.gameObject.layer == LayerMask.NameToLayer("ItemAltar"))
         {
-            Debug.Log("Im colliding with an altar");
+            ItemAltar altar = collision.gameObject.GetComponent<ItemAltar>();
+            
+            if (detectPickUp && altar.holdedItem != null)
+            {
+                detectPickUp = false;
+
+                head.SetActive(false);
+                bodyCtrl.SetTrigger("ItemPickup");
+
+                pickedItemRenderer.sprite = altar.ItemHolderRenderer.sprite;
+
+                ItemManager.Instance.EquipItem(altar.holdedItem);
+                altar.ChangeHoldedItem(null);
+            }
         }
     }
 
@@ -234,7 +246,7 @@ public class PlayerController : MonoBehaviour
         }
        
         GameObject tear = Instantiate(tearPrefab, tearPositions[index]);
-        tear.GetComponent<Rigidbody2D>().AddForce(direction * tearImpulse + inertia * moveSpeed, ForceMode2D.Impulse);
+        tear.GetComponent<Rigidbody2D>().AddForce(direction * tearImpulse + inertia * stats.speed, ForceMode2D.Impulse);
         tear.transform.SetParent(tearsContainer.transform);
     }
 
@@ -248,6 +260,7 @@ public class PlayerController : MonoBehaviour
         headCtrl.SetBool("facingLeft", false);
         headCtrl.SetBool("facingDown", false);
         headCtrl.SetBool("facingUp", false);
+        head.SetActive(true);
     }
 
     public void ResetBodyAnimator()
@@ -255,5 +268,16 @@ public class PlayerController : MonoBehaviour
         bodyCtrl.SetBool("walking_upwards", false);
         bodyCtrl.SetBool("walking_downwards", false);
         bodyCtrl.SetBool("walking_horizontal", false);
+        body.SetActive(true);
+    }
+
+    public void ResetAnimators()
+    {
+        ResetHeadAnimator();
+        ResetBodyAnimator();
+
+        detectPickUp = true;
+
+        pickedItemRenderer.sprite = null;
     }
 }

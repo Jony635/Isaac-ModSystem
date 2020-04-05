@@ -51,4 +51,13 @@ public class ItemManager : MonoBehaviour
             }
         }
     }
+
+    public void EquipItem(Item item)
+    {
+        if(item.transform.parent == availableItems.transform)
+        {
+            item.transform.SetParent(equippedItems.transform);
+            item.OnItemEquipped();
+        }        
+    }
 }

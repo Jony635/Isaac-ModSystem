@@ -24,4 +24,10 @@ public class ItemAltar : MonoBehaviour
 
         ItemHolderRenderer.sprite = (Sprite)AssetDatabase.LoadAssetAtPath<Sprite>(holdedItem.pickUpSprite);
     }
+
+    public void ChangeHoldedItem(Item item)
+    {
+        holdedItem = item;
+        ItemHolderRenderer.sprite = holdedItem != null ? (Sprite)AssetDatabase.LoadAssetAtPath<Sprite>(holdedItem.pickUpSprite) : null;
+    }
 }
