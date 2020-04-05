@@ -15,6 +15,13 @@ public class ItemAltar : MonoBehaviour
     private void Awake()
     {
         holdedItem = ItemManager.Instance.GetRandomAvailableItem();
+
+        if(holdedItem == null)
+        {
+            gameObject.SetActive(false);
+            return;
+        }
+
         ItemHolderRenderer.sprite = (Sprite)AssetDatabase.LoadAssetAtPath<Sprite>(holdedItem.pickUpSprite);
     }
 }

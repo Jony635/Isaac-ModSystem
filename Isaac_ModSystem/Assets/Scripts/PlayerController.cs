@@ -174,6 +174,14 @@ public class PlayerController : MonoBehaviour
         RoomManager.Instance.DoorTrespassed(door);
     }
 
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.layer == LayerMask.NameToLayer("ItemAltar"))
+        {
+            Debug.Log("Im colliding with an altar");
+        }
+    }
+
     public void OnShootEvent()
     {
         Vector2 direction = Vector2.zero;

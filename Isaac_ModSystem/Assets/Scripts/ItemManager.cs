@@ -21,7 +21,18 @@ public class ItemManager : MonoBehaviour
 
     public Item GetRandomAvailableItem()
     {
-        return availableItems.transform.GetChild(UnityEngine.Random.Range(0, availableItems.transform.childCount)).GetComponent<Item>();
+        if (availableItems.transform.childCount <= 0)
+            return null;
+
+        int random = UnityEngine.Random.Range(0, availableItems.transform.childCount);
+        Item ret = availableItems.transform.GetChild(random).GetComponent<Item>();
+        if(ret.gameObject.activeSelf)
+        {
+            ret.gameObject.SetActive(false);
+            return ret;
+        }
+        
+        return null;
     }
 
     private void InstantiateAllAvailableItems()
