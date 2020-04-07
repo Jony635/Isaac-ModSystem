@@ -51,7 +51,7 @@ public class PlayerController : MonoBehaviour
     private bool detectPickUp = true;
 
     [Header("Character Stats")]
-    public Stats stats;
+    public Stats stats = new Stats("");
 
     private void Awake()
     {
