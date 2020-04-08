@@ -123,6 +123,7 @@ GameObject:
   - component: {fileID: 744459539}
   - component: {fileID: 744459541}
   - component: {fileID: 744459540}
+  - component: {fileID: 2540587324918419214}
   - component: {fileID: 744459542}
   m_Layer: 0
   m_Name: Squirt
@@ -130,7 +131,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &744459539
 Transform:
   m_ObjectHideFlags: 0
@@ -214,6 +215,22 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!70 &2540587324918419214
+CapsuleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 744459538}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: -0.009586396, y: 0.49496365}
+  m_Size: {x: 1.2954401, y: 0.86211}
+  m_Direction: 1
 --- !u!114 &744459542
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -226,6 +243,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3097f09be8988a246837dc1a05a8ddab, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  currentRoom: {fileID: 5753106078741565313}
 --- !u!1 &774469894
 GameObject:
   m_ObjectHideFlags: 0
@@ -2517,6 +2535,7 @@ MonoBehaviour:
   - {fileID: 971582693}
   - {fileID: 1904726613}
   itemAltar: {fileID: 4035073482119301282}
+  monsters: {fileID: 53674915}
 --- !u!1 &6229531942143940899
 GameObject:
   m_ObjectHideFlags: 0

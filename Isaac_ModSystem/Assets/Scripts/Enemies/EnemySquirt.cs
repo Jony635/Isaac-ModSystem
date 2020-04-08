@@ -4,6 +4,10 @@ using UnityEngine;
 
 public class EnemySquirt : Enemy
 {
+    public Room currentRoom;
+
+    private bool attacked = false;
+
     public EnemySquirt()
     {
         enemyStats.damage = 3;
@@ -11,14 +15,32 @@ public class EnemySquirt : Enemy
         enemyStats.runSpeed = 30f * 2;
     }
 
+    private void Awake()
+    {
+        
+    }
+
     // Update is called once per frame
     void Update()
     {
-        //Monster logic
+        #region LOOK AT PLAYER
+        if (PlayerController.Instance.transform.position.x < transform.position.x)
+        {
+            transform.localScale = new Vector3(-1, 1, 1);
+        }
+        else
+        {
+            transform.localScale = new Vector3(1, 1, 1);
+        }
+        #endregion
+
+
     }
 
     protected override void Die()
     {
         //TODO: Animations, delete/disable gameObjects, play FX, etc.
     }
+
+
 }
