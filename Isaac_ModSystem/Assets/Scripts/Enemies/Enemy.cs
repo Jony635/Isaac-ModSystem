@@ -26,10 +26,20 @@ public abstract class Enemy : MonoBehaviour
     protected EnemyStats enemyStats = new EnemyStats("");
 
     protected Animator animator;
+    protected Rigidbody2D rb;
 
     protected virtual void Awake()
     {
         animator = GetComponent<Animator>();
+        rb = GetComponent<Rigidbody2D>();
+    }
+
+    protected virtual void OnTriggerEnter2D(Collider2D collider)
+    {
+        if(LayerMask.LayerToName(collider.gameObject.layer) == "PlayerTear")
+        {
+            TakeDamage(PlayerController.Instance.stats.damage);
+        }
     }
 
     public void TakeDamage(float damage)

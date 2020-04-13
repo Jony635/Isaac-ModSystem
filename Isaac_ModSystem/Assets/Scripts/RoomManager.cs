@@ -178,9 +178,10 @@ public class RoomManager : MonoBehaviour
         {
             door.thisRoom.gameObject.SetActive(false);
             PlayerController.Instance.enabled = true;
-        }));
+            currentRoom = door.connectedDoor.thisRoom;
 
-        currentRoom = door.connectedDoor.thisRoom;
+            currentRoom.GetComponent<Room>().SetUpRoom();
+        }));       
     }
 
     private IEnumerator CameraTranslation(Camera camera, Vector3 desiredPosition, float time, Action callback)

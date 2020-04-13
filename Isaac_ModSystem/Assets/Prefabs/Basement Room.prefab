@@ -123,9 +123,10 @@ GameObject:
   - component: {fileID: 744459539}
   - component: {fileID: 744459541}
   - component: {fileID: 744459540}
+  - component: {fileID: 140268748928389056}
   - component: {fileID: 2540587324918419214}
   - component: {fileID: 744459542}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: Squirt
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -181,9 +182,9 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingLayerID: 1946052535
+  m_SortingLayer: 1
+  m_SortingOrder: -1
   m_Sprite: {fileID: -3720062237099110549, guid: e2ec4278dfcf0144b96bbead1f5c5491,
     type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -215,6 +216,27 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!50 &140268748928389056
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 744459538}
+  m_BodyType: 0
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 0
+  m_Material: {fileID: 0}
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 1
+  m_Constraints: 4
 --- !u!70 &2540587324918419214
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
@@ -467,7 +489,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1546905090}
   - component: {fileID: 1546905091}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: Trigger
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -944,7 +966,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1159416265485097802}
   - component: {fileID: 3011238005812178665}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: Trigger
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1406,7 +1428,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1793656875001908050}
   - component: {fileID: 2130205253448042781}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: Trigger
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2536,6 +2558,7 @@ MonoBehaviour:
   - {fileID: 1904726613}
   itemAltar: {fileID: 4035073482119301282}
   monsters: {fileID: 53674915}
+  alreadyDefeated: 0
 --- !u!1 &6229531942143940899
 GameObject:
   m_ObjectHideFlags: 0
@@ -2627,7 +2650,7 @@ GameObject:
   m_Component:
   - component: {fileID: 308994020815158151}
   - component: {fileID: 1446011200641575938}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: Trigger
   m_TagString: Untagged
   m_Icon: {fileID: 0}

@@ -6,18 +6,23 @@ public class EnemySquirt : Enemy
 {
     public Room currentRoom;
 
-    private bool attacked = false;
+    private float attackTimer = 0.0f;
+    private bool attacking = false;
+    private bool attackFinished = true;
 
     public EnemySquirt()
     {
         enemyStats.damage = 3;
         enemyStats.hp = enemyStats.maxHP = 10;
-        enemyStats.runSpeed = 30f * 2;
+        enemyStats.runSpeed = 1f;
+        enemyStats.attackSpeed = 1 / 2f;
+
+        attackTimer = 1 / enemyStats.attackSpeed;
     }
 
     private void Awake()
     {
-        
+        base.Awake();
     }
 
     // Update is called once per frame
@@ -34,13 +39,57 @@ public class EnemySquirt : Enemy
         }
         #endregion
 
+        #region ATTACK
+        if (attackFinished)
+        {
+            attackTimer -= Time.deltaTime;
 
+            if (attackTimer <= 0f)
+            {
+                attackFinished = false;
+                StartCoroutine(AttackCoroutine());
+            }            
+        }
+        #endregion
+    }
+
+    IEnumerator AttackCoroutine()
+    {        
+        animator.SetTrigger("Attack");
+        Vector3 target = PlayerController.Instance.transform.position;
+        Vector3 direction = Vector3.Normalize(target - transform.position);
+
+        while(!attacking)
+        {
+            yield return null;
+        }
+
+        while(attacking)
+        {
+            rb.MovePosition(transform.position + direction * 0.5f);
+
+            yield return null;
+        }    
+
+        attackTimer = 1 / enemyStats.attackSpeed;
     }
 
     protected override void Die()
     {
         //TODO: Animations, delete/disable gameObjects, play FX, etc.
+        gameObject.SetActive(false);
+        currentRoom.OnMonsterDied();
     }
 
+    public void AttackMovementStarted()
+    {
+        attacking = true;
+    }
 
+    public void AttackMovementFinished()
+    {
+        attacking = false;
+        attackFinished = true;
+        rb.velocity = Vector2.zero;
+    }
 }
