@@ -13,9 +13,9 @@ public class EnemySquirt : Enemy
     public EnemySquirt()
     {
         enemyStats.damage = 3;
-        enemyStats.hp = enemyStats.maxHP = 10;
+        enemyStats.hp = enemyStats.maxHP = 20;
         enemyStats.runSpeed = 1f;
-        enemyStats.attackSpeed = 1 / 2f;
+        enemyStats.attackSpeed = 3f;
 
         attackTimer = 1 / enemyStats.attackSpeed;
     }
@@ -48,6 +48,7 @@ public class EnemySquirt : Enemy
             {
                 attackFinished = false;
                 StartCoroutine(AttackCoroutine());
+                attackTimer = 1 / enemyStats.attackSpeed;
             }            
         }
         #endregion
@@ -56,7 +57,7 @@ public class EnemySquirt : Enemy
     IEnumerator AttackCoroutine()
     {        
         animator.SetTrigger("Attack");
-        Vector3 target = PlayerController.Instance.transform.position;
+        Vector3 target = PlayerController.Instance.body.transform.position;
         Vector3 direction = Vector3.Normalize(target - transform.position);
 
         while(!attacking)
@@ -70,8 +71,6 @@ public class EnemySquirt : Enemy
 
             yield return null;
         }    
-
-        attackTimer = 1 / enemyStats.attackSpeed;
     }
 
     protected override void Die()
