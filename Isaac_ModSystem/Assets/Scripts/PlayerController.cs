@@ -16,9 +16,9 @@ public class PlayerController : MonoBehaviour
 
         public Stats(string useless)
         {
-            damage = 3f;
-            speed = 30f;
-            maxHp = hp = 10f;
+            damage = 5f;
+            speed = 7f;
+            maxHp = hp = 6f;
         }
     }
 
@@ -192,6 +192,31 @@ public class PlayerController : MonoBehaviour
                 altar.ChangeHoldedItem(null);
             }
         }
+        else if(collision.gameObject.layer == LayerMask.NameToLayer("Monster") || collision.gameObject.layer == LayerMask.NameToLayer("EnemyAttack"))
+        {
+            Enemy enemy = collision.gameObject.GetComponent<Enemy>();
+            if(enemy != null)
+            {
+                TakeDamage(enemy.enemyStats.damage);
+            }
+        }
+    }
+
+    public void TakeDamage(float damage)
+    {
+        stats.hp -= damage;
+
+        if(stats.hp <= 0)
+        {
+            Die();
+        }
+
+        HeartsManager.Instance.OnCharacterHealthChanged();
+    }
+
+    private void Die()
+    {
+
     }
 
     public void OnShootEvent()

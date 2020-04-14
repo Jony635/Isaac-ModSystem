@@ -12,7 +12,7 @@ public class EnemySquirt : Enemy
 
     public EnemySquirt()
     {
-        enemyStats.damage = 3;
+        enemyStats.damage = 1f;
         enemyStats.hp = enemyStats.maxHP = 20;
         enemyStats.runSpeed = 1f;
         enemyStats.attackSpeed = 3f;

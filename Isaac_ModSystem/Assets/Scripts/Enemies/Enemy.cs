@@ -15,15 +15,15 @@ public abstract class Enemy : MonoBehaviour
 
         public EnemyStats(string useless)
         {
-            maxHP = hp = 10f;
-            damage = 3f;
+            maxHP = hp = 2f;
+            damage = 0.5f;
             speed = 30f;
             runSpeed = speed * 1.5f;
             attackSpeed = 1f;
         }
     };
 
-    protected EnemyStats enemyStats = new EnemyStats("");
+    public EnemyStats enemyStats = new EnemyStats("");
 
     protected Animator animator;
     protected Rigidbody2D rb;
