@@ -335,8 +335,8 @@ MonoBehaviour:
   stats:
     damage: 5
     speed: 7
-    hp: 10
-    maxHp: 10
+    hp: 6
+    maxHp: 6
 --- !u!1 &8041023832312522774
 GameObject:
   m_ObjectHideFlags: 0

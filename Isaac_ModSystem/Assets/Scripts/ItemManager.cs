@@ -43,7 +43,7 @@ public class ItemManager : MonoBehaviour
             {
                 if (type != typeof(ActiveItem) && type != typeof(PassiveItem))
                 {
-                    GameObject newGO = Instantiate(new GameObject());
+                    GameObject newGO = new GameObject();
                     newGO.name = type.ToString();
                     newGO.transform.SetParent(availableItems.transform);
                     newGO.AddComponent(type);

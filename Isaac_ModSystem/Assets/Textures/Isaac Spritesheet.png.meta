@@ -538,13 +538,13 @@ TextureImporter:
     second: PC Computer - The Binding of Isaac Rebirth - Isaac_182
   - first:
       213: -1464196203046543222
-    second: PC Computer - The Binding of Isaac Rebirth - Isaac_183
+    second: Hurt1
   - first:
       213: 8459469881342876292
-    second: PC Computer - The Binding of Isaac Rebirth - Isaac_184
+    second: Hurt2
   - first:
       213: -626704472427820742
-    second: PC Computer - The Binding of Isaac Rebirth - Isaac_185
+    second: Death
   - first:
       213: 5431354450886697743
     second: PC Computer - The Binding of Isaac Rebirth - Isaac_186
@@ -4469,15 +4469,15 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: PC Computer - The Binding of Isaac Rebirth - Isaac_183
+      name: Hurt1
       rect:
         serializedVersion: 2
         x: 10
         y: 627
         width: 28
         height: 33
-      alignment: 7
-      pivot: {x: 0.5, y: 0}
+      alignment: 9
+      pivot: {x: 0.49589655, y: 0.1803071}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -4490,15 +4490,15 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: PC Computer - The Binding of Isaac Rebirth - Isaac_184
+      name: Hurt2
       rect:
         serializedVersion: 2
         x: 76
         y: 629
         width: 28
         height: 32
-      alignment: 7
-      pivot: {x: 0.5, y: 0}
+      alignment: 9
+      pivot: {x: 0.5048686, y: 0.16614914}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -4511,15 +4511,15 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: PC Computer - The Binding of Isaac Rebirth - Isaac_185
+      name: Death
       rect:
         serializedVersion: 2
         x: 133
         y: 623
         width: 36
         height: 27
-      alignment: 7
-      pivot: {x: 0.5, y: 0}
+      alignment: 9
+      pivot: {x: 0.21187592, y: 0.40438503}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []

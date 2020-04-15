@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 
 public class PlayerController : MonoBehaviour
 {
@@ -32,6 +33,8 @@ public class PlayerController : MonoBehaviour
     [HideInInspector]
     public Animator bodyCtrl;
 
+    private CircleCollider2D col = null;
+
     private Gamepad gamepad;
     public float stick_threshold = 0.1f;
 
@@ -49,6 +52,8 @@ public class PlayerController : MonoBehaviour
     private Vector2 move = Vector2.zero;
 
     private bool detectPickUp = true;
+
+    private bool detectControls = true;
 
     [Header("Character Stats")]
     public Stats stats = new Stats("");
@@ -68,97 +73,105 @@ public class PlayerController : MonoBehaviour
         }
 
         rb = GetComponent<Rigidbody2D>();
+        col = GetComponent<CircleCollider2D>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (gamepad == null)
+        #region CONTROLS
+        if (detectControls)
         {
-            gamepad = Gamepad.current;
-        }
-        else
-        {
-            #region SHOOTING
-            if(gamepad.buttonEast.isPressed)
+            if (gamepad == null)
             {
-                headCtrl.SetBool("shootRight", true);
-                headCtrl.SetBool("shootLeft", false);
-                headCtrl.SetBool("shootDown", false);
-                headCtrl.SetBool("shootUp", false);
-            }
-            else if (gamepad.buttonSouth.isPressed)
-            {
-                headCtrl.SetBool("shootRight", false);
-                headCtrl.SetBool("shootLeft", false);
-                headCtrl.SetBool("shootDown", true);
-                headCtrl.SetBool("shootUp", false);
-            }
-            else if(gamepad.buttonWest.isPressed)
-            {
-                headCtrl.SetBool("shootRight", false);
-                headCtrl.SetBool("shootLeft", true);
-                headCtrl.SetBool("shootDown", false);
-                headCtrl.SetBool("shootUp", false);
-            }
-            else if(gamepad.buttonNorth.isPressed)
-            {
-                headCtrl.SetBool("shootRight", false);
-                headCtrl.SetBool("shootLeft", false);
-                headCtrl.SetBool("shootDown", false);
-                headCtrl.SetBool("shootUp", true);
+                gamepad = Gamepad.current;
             }
             else
             {
-                headCtrl.SetBool("shootRight", false);
-                headCtrl.SetBool("shootLeft", false);
-                headCtrl.SetBool("shootDown", false);
-                headCtrl.SetBool("shootUp", false);
-            }
-            #endregion
-
-            #region MOVEMENT
-            move = gamepad.leftStick.ReadValue();
-            if(move.magnitude < stick_threshold)
-            {
-                bodyCtrl.SetBool("walking_horizontal", false);
-
-                bodyCtrl.SetBool("walking_upwards", false);
-                bodyCtrl.SetBool("walking_downwards", false);
-            }
-            else
-            {
-                if(Mathf.Abs(move.x) >= Mathf.Abs(move.y))
+                #region SHOOTING
+                if (gamepad.buttonEast.isPressed)
                 {
-                    //Move horizontal
-                    bodyCtrl.SetBool("walking_horizontal", true);
-
-                    bodyCtrl.SetBool("walking_upwards", false);
-                    bodyCtrl.SetBool("walking_downwards", false);
-
-                    if (move.x >= 0)
-                    {
-                        body.transform.localScale = new Vector3(1, 1, 1);
-                    }
-                    else
-                    {
-                        body.transform.localScale = new Vector3(-1, 1, 1);
-                    }
+                    headCtrl.SetBool("shootRight", true);
+                    headCtrl.SetBool("shootLeft", false);
+                    headCtrl.SetBool("shootDown", false);
+                    headCtrl.SetBool("shootUp", false);
+                }
+                else if (gamepad.buttonSouth.isPressed)
+                {
+                    headCtrl.SetBool("shootRight", false);
+                    headCtrl.SetBool("shootLeft", false);
+                    headCtrl.SetBool("shootDown", true);
+                    headCtrl.SetBool("shootUp", false);
+                }
+                else if (gamepad.buttonWest.isPressed)
+                {
+                    headCtrl.SetBool("shootRight", false);
+                    headCtrl.SetBool("shootLeft", true);
+                    headCtrl.SetBool("shootDown", false);
+                    headCtrl.SetBool("shootUp", false);
+                }
+                else if (gamepad.buttonNorth.isPressed)
+                {
+                    headCtrl.SetBool("shootRight", false);
+                    headCtrl.SetBool("shootLeft", false);
+                    headCtrl.SetBool("shootDown", false);
+                    headCtrl.SetBool("shootUp", true);
                 }
                 else
                 {
-                    //Move vertical
+                    headCtrl.SetBool("shootRight", false);
+                    headCtrl.SetBool("shootLeft", false);
+                    headCtrl.SetBool("shootDown", false);
+                    headCtrl.SetBool("shootUp", false);
+                }
+                #endregion
+
+                #region MOVEMENT
+                move = gamepad.leftStick.ReadValue();
+                if (move.magnitude < stick_threshold)
+                {
                     bodyCtrl.SetBool("walking_horizontal", false);
 
-                    bodyCtrl.SetBool("walking_upwards", move.y > 0 ? true : false);
-                    bodyCtrl.SetBool("walking_downwards", move.y > 0 ? false : true);                                   
+                    bodyCtrl.SetBool("walking_upwards", false);
+                    bodyCtrl.SetBool("walking_downwards", false);
                 }
-                
-                //Movement is being applied on FixedUpdate
-            }
+                else
+                {
+                    if (Mathf.Abs(move.x) >= Mathf.Abs(move.y))
+                    {
+                        //Move horizontal
+                        bodyCtrl.SetBool("walking_horizontal", true);
 
-            #endregion
+                        bodyCtrl.SetBool("walking_upwards", false);
+                        bodyCtrl.SetBool("walking_downwards", false);
+
+                        if (move.x >= 0)
+                        {
+                            body.transform.localScale = new Vector3(1, 1, 1);
+                        }
+                        else
+                        {
+                            body.transform.localScale = new Vector3(-1, 1, 1);
+                        }
+                    }
+                    else
+                    {
+                        //Move vertical
+                        bodyCtrl.SetBool("walking_horizontal", false);
+
+                        bodyCtrl.SetBool("walking_upwards", move.y > 0 ? true : false);
+                        bodyCtrl.SetBool("walking_downwards", move.y > 0 ? false : true);
+                    }
+
+                    //Movement is being applied on FixedUpdate
+                }
+
+                #endregion
+            }
         }
+        #endregion
+
+
     }
 
     private void FixedUpdate()
@@ -175,6 +188,7 @@ public class PlayerController : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
+        #region PICK UP ITEMS
         if (collision.gameObject.layer == LayerMask.NameToLayer("ItemAltar"))
         {
             ItemAltar altar = collision.gameObject.GetComponent<ItemAltar>();
@@ -192,7 +206,10 @@ public class PlayerController : MonoBehaviour
                 altar.ChangeHoldedItem(null);
             }
         }
-        else if(collision.gameObject.layer == LayerMask.NameToLayer("Monster") || collision.gameObject.layer == LayerMask.NameToLayer("EnemyAttack"))
+        #endregion
+
+        #region TAKE DAMAGE
+        else if (collision.gameObject.layer == LayerMask.NameToLayer("Monster") || collision.gameObject.layer == LayerMask.NameToLayer("EnemyAttack"))
         {
             Enemy enemy = collision.gameObject.GetComponent<Enemy>();
             if(enemy != null)
@@ -200,6 +217,7 @@ public class PlayerController : MonoBehaviour
                 TakeDamage(enemy.enemyStats.damage);
             }
         }
+        #endregion
     }
 
     public void TakeDamage(float damage)
@@ -210,13 +228,28 @@ public class PlayerController : MonoBehaviour
         {
             Die();
         }
+        else
+        {
+            head.SetActive(false);
+            bodyCtrl.SetTrigger("Damaged");
+        }
+
+        col.enabled = false;
 
         HeartsManager.Instance.OnCharacterHealthChanged();
     }
 
     private void Die()
     {
+        move = Vector2.zero;
 
+        detectControls = false;
+
+        head.SetActive(false);
+        bodyCtrl.SetTrigger("Death");
+
+        rb.isKinematic = true;
+        rb.velocity = Vector2.zero;
     }
 
     public void OnShootEvent()
@@ -296,13 +329,17 @@ public class PlayerController : MonoBehaviour
         body.SetActive(true);
     }
 
-    public void ResetAnimators()
+    public void ResetAnimators(bool isDeath)
     {
         ResetHeadAnimator();
         ResetBodyAnimator();
 
         detectPickUp = true;
-
         pickedItemRenderer.sprite = null;
+
+        col.enabled = true;
+
+        if (isDeath)
+            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 }

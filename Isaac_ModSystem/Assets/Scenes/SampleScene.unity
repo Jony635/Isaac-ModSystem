@@ -920,7 +920,7 @@ PrefabInstance:
     - target: {fileID: 5770102351968839976, guid: 502cef8e59113d74bbc2b13b077071b4,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0
+      value: 1.034
       objectReference: {fileID: 0}
     - target: {fileID: 5770102351968839976, guid: 502cef8e59113d74bbc2b13b077071b4,
         type: 3}
@@ -976,13 +976,10 @@ PrefabInstance:
       propertyPath: tearsContainer
       value: 
       objectReference: {fileID: 1260135603}
-    - target: {fileID: 1839666579, guid: 502cef8e59113d74bbc2b13b077071b4, type: 3}
-      propertyPath: stats.hp
-      value: 6
-      objectReference: {fileID: 0}
-    - target: {fileID: 1839666579, guid: 502cef8e59113d74bbc2b13b077071b4, type: 3}
-      propertyPath: stats.maxHp
-      value: 6
+    - target: {fileID: 8041023832312522774, guid: 502cef8e59113d74bbc2b13b077071b4,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 502cef8e59113d74bbc2b13b077071b4, type: 3}
