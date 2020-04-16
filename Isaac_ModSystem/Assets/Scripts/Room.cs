@@ -51,6 +51,8 @@ public class Room : MonoBehaviour
             }
 
             itemAltar.SetActive(true);
+
+            RoomManager.Instance.RoomCleared();
         }
     }
 }

@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class RoomManager : MonoBehaviour
 {
@@ -22,7 +23,6 @@ public class RoomManager : MonoBehaviour
     [Header("Room COnfiguration")]
     public int amountRooms = 6;
     float chanceToGetARoom = 0.1f;
-
 
     private void Awake()
     {
@@ -201,4 +201,22 @@ public class RoomManager : MonoBehaviour
 
         callback.Invoke();
     }  
+
+    public void RoomCleared()
+    {
+        bool levelFinished = true;
+        foreach(Room room in rooms)
+        {
+            if(!room.alreadyDefeated)
+            {
+                levelFinished = false;
+            }
+        }
+
+        if(levelFinished)
+        {
+            //Temp solution: Restart the game
+            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        }
+    }
 }
