@@ -1,31 +1,31 @@
 fileFormatVersion: 2
-guid: 8eca97a5b5059904680d183dbe52b967
+guid: ff94dca80cc8575498d7c861352dffae
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -5222276615639575662
-    second: Chargebar_Dark
+      213: 6534704132598333374
+    second: ui_chargebar_0
   - first:
-      213: -4079871118820716861
-    second: Chargebar_Green
+      213: 6258842304771286165
+    second: ui_chargebar_1
   - first:
-      213: -5294323133139570064
-    second: Chargebar_10
+      213: -7936008892148729452
+    second: ui_chargebar_2
   - first:
-      213: 4080634145808542029
-    second: Chargebar_6
+      213: 6743577608852675109
+    second: ui_chargebar_3
   - first:
-      213: 3644688269437769124
-    second: Chargebar_4
+      213: 8180823283899976579
+    second: ui_chargebar_4
   - first:
-      213: 8150055455343539824
-    second: Chargebar_3
+      213: -1826835768152646453
+    second: ui_chargebar_5
   - first:
-      213: -3561889320243695133
-    second: Chargebar_2
+      213: -7133332237823581912
+    second: ui_chargebar_6
   - first:
-      213: -3845909122094442198
-    second: Chargebar_1
+      213: 9172932592041119448
+    second: ui_chargebar_7
   externalObjects: {}
   serializedVersion: 10
   mipmaps:
@@ -69,7 +69,7 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 100
+  spritePixelsToUnits: 30
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -110,7 +110,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Chargebar_Dark
+      name: ui_chargebar_0
       rect:
         serializedVersion: 2
         x: 4
@@ -118,20 +118,20 @@ TextureImporter:
         width: 8
         height: 30
       alignment: 9
-      pivot: {x: 0.37223363, y: 0.5535403}
+      pivot: {x: 0.39961213, y: 0.56084126}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 9dca9945a3249674aa0bd6617a37897a
-      internalID: -5222276615639575662
+      spriteID: 56f7325a3e0859a468ded07acbcb36d1
+      internalID: 6534704132598333374
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Chargebar_Green
+      name: ui_chargebar_1
       rect:
         serializedVersion: 2
         x: 20
@@ -145,14 +145,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 58fdecbfe12321f46ab4077e799b98f7
-      internalID: -4079871118820716861
+      spriteID: 780e0114d01c8ee4ba3ac8431844aab5
+      internalID: 6258842304771286165
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Chargebar_10
+      name: ui_chargebar_2
       rect:
         serializedVersion: 2
         x: 36
@@ -166,14 +166,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 4e7bb364d6aab784f8f7ef9c55160fec
-      internalID: -5294323133139570064
+      spriteID: ff9ea55966c0ca8499fc61fc4a43faa4
+      internalID: -7936008892148729452
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Chargebar_6
+      name: ui_chargebar_3
       rect:
         serializedVersion: 2
         x: 52
@@ -187,14 +187,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 24e4fd5c81c45d842bc52ff87d9adc27
-      internalID: 4080634145808542029
+      spriteID: fcef11001264d53478bda219433bc476
+      internalID: 6743577608852675109
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Chargebar_4
+      name: ui_chargebar_4
       rect:
         serializedVersion: 2
         x: 4
@@ -208,14 +208,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: eed40e646e209454a9971f0e27ea279d
-      internalID: 3644688269437769124
+      spriteID: 8505befce16917947b6217d5af4677ca
+      internalID: 8180823283899976579
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Chargebar_3
+      name: ui_chargebar_5
       rect:
         serializedVersion: 2
         x: 20
@@ -229,14 +229,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 42768c072c2daef47bb4829f2ee1b2ab
-      internalID: 8150055455343539824
+      spriteID: 4523320c6f7ee4b45aa8be76ef8e9aae
+      internalID: -1826835768152646453
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Chargebar_2
+      name: ui_chargebar_6
       rect:
         serializedVersion: 2
         x: 36
@@ -250,14 +250,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: ac8b8a1935aaa9646acdeeb44148600b
-      internalID: -3561889320243695133
+      spriteID: 641ddd780cc8f2e4697b61cbad4dd2f3
+      internalID: -7133332237823581912
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Chargebar_1
+      name: ui_chargebar_7
       rect:
         serializedVersion: 2
         x: 52
@@ -271,8 +271,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: b74dce476dda003428785df7ca54270f
-      internalID: -3845909122094442198
+      spriteID: dccd4407faffd6c48ad5f019aa2d5d7f
+      internalID: 9172932592041119448
       vertices: []
       indices: 
       edges: []

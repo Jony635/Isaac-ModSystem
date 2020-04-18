@@ -3,12 +3,20 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.InputSystem;
+using UnityEditor;
 
 public class ActiveItemContainer : MonoBehaviour
 {
+    public static ActiveItemContainer Instance;
+
+    public Image activeItemIcon;
     public RectTransform mask;
     public RectTransform green;
     public Image subdivisions;
+
+    public GameObject chargesGO;
+
+    public List<Sprite> subdivisionSprites;
 
     [SerializeField]
     [Range(0, 1)]
@@ -16,38 +24,19 @@ public class ActiveItemContainer : MonoBehaviour
 
     private Vector3 initialLocalPosition;
     private float height;
+    private ActiveItem equippedItem;
 
     private void Awake()
     {
+        Instance = this;
+
         initialLocalPosition = mask.localPosition;
         height = green.rect.height;
     }
 
     private void Update()
     {
-        if(Keyboard.current.digit1Key.wasPressedThisFrame)
-        {
-            maskPercent = 1f;
-            Masking();
-        }
-
-        if (Keyboard.current.digit2Key.wasPressedThisFrame)
-        {
-            maskPercent = 0.5f;
-            Masking();
-        }
-
-        if (Keyboard.current.digit3Key.wasPressedThisFrame)
-        {
-            maskPercent = 0.3f;
-            Masking();
-        }
-
-        if (Keyboard.current.digit4Key.wasPressedThisFrame)
-        {
-            maskPercent = 0f;
-            Masking();
-        }
+        
     }
 
     private void Masking()
@@ -55,5 +44,45 @@ public class ActiveItemContainer : MonoBehaviour
         green.SetParent(transform);
         mask.localPosition = initialLocalPosition - new Vector3(0f, height * (1f - maskPercent), 0f);
         green.SetParent(mask);
+    }
+
+    public void ActiveItemEquipped(ActiveItem item)
+    {
+        equippedItem = item;
+
+        activeItemIcon.gameObject.SetActive(true);
+        chargesGO.gameObject.SetActive(true);
+
+        activeItemIcon.sprite = AssetDatabase.LoadAssetAtPath<Sprite>(item.pickUpSprite);
+        item.equiped = true;
+
+        subdivisions.sprite = subdivisionSprites[(int)item.numCharges - 1];
+    }
+
+    public void ActiveItemUsed()
+    {
+        if (equippedItem == null)
+            return;
+
+        if(equippedItem.currentCharges == equippedItem.numCharges)
+        {
+            equippedItem.currentCharges = 0;
+            maskPercent = 0f;
+            Masking();
+
+            equippedItem.OnActiveButtonPressed();
+        }
+    }
+
+    public void RoomCleared()
+    {
+        if(equippedItem)
+        {
+            equippedItem.currentCharges = (uint)Mathf.Clamp(equippedItem.currentCharges + 1, 0, equippedItem.numCharges);
+            equippedItem.OnNewRoomCleared();
+
+            maskPercent = (float)equippedItem.currentCharges / (float)equippedItem.numCharges;
+            Masking();
+        }
     }
 }

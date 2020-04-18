@@ -167,6 +167,11 @@ public class PlayerController : MonoBehaviour
                 }
 
                 #endregion
+
+                #region ACTIVE ITEM USED
+                if(gamepad.leftTrigger.wasPressedThisFrame)
+                    ActiveItemContainer.Instance.ActiveItemUsed();
+                #endregion
             }
         }
         #endregion
@@ -202,7 +207,7 @@ public class PlayerController : MonoBehaviour
 
                 pickedItemRenderer.sprite = altar.ItemHolderRenderer.sprite;
 
-                ItemManager.Instance.EquipItem(altar.holdedItem);
+                ItemManager.Instance.EquipItem(altar.holdedItem, altar);
                 altar.ChangeHoldedItem(null);
             }
         }

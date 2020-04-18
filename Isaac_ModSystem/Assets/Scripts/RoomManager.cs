@@ -204,6 +204,8 @@ public class RoomManager : MonoBehaviour
 
     public void RoomCleared()
     {
+        ActiveItemContainer.Instance.RoomCleared();
+
         bool levelFinished = true;
         foreach(Room room in rooms)
         {

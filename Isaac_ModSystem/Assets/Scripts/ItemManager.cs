@@ -12,6 +12,10 @@ public class ItemManager : MonoBehaviour
     private GameObject availableItems;
     [SerializeField]
     private GameObject equippedItems;
+    [SerializeField]
+    private GameObject activeItem;
+    [SerializeField]
+    private GameObject discardedItems;
 
     private void Awake()
     {
@@ -52,12 +56,28 @@ public class ItemManager : MonoBehaviour
         }
     }
 
-    public void EquipItem(Item item)
+    public void EquipItem(Item item, ItemAltar altar = null)
     {
-        if(item.transform.parent == availableItems.transform)
+        if (item.GetType().IsSubclassOf(typeof(ActiveItem)))
+        {
+            if(activeItem.transform.childCount > 0)
+            {
+                Transform equipedItem = activeItem.transform.GetChild(0);
+                equipedItem.SetParent(discardedItems.transform);
+
+                altar.ChangeHoldedItem(equipedItem.GetComponent<Item>());
+            }
+
+            item.transform.SetParent(activeItem.transform);
+
+            ActiveItemContainer.Instance.ActiveItemEquipped((ActiveItem)item);
+        }
+
+        else if (item.transform.parent == availableItems.transform)
         {
             item.transform.SetParent(equippedItems.transform);
-            item.OnItemEquipped();
-        }        
+        }   
+        
+        item.OnItemEquipped();
     }
 }

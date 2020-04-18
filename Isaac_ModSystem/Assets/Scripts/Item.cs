@@ -30,5 +30,8 @@ public class PassiveItem : Item
 
 public class ActiveItem : Item
 {
-    
+    public uint numCharges = 1u;
+    public uint currentCharges = 1u;
+
+    public bool equiped = false;
 }
