@@ -53,7 +53,7 @@ public class ActiveItemContainer : MonoBehaviour
         activeItemIcon.gameObject.SetActive(true);
         chargesGO.gameObject.SetActive(true);
 
-        activeItemIcon.sprite = AssetDatabase.LoadAssetAtPath<Sprite>(item.pickUpSprite);
+        activeItemIcon.sprite = Resources.Load<Sprite>(item.pickUpSprite);
         item.equiped = true;
 
         subdivisions.sprite = subdivisionSprites[(int)item.numCharges - 1];

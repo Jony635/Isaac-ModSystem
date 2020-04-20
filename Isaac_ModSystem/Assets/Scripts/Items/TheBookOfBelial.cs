@@ -9,7 +9,7 @@ public class TheBookOfBelial : ActiveItem
     public TheBookOfBelial()
     {
         name = "TheBookOfBelial";
-        pickUpSprite = "Assets/Textures/collectibles_034_thebookofbelial.png";
+        pickUpSprite = "Textures/Items/collectibles_034_thebookofbelial";
 
         currentCharges = numCharges = 3u;
     }

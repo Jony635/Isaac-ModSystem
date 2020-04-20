@@ -22,12 +22,12 @@ public class ItemAltar : MonoBehaviour
             return;
         }
 
-        ItemHolderRenderer.sprite = (Sprite)AssetDatabase.LoadAssetAtPath<Sprite>(holdedItem.pickUpSprite);
+        ItemHolderRenderer.sprite = Resources.Load<Sprite>(holdedItem.pickUpSprite);
     }
 
     public void ChangeHoldedItem(Item item)
     {
         holdedItem = item;
-        ItemHolderRenderer.sprite = holdedItem != null ? (Sprite)AssetDatabase.LoadAssetAtPath<Sprite>(holdedItem.pickUpSprite) : null;
+        ItemHolderRenderer.sprite = holdedItem != null ? Resources.Load<Sprite>(holdedItem.pickUpSprite) : null;
     }
 }

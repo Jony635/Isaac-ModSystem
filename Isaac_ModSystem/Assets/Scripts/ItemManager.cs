@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 using System.Reflection;
+using System.IO;
 
 public class ItemManager : MonoBehaviour
 {
@@ -21,6 +22,7 @@ public class ItemManager : MonoBehaviour
     {
         Instance = this;
         InstantiateAllAvailableItems();
+        LoadMods();
     }
 
     public Item GetRandomAvailableItem()
@@ -54,6 +56,28 @@ public class ItemManager : MonoBehaviour
                 }
             }
         }
+    }
+
+    private void LoadMods()
+    {
+        if (Directory.Exists(Application.dataPath + "/Mods/"))
+        {
+            string[] modFolders = Directory.GetDirectories(Application.dataPath + "/Mods/");
+            foreach (string modFolder in modFolders)
+            {
+                //TODO: Load the resources, create the GameObjects, etc.
+                
+                //STEPS:
+                // 1. Create 1 Empty gameobject named as the folder.
+                // 2. Add a LuaScriptController Component.
+                // 3. Look for a main.lua inside the folder.
+                // 4. Extract the string stored in the global variable "itemicon"
+                // 5. Import at runtime the .png file as a Texture/Sprite
+                // 6. Store the Sprite inside the LuaScriptController component.
+                // 7. Try to show the icon in the active item icon sprite in order to see the results.
+                // 8. Store the created gameobject in its respective place depending of the item.
+            }
+        }      
     }
 
     public void EquipItem(Item item, ItemAltar altar = null)

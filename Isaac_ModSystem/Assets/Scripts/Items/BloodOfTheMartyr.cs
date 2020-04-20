@@ -7,7 +7,7 @@ public class BloodOfTheMartyr : Item
     public BloodOfTheMartyr()
     {
         name = "BloodOfTheMartyr";
-        pickUpSprite = "Assets/Textures/collectibles_007_bloodofthemartyr.png";
+        pickUpSprite = "Textures/Items/collectibles_007_bloodofthemartyr";
     }
 
     public override void OnItemEquipped()
