@@ -18,6 +18,9 @@ public class ItemManager : MonoBehaviour
     [SerializeField]
     private GameObject discardedItems;
 
+    [SerializeField]
+    private GameObject mods;
+
     private void Awake()
     {
         Instance = this;
@@ -66,16 +69,33 @@ public class ItemManager : MonoBehaviour
             foreach (string modFolder in modFolders)
             {
                 //TODO: Load the resources, create the GameObjects, etc.
-                
+
                 //STEPS:
-                // 1. Create 1 Empty gameobject named as the folder.
-                // 2. Add a LuaScriptController Component.
+                // 1. Create 1 Empty gameobject named as the folder.                                        v
+                // 2. Add a LuaScriptController Component.                                                  v
                 // 3. Look for a main.lua inside the folder.
                 // 4. Extract the string stored in the global variable "itemicon"
                 // 5. Import at runtime the .png file as a Texture/Sprite
                 // 6. Store the Sprite inside the LuaScriptController component.
                 // 7. Try to show the icon in the active item icon sprite in order to see the results.
                 // 8. Store the created gameobject in its respective place depending of the item.
+
+                string modName = modFolder.Substring(modFolder.LastIndexOf('/') + 1);
+
+                GameObject modGO = new GameObject();
+                modGO.name = modName;
+                modGO.transform.SetParent(mods.transform);
+
+                LuaScriptController scriptController = modGO.AddComponent<LuaScriptController>();
+
+                if(File.Exists(modFolder + "/main.lua"))
+                {
+                    scriptController.LuaScriptFile = modFolder + "/main.lua";
+                    scriptController.Initialize();
+
+
+                }
+
             }
         }      
     }

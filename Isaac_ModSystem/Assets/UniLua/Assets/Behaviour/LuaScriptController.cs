@@ -13,62 +13,70 @@ public class LuaScriptController : MonoBehaviour {
 	private int			LateUpdateRef;
 	private int			FixedUpdateRef;
 
-	void Awake() {
-		Debug.Log("LuaScriptController Awake");
+    private string itemIconPath;
 
-		if( Lua == null )
-		{
-			Lua = LuaAPI.NewState();
-			Lua.L_OpenLibs();
+    public void Initialize()
+    {
+        if (Lua == null)
+        {
+            Lua = LuaAPI.NewState();
+            Lua.L_OpenLibs();
 
-			var status = Lua.L_DoFile( LuaScriptFile );
-			if( status != ThreadStatus.LUA_OK )
-			{
-				throw new Exception( Lua.ToString(-1) );
-			}
+            var status = Lua.L_DoFile(LuaScriptFile);
+            if (status != ThreadStatus.LUA_OK)
+            {
+                throw new Exception(Lua.ToString(-1));
+            }
 
-			if( ! Lua.IsTable(-1) )
-			{
-				throw new Exception(
-					"framework main's return value is not a table" );
-			}
+            //if (!Lua.IsTable(-1))
+            //{
+            //    throw new Exception(
+            //        "framework main's return value is not a table");
+            //}
 
-			AwakeRef 		= StoreMethod( "awake" );
-			StartRef 		= StoreMethod( "start" );
-			UpdateRef 		= StoreMethod( "update" );
-			LateUpdateRef 	= StoreMethod( "late_update" );
-			FixedUpdateRef 	= StoreMethod( "fixed_update" );
+            AwakeRef = StoreMethod("awake");
+            StartRef = StoreMethod("start");
+            UpdateRef = StoreMethod("update");
+            LateUpdateRef = StoreMethod("late_update");
+            FixedUpdateRef = StoreMethod("fixed_update");
 
-			Lua.Pop(1);
-			Debug.Log("Lua Init Done");
-		}
+            itemIconPath = GetGlobalString("itemicon");
+        }
+    }
+
+    void Awake() {
+        if (Lua == null)
+            return;
 
 		CallMethod( AwakeRef );
 	}
 
 // AssetBundle testx.unity3d is built for StandaloneWindows
 #if UNITY_STANDALONE
-	IEnumerator Start() {
+	IEnumerator Start() 
+    {
 		CallMethod( StartRef );
 
-		// -- sample code for loading binary Asset Bundles --------------------
-		String s = "file:///"+Application.streamingAssetsPath+"/testx.unity3d";
-		WWW www = new WWW(s);
-		yield return www;
-		if(www.assetBundle.mainAsset != null) {
-			TextAsset cc = (TextAsset)www.assetBundle.mainAsset;
-			var status = Lua.L_LoadBytes(cc.bytes, "test");
-			if( status != ThreadStatus.LUA_OK )
-			{
-				throw new Exception( Lua.ToString(-1) );
-			}
-			status = Lua.PCall( 0, 0, 0);
-			if( status != ThreadStatus.LUA_OK )
-			{
-				throw new Exception( Lua.ToString(-1) );
-			}
-			Debug.Log("---- call done ----");
-		}
+        // -- sample code for loading binary Asset Bundles --------------------
+        //String s = "file:///"+Application.streamingAssetsPath+"/testx.unity3d";
+        //WWW www = new WWW(s);
+        //yield return www;
+        //if(www.assetBundle.mainAsset != null) {
+        //	TextAsset cc = (TextAsset)www.assetBundle.mainAsset;
+        //	var status = Lua.L_LoadBytes(cc.bytes, "test");
+        //	if( status != ThreadStatus.LUA_OK )
+        //	{
+        //		throw new Exception( Lua.ToString(-1) );
+        //	}
+        //	status = Lua.PCall( 0, 0, 0);
+        //	if( status != ThreadStatus.LUA_OK )
+        //	{
+        //		throw new Exception( Lua.ToString(-1) );
+        //	}
+        //	Debug.Log("---- call done ----");
+        //}
+
+        yield return null;
 	}
 #else
 	void Start() {
@@ -88,19 +96,49 @@ public class LuaScriptController : MonoBehaviour {
 		CallMethod( FixedUpdateRef );
 	}
 
+    private string GetGlobalString(string name)
+    {
+        string ret = null;
+        
+        Lua.GetGlobal(name);
+        try
+        {
+            ret = Lua.L_CheckString(-1);
+        }
+        catch 
+        { 
+            Lua.Pop(-1);
+            return null;
+        }
+
+        Lua.Pop(1);
+        return ret;
+    }
+
 	private int StoreMethod( string name )
 	{
-		Lua.GetField( -1, name );
+        try
+        {
+		    Lua.GetField( -1, name );
+        }
+        catch
+        {
+            return -1;
+        }
+
 		if( !Lua.IsFunction( -1 ) )
 		{
-			throw new Exception( string.Format(
-				"method {0} not found!", name ) );
+			//throw new Exception( string.Format(
+			//	"method {0} not found!", name ) );
 		}
+
 		return Lua.L_Ref( LuaDef.LUA_REGISTRYINDEX );
 	}
 
 	private void CallMethod( int funcRef )
 	{
+        if (funcRef == -1) return;
+
 		Lua.RawGetI( LuaDef.LUA_REGISTRYINDEX, funcRef );
 
 		// insert `traceback' function
