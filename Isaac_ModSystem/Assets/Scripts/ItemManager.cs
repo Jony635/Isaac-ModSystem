@@ -4,6 +4,7 @@ using UnityEngine;
 using System;
 using System.Reflection;
 using System.IO;
+using UnityEngine.UI;
 
 public class ItemManager : MonoBehaviour
 {
@@ -20,6 +21,8 @@ public class ItemManager : MonoBehaviour
 
     [SerializeField]
     private GameObject mods;
+
+    public GameObject temp;
 
     private void Awake()
     {
@@ -93,9 +96,14 @@ public class ItemManager : MonoBehaviour
                     scriptController.LuaScriptFile = modFolder + "/main.lua";
                     scriptController.Initialize();
 
+                    string fullPath = modFolder + "/" + scriptController.itemIconPath;
 
+                    if(File.Exists(fullPath))
+                    {
+                        Sprite sprite = ImportSprite(fullPath);
+                        temp.GetComponent<Image>().sprite = sprite;
+                    }
                 }
-
             }
         }      
     }
@@ -123,5 +131,16 @@ public class ItemManager : MonoBehaviour
         }   
         
         item.OnItemEquipped();
+    }
+
+    private Sprite ImportSprite(string path)
+    {
+        byte[] textureBytes = File.ReadAllBytes(path);
+
+        Texture2D texture = new Texture2D(2, 2, TextureFormat.ARGB32, false);
+        texture.filterMode = FilterMode.Point;
+        texture.LoadImage(textureBytes);
+
+        return Sprite.Create(texture, new Rect(0.0f, 0.0f, texture.width, texture.height), new Vector2(0.5f, 0.5f));
     }
 }

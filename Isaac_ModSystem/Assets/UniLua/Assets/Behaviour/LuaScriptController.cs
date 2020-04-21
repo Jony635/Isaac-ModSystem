@@ -13,7 +13,7 @@ public class LuaScriptController : MonoBehaviour {
 	private int			LateUpdateRef;
 	private int			FixedUpdateRef;
 
-    private string itemIconPath;
+    public string itemIconPath;
 
     public void Initialize()
     {
