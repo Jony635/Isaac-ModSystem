@@ -1,19 +1,37 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UniLua;
+using System.IO;
 
-public class LuaScriptController : MonoBehaviour {
-	public	string		LuaScriptFile = "framework/main.lua";
+using UnityEngine.UI;
 
+public class LuaScriptController : MonoBehaviour 
+{
 	private ILuaState 	Lua;
-	private int			AwakeRef;
-	private int			StartRef;
-	private int			UpdateRef;
-	private int			LateUpdateRef;
-	private int			FixedUpdateRef;
 
-    public string itemIconPath;
+    [HideInInspector]
+    public bool isMain = false;
+
+    [HideInInspector]
+    public string basePath = null;
+
+    [HideInInspector]
+    public string LuaScriptFile = null;
+
+    [HideInInspector]
+    public Sprite sprite = null;
+
+    private GameObject passiveItems = null;
+    private GameObject activeItems = null;
+    private GameObject monsters = null;
+
+    private int			AwakeRef = -1;
+	private int			StartRef = -1;
+	private int			UpdateRef = -1;
+	private int			LateUpdateRef = -1;
+	private int			FixedUpdateRef = -1;
 
     public void Initialize()
     {
@@ -28,71 +46,57 @@ public class LuaScriptController : MonoBehaviour {
                 throw new Exception(Lua.ToString(-1));
             }
 
-            //if (!Lua.IsTable(-1))
-            //{
-            //    throw new Exception(
-            //        "framework main's return value is not a table");
-            //}
+            AwakeRef = StoreMethod("Awake");
+            StartRef = StoreMethod("Start");
+            UpdateRef = StoreMethod("Update");
+            LateUpdateRef = StoreMethod("LateUpdate");
+            FixedUpdateRef = StoreMethod("FixedUpdate");
 
-            AwakeRef = StoreMethod("awake");
-            StartRef = StoreMethod("start");
-            UpdateRef = StoreMethod("update");
-            LateUpdateRef = StoreMethod("late_update");
-            FixedUpdateRef = StoreMethod("fixed_update");
+            string spritePath = GetGlobalString("sprite");
+            if(spritePath != null)
+                sprite = ImportSprite(basePath + "/" + spritePath);
 
-            itemIconPath = GetGlobalString("itemicon");
+            if(isMain)
+            {           
+                passiveItems = new GameObject();
+                passiveItems.name = "PassiveItems";
+                passiveItems.transform.SetParent(transform);
+
+                activeItems = new GameObject();
+                activeItems.name = "ActiveItems";
+                activeItems.transform.SetParent(transform);
+
+                monsters = new GameObject();
+                monsters.name = "Monsters";
+                monsters.transform.SetParent(transform);
+
+                LoadPassiveItems();
+            }           
         }
     }
 
-    void Awake() {
-        if (Lua == null)
-            return;
-
+    private void Awake() 
+    {
 		CallMethod( AwakeRef );
 	}
 
-// AssetBundle testx.unity3d is built for StandaloneWindows
-#if UNITY_STANDALONE
-	IEnumerator Start() 
+    private void Start() 
     {
 		CallMethod( StartRef );
-
-        // -- sample code for loading binary Asset Bundles --------------------
-        //String s = "file:///"+Application.streamingAssetsPath+"/testx.unity3d";
-        //WWW www = new WWW(s);
-        //yield return www;
-        //if(www.assetBundle.mainAsset != null) {
-        //	TextAsset cc = (TextAsset)www.assetBundle.mainAsset;
-        //	var status = Lua.L_LoadBytes(cc.bytes, "test");
-        //	if( status != ThreadStatus.LUA_OK )
-        //	{
-        //		throw new Exception( Lua.ToString(-1) );
-        //	}
-        //	status = Lua.PCall( 0, 0, 0);
-        //	if( status != ThreadStatus.LUA_OK )
-        //	{
-        //		throw new Exception( Lua.ToString(-1) );
-        //	}
-        //	Debug.Log("---- call done ----");
-        //}
-
-        yield return null;
 	}
-#else
-	void Start() {
-		CallMethod( StartRef );
-	}
-#endif
 
-	void Update() {
+    private void Update() 
+    {
 		CallMethod( UpdateRef );
 	}
 
-	void LateUpdate() {
+    private void LateUpdate() 
+    {
 		CallMethod( LateUpdateRef );
 	}
 
-	void FixedUpdate() {
+    private void FixedUpdate() 
+    {
 		CallMethod( FixedUpdateRef );
 	}
 
@@ -170,5 +174,63 @@ public class LuaScriptController : MonoBehaviour {
 		}
 		return 1;
 	}
+
+    private void LoadPassiveItems()
+    {
+        List<string> items = new List<string>();
+
+        //Extract lua files from the global variable
+        Lua.GetGlobal("passiveItems");
+        for (int i = 1; true; ++i)
+        {
+            try
+            {
+                Lua.RawGetI(-1, i);
+            }
+            catch
+            {
+                break;
+            }
+
+            if (Lua.IsNoneOrNil(-1))
+            {
+                Lua.Pop(2);
+                break;
+            }               
+
+            items.Add(Lua.L_CheckString(-1));
+            Lua.Pop(1);
+        }
+
+        foreach(string item in items)
+        {
+            string itemPath = basePath + "/" + item;
+            if(File.Exists(itemPath))
+            {
+                string itemName = item.Substring(item.LastIndexOf('/') + 1);
+                itemName = itemName.Remove(itemName.IndexOf('.'));
+
+                GameObject passiveItem = new GameObject();
+                passiveItem.name = itemName;
+                passiveItem.transform.SetParent(passiveItems.transform);
+
+                LuaScriptController controller = passiveItem.AddComponent<LuaScriptController>();
+                controller.LuaScriptFile = itemPath;
+                controller.basePath = itemPath.Substring(0, itemPath.LastIndexOf('/'));
+                controller.Initialize();           
+            }
+        }    
+    }
+
+    public static Sprite ImportSprite(string path)
+    {
+        byte[] textureBytes = File.ReadAllBytes(path);
+
+        Texture2D texture = new Texture2D(2, 2, TextureFormat.ARGB32, false);
+        texture.filterMode = FilterMode.Point;
+        texture.LoadImage(textureBytes);
+
+        return Sprite.Create(texture, new Rect(0.0f, 0.0f, texture.width, texture.height), new Vector2(0.5f, 0.5f));
+    } 
 }
 
