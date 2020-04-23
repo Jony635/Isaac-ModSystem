@@ -5,6 +5,8 @@ using UnityEngine;
 using UniLua;
 using System.IO;
 
+using UnityEngine.InputSystem;
+
 using UnityEngine.UI;
 
 public class LuaScriptController : MonoBehaviour 
@@ -30,8 +32,18 @@ public class LuaScriptController : MonoBehaviour
     private int			AwakeRef = -1;
 	private int			StartRef = -1;
 	private int			UpdateRef = -1;
-	private int			LateUpdateRef = -1;
 	private int			FixedUpdateRef = -1;
+	private int			LateUpdateRef = -1;
+    private int         OnCollisionEnter2DRef = -1;
+    private int         OnTriggerEnter2DRef = -1;
+    private int         OnCollisionStay2DRef = -1;
+    private int         OnTriggerStay2DRef = -1;
+    private int         OnCollisionExit2DRef = -1;
+    private int         OnTriggerExit2DRef = -1;
+    private int         OnEnableRef = -1;
+    private int         OnDisableRef = -1;
+
+    private int         TestRef = -1;
 
     public void Initialize()
     {
@@ -51,6 +63,10 @@ public class LuaScriptController : MonoBehaviour
             UpdateRef = StoreMethod("Update");
             LateUpdateRef = StoreMethod("LateUpdate");
             FixedUpdateRef = StoreMethod("FixedUpdate");
+
+            TestRef = StoreMethod("Test");
+
+            Lua.Pop(-1);
 
             string spritePath = GetGlobalString("sprite");
             if(spritePath != null)
@@ -87,18 +103,40 @@ public class LuaScriptController : MonoBehaviour
 
     private void Update() 
     {
-		CallMethod( UpdateRef );
+        if (TestRef == -1)
+            return;
+
+        CallMethod( UpdateRef );
 	}
+
+    private void FixedUpdate()
+    {
+        CallMethod(FixedUpdateRef);
+    }
 
     private void LateUpdate() 
     {
 		CallMethod( LateUpdateRef );
 	}
 
-    private void FixedUpdate() 
+    private void OnCollisionEnter2D(Collision2D collision) 
     {
-		CallMethod( FixedUpdateRef );
-	}
+        //CallMethod(OnCollisionEnter2DRef); 
+    }
+
+    private void OnTriggerEnter2D(Collider2D collider) { }
+
+    private void OnCollisionStay2D(Collision2D collision) { }
+
+    private void OnTriggerStay2D(Collider2D collider) { }
+
+    private void OnCollisionExit2D(Collision2D collision) { }
+
+    private void OnTriggerExit2D(Collider2D collider) { }
+
+    public virtual void OnEnable() { }
+
+    public virtual void OnDisable() { }
 
     private string GetGlobalString(string name)
     {
@@ -134,40 +172,66 @@ public class LuaScriptController : MonoBehaviour
 		return Lua.L_Ref( LuaDef.LUA_REGISTRYINDEX );
 	}
 
-	private void CallMethod( int funcRef )
+	private void CallMethod( int funcRef, int numArguments = 0, int numResults = 0, params object[] arguments)
 	{
         if (funcRef == -1) return;
 
-		Lua.RawGetI( LuaDef.LUA_REGISTRYINDEX, funcRef );
+        Lua.RawGetI( LuaDef.LUA_REGISTRYINDEX, funcRef );
 
-		// insert `traceback' function
-		var b = Lua.GetTop();
-		Lua.PushCSharpFunction( Traceback );
-		Lua.Insert(b);
+        // insert `traceback' function
+        var b = Lua.GetTop();
+        Lua.PushCSharpFunction(Traceback);
+        Lua.Insert(b);
 
-		var status = Lua.PCall( 0, 0, b );
+        for (int i = 0; i < numArguments; ++i)
+        {
+            object argument = arguments[i];
+            Type type = argument.GetType();
+
+            if(type == typeof(bool))
+            {
+                Lua.PushBoolean((bool)argument);
+            }
+            else if(type == typeof(string))
+            {
+                Lua.PushString((string)argument);
+            }
+            else if(type == typeof(float) || type == typeof(double))
+            {
+                Lua.PushNumber(type == typeof(float) ? (float)argument : (double)argument);
+            }
+            else if(type == typeof(int))
+            {
+                Lua.PushInteger((int)argument);
+            }
+        }
+
+        var status = Lua.PCall( numArguments, numResults, b );
 		if( status != ThreadStatus.LUA_OK )
 		{
 			Debug.LogError( Lua.ToString(-1) );
 		}
 
-		// remove `traceback' function
-		Lua.Remove(b);
-	}
+        // remove `traceback' function
+        Lua.Remove(b);
+    }
 
 	private static int Traceback(ILuaState lua) {
-		var msg = lua.ToString(1);
-		if(msg != null) {
-			lua.L_Traceback(lua, msg, 1);
-		}
-		// is there an error object?
-		else if(!lua.IsNoneOrNil(1)) {
-			// try its `tostring' metamethod
-			if(!lua.L_CallMeta(1, "__tostring")) {
-				lua.PushString("(no error message)");
-			}
-		}
-		return 1;
+        var msg = lua.ToString(1);
+        if (msg != null)
+        {
+            lua.L_Traceback(lua, msg, 1);
+        }
+        // is there an error object?
+        else if (!lua.IsNoneOrNil(1))
+        {
+            // try its `tostring' metamethod
+            if (!lua.L_CallMeta(1, "__tostring"))
+            {
+                lua.PushString("(no error message)");
+            }
+        }
+        return 1;
 	}
 
     private void LoadItemsAndMonsters()

@@ -108,7 +108,7 @@ public class ItemManager : MonoBehaviour
         }
 
         availableItems.Remove(item);
-        item.OnItemEquipped();
+        item.OnEquipped();
     }
 
     public void OnNewRoomCleared()

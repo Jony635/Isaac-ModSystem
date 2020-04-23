@@ -4,24 +4,40 @@ using UnityEngine;
 
 public class Item : MonoBehaviour
 {
-    private LuaScriptController luaScript = null;
+    public LuaScriptController luaScript = null;
 
     public string name = "Default";
     public string pickUpSprite = "Default";
 
-    protected virtual void Awake()
-    {
-        luaScript = GetComponent<LuaScriptController>();
-    }
+    protected virtual void Awake() { }
+
+    protected virtual void Start() { }
 
     protected virtual void Update() { }
 
+    protected virtual void FixedUpdate() { }
+
+    protected virtual void LateUpdate() { }
+
     public virtual void OnCollisionEnter2D(Collision2D collision) { }
+
     public virtual void OnTriggerEnter2D(Collider2D collider) { }
 
-    public virtual void OnItemEquipped() { }
+    public virtual void OnCollisionStay2D(Collision2D collision) { }
 
-    public virtual void OnItemUnEquipped() { }
+    public virtual void OnTriggerStay2D(Collider2D collider) { }
+
+    public virtual void OnCollisionExit2D(Collision2D collision) { }
+
+    public virtual void OnTriggerExit2D(Collider2D collider) { }
+
+    public virtual void OnEnable() { }
+
+    public virtual void OnDisable() { }
+
+    public virtual void OnEquipped() { }
+
+    public virtual void OnUnequipped() { }
 
     public virtual void OnNewRoomEntered(bool alreadyDefeated) { }
 

@@ -10,7 +10,7 @@ public class BloodOfTheMartyr : Item
         pickUpSprite = "Textures/Items/collectibles_007_bloodofthemartyr";
     }
 
-    public override void OnItemEquipped()
+    public override void OnEquipped()
     {
         PlayerController.Instance.stats.damage += 1;
     }
