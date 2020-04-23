@@ -4,13 +4,3 @@ passiveItems =
 {
 	"SacrificialDagger.lua"
 }
-
-activeItems = 
-{
-
-}
-
-monsters = 
-{
-
-}

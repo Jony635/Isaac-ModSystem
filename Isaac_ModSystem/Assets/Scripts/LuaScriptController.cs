@@ -70,7 +70,7 @@ public class LuaScriptController : MonoBehaviour
                 monsters.name = "Monsters";
                 monsters.transform.SetParent(transform);
 
-                LoadPassiveItems();
+                LoadItemsAndMonsters();
             }           
         }
     }
@@ -105,17 +105,12 @@ public class LuaScriptController : MonoBehaviour
         string ret = null;
         
         Lua.GetGlobal(name);
-        try
+        if(!Lua.IsNoneOrNil(-1))
         {
             ret = Lua.L_CheckString(-1);
-        }
-        catch 
-        { 
-            Lua.Pop(-1);
-            return null;
-        }
-
+        }           
         Lua.Pop(1);
+
         return ret;
     }
 
@@ -175,47 +170,73 @@ public class LuaScriptController : MonoBehaviour
 		return 1;
 	}
 
-    private void LoadPassiveItems()
+    private void LoadItemsAndMonsters()
     {
-        List<string> items = new List<string>();
-
-        //Extract lua files from the global variable
-        Lua.GetGlobal("passiveItems");
-        if(Lua.IsNoneOrNil(-1))
+        for(int step = 0; step < 3; ++step)
         {
-            Lua.Pop(1);
-            return;
-        }
+            List<string> elements = new List<string>();
 
-        for (int i = 1; true; ++i)
-        {
-            Lua.RawGetI(-1, i);
+            switch(step)
+            {
+                case 0:
+                    Lua.GetGlobal("passiveItems");
+                    break;
+                case 1:
+                    Lua.GetGlobal("activeItems");
+                    break;
+                case 2:
+                    Lua.GetGlobal("monsters");
+                    break;
+            }
+            
             if (Lua.IsNoneOrNil(-1))
             {
-                Lua.Pop(2);
-                break;
-            }               
+                Lua.Pop(1);
+                continue;
+            }
 
-            items.Add(Lua.L_CheckString(-1));
-            Lua.Pop(1);
-        }
-
-        foreach(string item in items)
-        {
-            string itemPath = basePath + "/" + item;
-            if(File.Exists(itemPath))
+            for (int i = 1; true; ++i)
             {
-                string itemName = item.Substring(item.LastIndexOf('/') + 1);
-                itemName = itemName.Remove(itemName.IndexOf('.'));
+                Lua.RawGetI(-1, i);
+                if (Lua.IsNoneOrNil(-1))
+                {
+                    Lua.Pop(2);
+                    break;
+                }
 
-                GameObject passiveItem = new GameObject();
-                passiveItem.name = itemName;
-                passiveItem.transform.SetParent(passiveItems.transform);
+                elements.Add(Lua.L_CheckString(-1));
+                Lua.Pop(1);
+            }
 
-                LuaScriptController controller = passiveItem.AddComponent<LuaScriptController>();
-                controller.LuaScriptFile = itemPath;
-                controller.basePath = itemPath.Substring(0, itemPath.LastIndexOf('/'));
-                controller.Initialize();           
+            foreach (string item in elements)
+            {
+                string path = basePath + "/" + item;
+                if (File.Exists(path))
+                {
+                    string name = item.Substring(item.LastIndexOf('/') + 1);
+                    name = name.Remove(name.IndexOf('.'));
+
+                    GameObject element = new GameObject();
+                    element.name = name;
+
+                    switch (step)
+                    {
+                        case 0:
+                            element.transform.SetParent(passiveItems.transform);
+                            break;
+                        case 1:
+                            element.transform.SetParent(activeItems.transform);
+                            break;
+                        case 2:
+                            element.transform.SetParent(monsters.transform);
+                            break;
+                    }
+                  
+                    LuaScriptController controller = element.AddComponent<LuaScriptController>();
+                    controller.LuaScriptFile = path;
+                    controller.basePath = path.Substring(0, path.LastIndexOf('/'));
+                    controller.Initialize();
+                }
             }
         }    
     }
