@@ -170,7 +170,7 @@ public class PlayerController : MonoBehaviour
 
                 #region ACTIVE ITEM USED
                 if(gamepad.leftTrigger.wasPressedThisFrame)
-                    ActiveItemContainer.Instance.ActiveItemUsed();
+                    ItemManager.Instance.OnActiveItemButtonPressed();
                 #endregion
             }
         }

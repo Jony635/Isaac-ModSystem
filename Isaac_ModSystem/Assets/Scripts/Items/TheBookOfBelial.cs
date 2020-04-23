@@ -14,13 +14,13 @@ public class TheBookOfBelial : ActiveItem
         currentCharges = numCharges = 3u;
     }
 
-    public override void OnActiveButtonPressed()
+    public override void OnUsed()
     {
         activatedThisRoom = true;
         PlayerController.Instance.stats.damage += 2;
     }
 
-    public override void OnNewRoomCleared()
+    public override void OnNewRoomEntered(bool alreadyDefeated)
     {
         if(activatedThisRoom)
         {

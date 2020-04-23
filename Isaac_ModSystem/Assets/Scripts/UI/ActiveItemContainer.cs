@@ -61,28 +61,19 @@ public class ActiveItemContainer : MonoBehaviour
 
     public void ActiveItemUsed()
     {
-        if (equippedItem == null)
-            return;
-
         if(equippedItem.currentCharges == equippedItem.numCharges)
         {
             equippedItem.currentCharges = 0;
             maskPercent = 0f;
             Masking();
-
-            equippedItem.OnActiveButtonPressed();
+            equippedItem.OnUsed();
         }
     }
 
-    public void RoomCleared()
-    {
-        if(equippedItem)
-        {
-            equippedItem.currentCharges = (uint)Mathf.Clamp(equippedItem.currentCharges + 1, 0, equippedItem.numCharges);
-            equippedItem.OnNewRoomCleared();
-
-            maskPercent = (float)equippedItem.currentCharges / (float)equippedItem.numCharges;
-            Masking();
-        }
+    public void OnNewRoomCleared()
+    {      
+        equippedItem.currentCharges = (uint)Mathf.Clamp(equippedItem.currentCharges + 1, 0, equippedItem.numCharges);
+        maskPercent = (float)equippedItem.currentCharges / (float)equippedItem.numCharges;
+        Masking();
     }
 }

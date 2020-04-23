@@ -11,13 +11,13 @@ public class ItemManager : MonoBehaviour
     public static ItemManager Instance;
 
     [SerializeField]
-    private GameObject availableItems;
-    [SerializeField]
-    private GameObject equippedItems;
-    [SerializeField]
-    private GameObject activeItem;
-    [SerializeField]
-    private GameObject discardedItems;
+    private GameObject itemsGO;
+
+    private List<Item> availableItems = new List<Item>();
+    private List<Item> equippedItems = new List<Item>();
+    private List<ActiveItem> discardedItems = new List<ActiveItem>();
+
+    private ActiveItem activeItemEquipped = null;
 
     [SerializeField]
     private GameObject mods;
@@ -31,18 +31,11 @@ public class ItemManager : MonoBehaviour
 
     public Item GetRandomAvailableItem()
     {
-        if (availableItems.transform.childCount <= 0)
+        if (availableItems.Count <= 0)
             return null;
 
-        int random = UnityEngine.Random.Range(0, availableItems.transform.childCount);
-        Item ret = availableItems.transform.GetChild(random).GetComponent<Item>();
-        if(ret.gameObject.activeSelf)
-        {
-            ret.gameObject.SetActive(false);
-            return ret;
-        }
-        
-        return null;
+        int random = UnityEngine.Random.Range(0, availableItems.Count);
+        return availableItems[random];
     }
 
     private void InstantiateAllAvailableItems()
@@ -55,8 +48,10 @@ public class ItemManager : MonoBehaviour
                 {
                     GameObject newGO = new GameObject();
                     newGO.name = type.ToString();
-                    newGO.transform.SetParent(availableItems.transform);
-                    newGO.AddComponent(type);
+                    newGO.transform.SetParent(itemsGO.transform);
+
+                    Item item = (Item)newGO.AddComponent(type);
+                    availableItems.Add(item);
                 }
             }
         }
@@ -69,59 +64,90 @@ public class ItemManager : MonoBehaviour
             string[] modFolders = Directory.GetDirectories(Application.dataPath + "/Mods/");
             foreach (string modFolder in modFolders)
             {
-                //TODO: Load the resources, create the GameObjects, etc.
-
-                //STEPS:
-                // 1. Create 1 Empty gameobject named as the folder.                                        v
-                // 2. Add a LuaScriptController Component.                                                  v
-                // 3. Look for a main.lua inside the folder.
-                // 4. Extract the string stored in the global variable "itemicon"
-                // 5. Import at runtime the .png file as a Texture/Sprite
-                // 6. Store the Sprite inside the LuaScriptController component.
-                // 7. Try to show the icon in the active item icon sprite in order to see the results.
-                // 8. Store the created gameobject in its respective place depending of the item.
-
                 string modName = modFolder.Substring(modFolder.LastIndexOf('/') + 1);
 
-                GameObject modGO = new GameObject();
-                modGO.name = modName;
-                modGO.transform.SetParent(mods.transform);
-
-                LuaScriptController scriptController = modGO.AddComponent<LuaScriptController>();
-
-                if(File.Exists(modFolder + "/main.lua"))
+                if (File.Exists(modFolder + "/main.lua"))
                 {
+                    GameObject modGO = new GameObject();
+                    modGO.name = modName;
+                    modGO.transform.SetParent(mods.transform);
+
+                    LuaScriptController scriptController = modGO.AddComponent<LuaScriptController>();
+
                     scriptController.basePath = modFolder;
                     scriptController.LuaScriptFile = modFolder + "/main.lua";
                     scriptController.isMain = true;
                     scriptController.Initialize();
-                }
+                }           
             }
         }      
     }
 
+    //Events
     public void EquipItem(Item item, ItemAltar altar = null)
     {
         if (item.GetType().IsSubclassOf(typeof(ActiveItem)))
         {
-            if(activeItem.transform.childCount > 0)
+            if(activeItemEquipped != null)
             {
-                Transform equipedItem = activeItem.transform.GetChild(0);
-                equipedItem.SetParent(discardedItems.transform);
+                if(discardedItems.Contains((ActiveItem)item))               
+                    discardedItems.Remove((ActiveItem)item);               
 
-                altar.ChangeHoldedItem(equipedItem.GetComponent<Item>());
+                discardedItems.Add(activeItemEquipped);
+                altar.ChangeHoldedItem(activeItemEquipped);
             }
 
-            item.transform.SetParent(activeItem.transform);
+            activeItemEquipped = (ActiveItem)item;
 
             ActiveItemContainer.Instance.ActiveItemEquipped((ActiveItem)item);
         }
 
-        else if (item.transform.parent == availableItems.transform)
+        else if (availableItems.Contains(item))
         {
-            item.transform.SetParent(equippedItems.transform);
-        }   
-        
+            equippedItems.Add(item);
+        }
+
+        availableItems.Remove(item);
         item.OnItemEquipped();
+    }
+
+    public void OnNewRoomCleared()
+    {
+        foreach(Item item in equippedItems)
+        {
+            item.OnNewRoomCleared();
+        }
+
+        if (activeItemEquipped)
+        {
+            ActiveItemContainer.Instance.OnNewRoomCleared();
+            activeItemEquipped.OnNewRoomCleared();
+        }
+    }
+
+    public void OnNewRoomEntered(bool alreadyDefeated = false)
+    {
+        foreach(Item item in equippedItems)
+        {
+            item.OnNewRoomEntered(alreadyDefeated);
+        }
+
+        if(activeItemEquipped != null)
+        {
+            activeItemEquipped.OnNewRoomEntered(alreadyDefeated);
+        }
+    }
+
+    public void OnMonsterDied()
+    {
+
+    }
+
+    public void OnActiveItemButtonPressed()
+    {
+        if(activeItemEquipped != null)
+        {
+            ActiveItemContainer.Instance.ActiveItemUsed();          
+        }
     }
 }

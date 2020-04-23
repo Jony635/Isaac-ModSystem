@@ -180,7 +180,10 @@ public class RoomManager : MonoBehaviour
             PlayerController.Instance.enabled = true;
             currentRoom = door.connectedDoor.thisRoom;
 
-            currentRoom.GetComponent<Room>().SetUpRoom();
+            Room room = currentRoom.GetComponent<Room>();
+            room.SetUpRoom();
+
+            ItemManager.Instance.OnNewRoomEntered(room.alreadyDefeated);
         }));       
     }
 
@@ -202,10 +205,8 @@ public class RoomManager : MonoBehaviour
         callback.Invoke();
     }  
 
-    public void RoomCleared()
-    {
-        ActiveItemContainer.Instance.RoomCleared();
-
+    public void OnNewRoomCleared()
+    { 
         bool levelFinished = true;
         foreach(Room room in rooms)
         {
