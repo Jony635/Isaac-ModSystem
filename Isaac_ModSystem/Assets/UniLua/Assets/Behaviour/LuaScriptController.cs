@@ -181,17 +181,15 @@ public class LuaScriptController : MonoBehaviour
 
         //Extract lua files from the global variable
         Lua.GetGlobal("passiveItems");
+        if(Lua.IsNoneOrNil(-1))
+        {
+            Lua.Pop(1);
+            return;
+        }
+
         for (int i = 1; true; ++i)
         {
-            try
-            {
-                Lua.RawGetI(-1, i);
-            }
-            catch
-            {
-                break;
-            }
-
+            Lua.RawGetI(-1, i);
             if (Lua.IsNoneOrNil(-1))
             {
                 Lua.Pop(2);
