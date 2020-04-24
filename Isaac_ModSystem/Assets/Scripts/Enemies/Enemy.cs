@@ -38,7 +38,7 @@ public abstract class Enemy : MonoBehaviour
     {
         if(LayerMask.LayerToName(collider.gameObject.layer) == "PlayerTear")
         {
-            TakeDamage(PlayerController.Instance.stats.damage);
+            TakeDamage(PlayerController.Instance.stats.plainDamage * PlayerController.Instance.stats.factorDamage);
         }
     }
 

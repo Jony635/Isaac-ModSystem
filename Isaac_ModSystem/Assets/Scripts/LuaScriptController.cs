@@ -29,6 +29,7 @@ public class LuaScriptController : MonoBehaviour
     private GameObject activeItems = null;
     private GameObject monsters = null;
 
+    #region LUA FUNCTION REFERENCES
     private int			AwakeRef = -1;
 	private int			StartRef = -1;
 	private int			UpdateRef = -1;
@@ -43,6 +44,7 @@ public class LuaScriptController : MonoBehaviour
     private int         OnEnableRef = -1;
     private int         OnDisableRef = -1;
     private int         OnEquippedRef = -1;
+    #endregion
 
     public void Initialize()
     {
@@ -57,6 +59,7 @@ public class LuaScriptController : MonoBehaviour
                 throw new Exception(Lua.ToString(-1));
             }
 
+            #region Get Lua Function References
             AwakeRef = StoreMethod("Awake");
             StartRef = StoreMethod("Start");
             UpdateRef = StoreMethod("Update");
@@ -64,6 +67,30 @@ public class LuaScriptController : MonoBehaviour
             FixedUpdateRef = StoreMethod("FixedUpdate");
 
             OnEquippedRef = StoreMethod("OnEquipped");
+            #endregion
+
+            #region Push C# Functions to Lua
+            Lua.PushCSharpFunction(AddDamage);
+            Lua.SetGlobal("AddDamage");
+            
+            Lua.PushCSharpFunction(SubstractDamage);
+            Lua.SetGlobal("SubstractDamage");
+
+            Lua.PushCSharpFunction(GetPlainDamage);
+            Lua.SetGlobal("GetPlainDamage");
+
+            Lua.PushCSharpFunction(AddFactorDamage);
+            Lua.SetGlobal("AddFactorDamage");
+
+            Lua.PushCSharpFunction(SubstractFactorDamage);
+            Lua.SetGlobal("SubstractFactorDamage");
+
+            Lua.PushCSharpFunction(GetFactorDamage);
+            Lua.SetGlobal("GetFactorDamage");
+
+            Lua.PushCSharpFunction(GetDamage);
+            Lua.SetGlobal("GetDamage");
+            #endregion
 
             Lua.Pop(-1);
 
@@ -90,6 +117,7 @@ public class LuaScriptController : MonoBehaviour
         }
     }
 
+    #region C#->Lua FUNCTIONS
     private void Awake() 
     {
 		CallMethod( AwakeRef );
@@ -97,8 +125,8 @@ public class LuaScriptController : MonoBehaviour
 
     private void Start() 
     {
-		CallMethod( StartRef );
-	}
+        CallMethod( StartRef );
+    }
 
     private void Update() 
     {
@@ -138,7 +166,57 @@ public class LuaScriptController : MonoBehaviour
     {
         CallMethod(OnEquippedRef);
     }
+    #endregion
 
+    #region Lua->C# FUNCTIONS
+    public int AddDamage(ILuaState lua)
+    {
+        float sum = (float)lua.L_CheckNumber(1);
+        PlayerController.Instance.stats.plainDamage += sum;
+        return 0;
+    }
+
+    public int SubstractDamage(ILuaState lua)
+    {
+        float sub = (float)lua.L_CheckNumber(1);
+        PlayerController.Instance.stats.plainDamage -= sub;
+        return 0;
+    }
+
+    public int AddFactorDamage(ILuaState lua)
+    {
+        float sum = (float)lua.L_CheckNumber(1);
+        PlayerController.Instance.stats.factorDamage += sum;
+        return 0;
+    }
+    
+    public int SubstractFactorDamage(ILuaState lua)
+    {
+        float sub = (float)lua.L_CheckNumber(1);
+        PlayerController.Instance.stats.factorDamage -= sub;
+        return 0;
+    }
+
+    public int GetPlainDamage(ILuaState lua)
+    {
+        lua.PushNumber(PlayerController.Instance.stats.plainDamage);
+        return 1;
+    }
+
+    public int GetFactorDamage(ILuaState lua)
+    {
+        lua.PushNumber(PlayerController.Instance.stats.factorDamage);
+        return 1;
+    }
+
+    public int GetDamage(ILuaState lua)
+    {
+        lua.PushNumber(PlayerController.Instance.stats.plainDamage * PlayerController.Instance.stats.factorDamage);
+        return 1;
+    }
+    #endregion
+
+    #region Utils
     private string GetGlobalString(string name)
     {
         string ret = null;
@@ -189,19 +267,19 @@ public class LuaScriptController : MonoBehaviour
             object argument = arguments[i];
             Type type = argument.GetType();
 
-            if(type == typeof(bool))
+            if (type == typeof(bool))
             {
                 Lua.PushBoolean((bool)argument);
             }
-            else if(type == typeof(string))
+            else if (type == typeof(string))
             {
                 Lua.PushString((string)argument);
             }
-            else if(type == typeof(float) || type == typeof(double))
+            else if (type == typeof(float) || type == typeof(double))
             {
                 Lua.PushNumber(type == typeof(float) ? (float)argument : (double)argument);
             }
-            else if(type == typeof(int))
+            else if (type == typeof(int))
             {
                 Lua.PushInteger((int)argument);
             }
@@ -211,6 +289,7 @@ public class LuaScriptController : MonoBehaviour
 		if( status != ThreadStatus.LUA_OK )
 		{
 			Debug.LogError( Lua.ToString(-1) );
+            Lua.Pop(1);
 		}
 
         // remove `traceback' function
@@ -233,8 +312,10 @@ public class LuaScriptController : MonoBehaviour
                 lua.PushString("(no error message)");
             }
         }
+
         return 1;
 	}
+    #endregion
 
     private void LoadItemsAndMonsters()
     {

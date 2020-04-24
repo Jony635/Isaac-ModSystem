@@ -17,14 +17,14 @@ public class TheBookOfBelial : ActiveItem
     public override void OnUsed()
     {
         activatedThisRoom = true;
-        PlayerController.Instance.stats.damage += 2;
+        PlayerController.Instance.stats.plainDamage += 2;
     }
 
     public override void OnNewRoomEntered(bool alreadyDefeated)
     {
         if(activatedThisRoom)
         {
-            PlayerController.Instance.stats.damage -= 2;
+            PlayerController.Instance.stats.plainDamage -= 2;
             activatedThisRoom = false;
         }
     }

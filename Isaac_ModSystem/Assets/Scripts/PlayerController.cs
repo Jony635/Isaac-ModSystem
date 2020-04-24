@@ -10,14 +10,17 @@ public class PlayerController : MonoBehaviour
     [System.Serializable]
     public struct Stats
     {
-        public float damage;
+        public float plainDamage;
+        public float factorDamage;
+
         public float speed;
         public float hp;
         public float maxHp;
 
         public Stats(string useless)
         {
-            damage = 5f;
+            plainDamage = 5f;
+            factorDamage = 1f;
             speed = 7f;
             maxHp = hp = 6f;
         }

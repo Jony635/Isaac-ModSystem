@@ -12,6 +12,6 @@ public class BloodOfTheMartyr : Item
 
     public override void OnEquipped()
     {
-        PlayerController.Instance.stats.damage += 1;
+        PlayerController.Instance.stats.plainDamage += 1;
     }
 }
