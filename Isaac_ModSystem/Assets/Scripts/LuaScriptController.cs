@@ -44,14 +44,18 @@ public class LuaScriptController : MonoBehaviour
     private int         OnEnableRef = -1;
     private int         OnDisableRef = -1;
     private int         OnEquippedRef = -1;
-    #endregion
+    #endregion 
 
     public void Initialize()
     {
         if (Lua == null)
         {
             Lua = LuaAPI.NewState();
+
             Lua.L_OpenLibs();
+
+            //Push C# Functions to Lua
+            Lua.L_RequireF("ModSystem", OpenModSystemLib, false);
 
             var status = Lua.L_DoFile(LuaScriptFile);
             if (status != ThreadStatus.LUA_OK)
@@ -67,30 +71,7 @@ public class LuaScriptController : MonoBehaviour
             FixedUpdateRef = StoreMethod("FixedUpdate");
 
             OnEquippedRef = StoreMethod("OnEquipped");
-            #endregion
-
-            #region Push C# Functions to Lua
-            Lua.PushCSharpFunction(AddDamage);
-            Lua.SetGlobal("AddDamage");
-            
-            Lua.PushCSharpFunction(SubstractDamage);
-            Lua.SetGlobal("SubstractDamage");
-
-            Lua.PushCSharpFunction(GetPlainDamage);
-            Lua.SetGlobal("GetPlainDamage");
-
-            Lua.PushCSharpFunction(AddFactorDamage);
-            Lua.SetGlobal("AddFactorDamage");
-
-            Lua.PushCSharpFunction(SubstractFactorDamage);
-            Lua.SetGlobal("SubstractFactorDamage");
-
-            Lua.PushCSharpFunction(GetFactorDamage);
-            Lua.SetGlobal("GetFactorDamage");
-
-            Lua.PushCSharpFunction(GetDamage);
-            Lua.SetGlobal("GetDamage");
-            #endregion
+            #endregion         
 
             Lua.Pop(-1);
 
@@ -315,6 +296,23 @@ public class LuaScriptController : MonoBehaviour
 
         return 1;
 	}
+
+    private int OpenModSystemLib(ILuaState lua)
+    {
+        NameFuncPair[] lib = new NameFuncPair[]
+        {
+            new NameFuncPair("AddDamage", AddDamage),
+            new NameFuncPair("SubstractDamage", SubstractDamage),
+            new NameFuncPair("GetPlainDamage", GetPlainDamage),
+            new NameFuncPair("AddFactorDamage", AddFactorDamage),
+            new NameFuncPair("SubstractFactorDamage", SubstractFactorDamage),
+            new NameFuncPair("GetFactorDamage", GetFactorDamage),
+            new NameFuncPair("GetDamage", GetDamage),
+        };
+        lua.L_NewLib(lib);
+
+        return 1;
+    }
     #endregion
 
     private void LoadItemsAndMonsters()

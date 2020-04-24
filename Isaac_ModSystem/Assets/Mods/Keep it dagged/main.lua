@@ -1,3 +1,5 @@
+mod = require "ModSystem"
+
 sprite = "collectibles_172_sacrificialdagger.png"
 
 passiveItems = 
@@ -8,13 +10,13 @@ passiveItems =
 function Start()
 	print("Mod Start")
 
-	prevDamage = GetDamage()
+	prevDamage = mod.GetDamage()
 
-	AddDamage(0.1)
+	mod.AddDamage(0.1)
 
-	AddFactorDamage(1)
+	mod.AddFactorDamage(1)
 
-	print(string.format("Previous damage: %.2f. Current damage: %.2f", prevDamage, GetDamage()))
+	print(string.format("Previous damage: %.2f. Current damage: %.2f", prevDamage, mod.GetDamage()))
 
 end
 
