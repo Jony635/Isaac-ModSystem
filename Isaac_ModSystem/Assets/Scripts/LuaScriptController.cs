@@ -11,6 +11,8 @@ using UnityEngine.UI;
 
 public class LuaScriptController : MonoBehaviour 
 {
+    const bool GEN_LIB = false;
+
 	private ILuaState 	Lua;
 
     [HideInInspector]
@@ -46,6 +48,9 @@ public class LuaScriptController : MonoBehaviour
     private int         OnEquippedRef = -1;
     #endregion 
 
+    //C# Functions container
+    private NameFuncPair[] lib;
+
     public void Initialize()
     {
         if (Lua == null)
@@ -54,8 +59,25 @@ public class LuaScriptController : MonoBehaviour
 
             Lua.L_OpenLibs();
 
-            //Push C# Functions to Lua
-            Lua.L_RequireF("ModSystem", OpenModSystemLib, false);
+            #region Push C# Functions to Lua
+
+            lib = new NameFuncPair[]
+            {
+                new NameFuncPair("AddDamage", AddDamage),
+                new NameFuncPair("SubstractDamage", SubstractDamage),
+                new NameFuncPair("GetPlainDamage", GetPlainDamage),
+                new NameFuncPair("AddFactorDamage", AddFactorDamage),
+                new NameFuncPair("SubstractFactorDamage", SubstractFactorDamage),
+                new NameFuncPair("GetFactorDamage", GetFactorDamage),
+                new NameFuncPair("GetDamage", GetDamage),
+            };
+            
+            if (GEN_LIB)
+                Lua.L_RequireF("ModSystem", OpenModSystemLib, false);
+            else
+                PushCSharpFunctions();
+
+            #endregion
 
             var status = Lua.L_DoFile(LuaScriptFile);
             if (status != ThreadStatus.LUA_OK)
@@ -298,20 +320,18 @@ public class LuaScriptController : MonoBehaviour
 	}
 
     private int OpenModSystemLib(ILuaState lua)
-    {
-        NameFuncPair[] lib = new NameFuncPair[]
-        {
-            new NameFuncPair("AddDamage", AddDamage),
-            new NameFuncPair("SubstractDamage", SubstractDamage),
-            new NameFuncPair("GetPlainDamage", GetPlainDamage),
-            new NameFuncPair("AddFactorDamage", AddFactorDamage),
-            new NameFuncPair("SubstractFactorDamage", SubstractFactorDamage),
-            new NameFuncPair("GetFactorDamage", GetFactorDamage),
-            new NameFuncPair("GetDamage", GetDamage),
-        };
+    {        
         lua.L_NewLib(lib);
-
         return 1;
+    }
+
+    private void PushCSharpFunctions()
+    {
+        foreach(NameFuncPair pair in lib)
+        {
+            Lua.PushCSharpFunction(pair.Func);
+            Lua.SetGlobal(pair.Name);
+        }
     }
     #endregion
 
@@ -408,4 +428,3 @@ public class LuaScriptController : MonoBehaviour
         return Sprite.Create(texture, new Rect(0.0f, 0.0f, texture.width, texture.height), new Vector2(0.5f, 0.5f), 30);
     } 
 }
-
