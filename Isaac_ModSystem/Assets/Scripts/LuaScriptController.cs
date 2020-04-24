@@ -42,8 +42,7 @@ public class LuaScriptController : MonoBehaviour
     private int         OnTriggerExit2DRef = -1;
     private int         OnEnableRef = -1;
     private int         OnDisableRef = -1;
-
-    private int         TestRef = -1;
+    private int         OnEquippedRef = -1;
 
     public void Initialize()
     {
@@ -64,7 +63,7 @@ public class LuaScriptController : MonoBehaviour
             LateUpdateRef = StoreMethod("LateUpdate");
             FixedUpdateRef = StoreMethod("FixedUpdate");
 
-            TestRef = StoreMethod("Test");
+            OnEquippedRef = StoreMethod("OnEquipped");
 
             Lua.Pop(-1);
 
@@ -103,9 +102,6 @@ public class LuaScriptController : MonoBehaviour
 
     private void Update() 
     {
-        if (TestRef == -1)
-            return;
-
         CallMethod( UpdateRef );
 	}
 
@@ -134,9 +130,14 @@ public class LuaScriptController : MonoBehaviour
 
     private void OnTriggerExit2D(Collider2D collider) { }
 
-    public virtual void OnEnable() { }
+    public void OnEnable() { }
 
-    public virtual void OnDisable() { }
+    public void OnDisable() { }
+
+    public void OnEquipped()
+    {
+        CallMethod(OnEquippedRef);
+    }
 
     private string GetGlobalString(string name)
     {
@@ -156,7 +157,7 @@ public class LuaScriptController : MonoBehaviour
 	{
         try
         {
-		    Lua.GetField( -1, name );
+		    Lua.GetField(-1, name);
         }
         catch
         {
@@ -216,7 +217,8 @@ public class LuaScriptController : MonoBehaviour
         Lua.Remove(b);
     }
 
-	private static int Traceback(ILuaState lua) {
+	private static int Traceback(ILuaState lua) 
+    {
         var msg = lua.ToString(1);
         if (msg != null)
         {
@@ -283,23 +285,34 @@ public class LuaScriptController : MonoBehaviour
                     GameObject element = new GameObject();
                     element.name = name;
 
+                    LuaScriptController controller = element.AddComponent<LuaScriptController>();
+                    controller.enabled = false;
+                    controller.LuaScriptFile = path;
+                    controller.basePath = path.Substring(0, path.LastIndexOf('/'));
+                    controller.Initialize();
+
                     switch (step)
                     {
                         case 0:
                             element.transform.SetParent(passiveItems.transform);
+                            PassiveItem pItem = element.AddComponent<PassiveItem>();
+                            pItem.luaScript = controller;
+                            pItem.name = name;
+                            pItem.sprite = controller.sprite;
+                            ItemManager.Instance.AddItem(pItem);                          
                             break;
                         case 1:
                             element.transform.SetParent(activeItems.transform);
+                            ActiveItem aItem = element.AddComponent<ActiveItem>();
+                            aItem.luaScript = controller;
+                            aItem.sprite = controller.sprite;
+                            ItemManager.Instance.AddItem(aItem);
                             break;
                         case 2:
                             element.transform.SetParent(monsters.transform);
+                            //element.AddComponent<Monster>().luaScript = controller;
                             break;
-                    }
-                  
-                    LuaScriptController controller = element.AddComponent<LuaScriptController>();
-                    controller.LuaScriptFile = path;
-                    controller.basePath = path.Substring(0, path.LastIndexOf('/'));
-                    controller.Initialize();
+                    }               
                 }
             }
         }    
@@ -313,7 +326,7 @@ public class LuaScriptController : MonoBehaviour
         texture.filterMode = FilterMode.Point;
         texture.LoadImage(textureBytes);
 
-        return Sprite.Create(texture, new Rect(0.0f, 0.0f, texture.width, texture.height), new Vector2(0.5f, 0.5f));
+        return Sprite.Create(texture, new Rect(0.0f, 0.0f, texture.width, texture.height), new Vector2(0.5f, 0.5f), 30);
     } 
 }
 

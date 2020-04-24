@@ -8,6 +8,7 @@ public class Item : MonoBehaviour
 
     public string name = "Default";
     public string pickUpSprite = "Default";
+    public Sprite sprite = null;
 
     protected virtual void Awake() { }
 
@@ -35,7 +36,14 @@ public class Item : MonoBehaviour
 
     public virtual void OnDisable() { }
 
-    public virtual void OnEquipped() { }
+    public virtual void OnEquipped() 
+    { 
+        if(luaScript != null)
+        {
+            luaScript.enabled = true;
+            luaScript.OnEquipped();
+        }
+    }
 
     public virtual void OnUnequipped() { }
 

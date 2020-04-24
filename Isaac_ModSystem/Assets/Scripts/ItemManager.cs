@@ -51,6 +51,7 @@ public class ItemManager : MonoBehaviour
                     newGO.transform.SetParent(itemsGO.transform);
 
                     Item item = (Item)newGO.AddComponent(type);
+                    item.sprite = Resources.Load<Sprite>(item.pickUpSprite);
                     availableItems.Add(item);
                 }
             }
@@ -73,7 +74,6 @@ public class ItemManager : MonoBehaviour
                     modGO.transform.SetParent(mods.transform);
 
                     LuaScriptController scriptController = modGO.AddComponent<LuaScriptController>();
-
                     scriptController.basePath = modFolder;
                     scriptController.LuaScriptFile = modFolder + "/main.lua";
                     scriptController.isMain = true;
@@ -149,5 +149,10 @@ public class ItemManager : MonoBehaviour
         {
             ActiveItemContainer.Instance.ActiveItemUsed();          
         }
+    }
+
+    public void AddItem(Item item)
+    {
+        availableItems.Add(item);
     }
 }
