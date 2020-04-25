@@ -51,7 +51,7 @@ public class LuaScriptController : MonoBehaviour
     //C# Functions container
     private NameFuncPair[] lib;
 
-    private Dictionary<Int32, GameObject> childs = new Dictionary<int, GameObject>();
+    private Dictionary<UInt32, GameObject> childs = new Dictionary<uint, GameObject>();
 
     public void Initialize()
     {
@@ -76,7 +76,11 @@ public class LuaScriptController : MonoBehaviour
                 new NameFuncPair("DeleteChild", DeleteChild),
                 new NameFuncPair("Wait", Wait),
                 new NameFuncPair("GetDT", GetDT),
+                new NameFuncPair("GetPosition", GetPosition),
+                new NameFuncPair("SetPosition", SetPosition),
             };
+
+            childs.Add(0, PlayerController.Instance.gameObject);
             
             if (GEN_LIB)
                 Lua.L_RequireF("ModSystem", OpenModSystemLib, false);
@@ -178,76 +182,76 @@ public class LuaScriptController : MonoBehaviour
     #endregion
 
     #region Lua->C# FUNCTIONS
-    public int AddDamage(ILuaState lua)
+    private int AddDamage(ILuaState lua)
     {
         float sum = (float)lua.L_CheckNumber(1);
         PlayerController.Instance.stats.plainDamage += sum;
         return 0;
     }
 
-    public int SubstractDamage(ILuaState lua)
+    private int SubstractDamage(ILuaState lua)
     {
         float sub = (float)lua.L_CheckNumber(1);
         PlayerController.Instance.stats.plainDamage -= sub;
         return 0;
     }
 
-    public int AddFactorDamage(ILuaState lua)
+    private int AddFactorDamage(ILuaState lua)
     {
         float sum = (float)lua.L_CheckNumber(1);
         PlayerController.Instance.stats.factorDamage += sum;
         return 0;
     }
-    
-    public int SubstractFactorDamage(ILuaState lua)
+
+    private int SubstractFactorDamage(ILuaState lua)
     {
         float sub = (float)lua.L_CheckNumber(1);
         PlayerController.Instance.stats.factorDamage -= sub;
         return 0;
     }
 
-    public int GetPlainDamage(ILuaState lua)
+    private int GetPlainDamage(ILuaState lua)
     {
         lua.PushNumber(PlayerController.Instance.stats.plainDamage);
         return 1;
     }
 
-    public int GetFactorDamage(ILuaState lua)
+    private int GetFactorDamage(ILuaState lua)
     {
         lua.PushNumber(PlayerController.Instance.stats.factorDamage);
         return 1;
     }
 
-    public int GetDamage(ILuaState lua)
+    private int GetDamage(ILuaState lua)
     {
         lua.PushNumber(PlayerController.Instance.stats.plainDamage * PlayerController.Instance.stats.factorDamage);
         return 1;
     }
 
-    public int AddChild(ILuaState lua)
+    private int AddChild(ILuaState lua)
     {
         GameObject newChild = new GameObject();
         newChild.transform.SetParent(transform);
 
-        int rand = 0;
+        uint rand = 0;
         do
         {
-            rand = (int)(UnityEngine.Random.value * uint.MaxValue);
+            rand = (uint)(UnityEngine.Random.value * uint.MaxValue);
 
-        } while(childs.ContainsKey(rand));
+        } while(childs.ContainsKey(rand) || rand == 0);
 
         childs.Add(rand, newChild);
 
-        lua.PushInteger(rand);
+        lua.PushUnsigned(rand);
 
         return 1;
     }
 
-    public int DeleteChild(ILuaState lua)
+    private int DeleteChild(ILuaState lua)
     {
-        int key = lua.L_CheckInteger(1);
+        uint key = lua.L_CheckUnsigned(1);
 
-        if(childs.ContainsKey(key))
+        if(childs.ContainsKey(key) && key != 0)
         {
             GameObject destroyed = childs[key];
             Destroy(destroyed);
@@ -256,8 +260,8 @@ public class LuaScriptController : MonoBehaviour
 
         return 0;
     }
-    
-    public int Wait(ILuaState lua)
+
+    private int Wait(ILuaState lua)
     {
         StartCoroutine(WaitCoroutine(lua));
         return 0;
@@ -274,10 +278,64 @@ public class LuaScriptController : MonoBehaviour
         luaThread.Resume(null, 0);      
     }
 
-    public int GetDT(ILuaState lua)
+    private int GetDT(ILuaState lua)
     {
         lua.PushNumber(Time.deltaTime);
         return 1;
+    }
+
+    private int GetPosition(ILuaState lua)
+    {
+        uint key = lua.L_CheckUnsigned(1);
+        if(childs.ContainsKey(key))
+        {
+            GameObject child = childs[key];
+
+            lua.NewTable();
+
+            lua.PushString("x");
+            lua.PushNumber(child.transform.position.x);
+            lua.SetTable(-3);
+
+            lua.PushString("y");
+            lua.PushNumber(child.transform.position.y);
+            lua.SetTable(-3);
+        }     
+
+        return 1;
+    }
+
+    private int SetPosition(ILuaState lua)
+    {
+        uint key = lua.L_CheckUnsigned(1);
+
+        if(childs.ContainsKey(key))
+        {
+            GameObject child = childs[key];
+
+            Vector2 newPosition = new Vector2(0, 0);
+
+            if(lua.IsTable(2))
+            {
+                lua.Insert(2);
+
+                lua.PushString("x");
+                lua.GetTable(-2);
+                double x = lua.L_CheckNumber(-1);
+                lua.Pop(1);
+
+                lua.PushString("y");
+                lua.GetTable(-2);
+                double y = lua.L_CheckNumber(-1);
+                lua.Pop(1);
+
+                newPosition = new Vector2((float)x, (float)y);
+            }
+
+            child.transform.position = newPosition;
+        }
+
+        return 0;
     }
 
     #endregion
