@@ -51,6 +51,8 @@ public class LuaScriptController : MonoBehaviour
     //C# Functions container
     private NameFuncPair[] lib;
 
+    private Dictionary<Int32, GameObject> childs = new Dictionary<int, GameObject>();
+
     public void Initialize()
     {
         if (Lua == null)
@@ -70,6 +72,10 @@ public class LuaScriptController : MonoBehaviour
                 new NameFuncPair("SubstractFactorDamage", SubstractFactorDamage),
                 new NameFuncPair("GetFactorDamage", GetFactorDamage),
                 new NameFuncPair("GetDamage", GetDamage),
+                new NameFuncPair("AddChild", AddChild),
+                new NameFuncPair("DeleteChild", DeleteChild),
+                new NameFuncPair("Wait", Wait),
+                new NameFuncPair("GetDT", GetDT),
             };
             
             if (GEN_LIB)
@@ -217,6 +223,63 @@ public class LuaScriptController : MonoBehaviour
         lua.PushNumber(PlayerController.Instance.stats.plainDamage * PlayerController.Instance.stats.factorDamage);
         return 1;
     }
+
+    public int AddChild(ILuaState lua)
+    {
+        GameObject newChild = new GameObject();
+        newChild.transform.SetParent(transform);
+
+        int rand = 0;
+        do
+        {
+            rand = (int)(UnityEngine.Random.value * uint.MaxValue);
+
+        } while(childs.ContainsKey(rand));
+
+        childs.Add(rand, newChild);
+
+        lua.PushInteger(rand);
+
+        return 1;
+    }
+
+    public int DeleteChild(ILuaState lua)
+    {
+        int key = lua.L_CheckInteger(1);
+
+        if(childs.ContainsKey(key))
+        {
+            GameObject destroyed = childs[key];
+            Destroy(destroyed);
+            childs.Remove(key);
+        }
+
+        return 0;
+    }
+    
+    public int Wait(ILuaState lua)
+    {
+        StartCoroutine(WaitCoroutine(lua));
+        return 0;
+    }
+
+    IEnumerator WaitCoroutine(ILuaState lua)
+    {
+        ILuaState luaThread = lua.NewThread();
+        lua.PushValue(2);
+        lua.XMove(luaThread, 1);
+
+        yield return new WaitForSeconds((float)lua.L_CheckNumber(1));
+
+        luaThread.Resume(null, 0);      
+    }
+
+    public int GetDT(ILuaState lua)
+    {
+        lua.PushNumber(Time.deltaTime);
+        return 1;
+    }
+
     #endregion
 
     #region Utils
