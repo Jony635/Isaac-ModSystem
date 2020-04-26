@@ -78,6 +78,7 @@ public class LuaScriptController : MonoBehaviour
                 new NameFuncPair("GetDT", GetDT),
                 new NameFuncPair("GetPosition", GetPosition),
                 new NameFuncPair("SetPosition", SetPosition),
+                new NameFuncPair("SetComponent", SetComponent),
             };
 
             childs.Add(0, PlayerController.Instance.gameObject);
@@ -335,6 +336,43 @@ public class LuaScriptController : MonoBehaviour
             child.transform.position = newPosition;
         }
 
+        return 0;
+    }
+
+    private int SetComponent(ILuaState lua)
+    {
+        uint key = lua.L_CheckUnsigned(1);
+        if(childs.ContainsKey(key))
+        {
+            GameObject child = childs[key];
+                        switch(lua.L_CheckString(2))
+            {
+                case "SpriteRenderer":
+
+                    if (lua.IsTable(3))
+                    {
+                        lua.Insert(3);
+
+                        lua.PushString("sprite");
+                        lua.GetTable(-2);
+                        if (!lua.IsNoneOrNil(-1))
+                        {
+                            int spriteIndex = lua.L_CheckInteger(-1);
+
+                            SpriteRenderer renderer = child.GetComponent<SpriteRenderer>();
+                            if (renderer == null)
+                                renderer = child.AddComponent<SpriteRenderer>();
+
+                            renderer.sortingOrder = 10;
+                            renderer.sprite = spriteIndex == 0 ? sprite : null; //TODO: extraSprites[spriteIndex - 1]
+                        }
+                       
+                        lua.Pop(1);
+                    }
+                    break;
+            }
+
+        }
         return 0;
     }
 
