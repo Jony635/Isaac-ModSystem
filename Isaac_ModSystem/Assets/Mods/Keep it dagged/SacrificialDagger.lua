@@ -36,6 +36,10 @@ function Update()
 	dir = Rotate2DVector({x = 1, y = 0}, angle + 240)
 	SetPosition(daggers[3], CalculatePosition(IsaacPos, dir, radius))
 
+	SetRotation(daggers[1], angle + 180)
+	SetRotation(daggers[2], angle + 180 + 120)
+	SetRotation(daggers[3], angle + 180 + 240)
+
 end
 
 function Rotate2DVector(vec, degAngle)

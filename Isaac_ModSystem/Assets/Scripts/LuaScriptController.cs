@@ -78,6 +78,7 @@ public class LuaScriptController : MonoBehaviour
                 new NameFuncPair("GetDT", GetDT),
                 new NameFuncPair("GetPosition", GetPosition),
                 new NameFuncPair("SetPosition", SetPosition),
+                new NameFuncPair("SetRotation", SetRotation),
                 new NameFuncPair("SetComponent", SetComponent),
             };
 
@@ -335,6 +336,21 @@ public class LuaScriptController : MonoBehaviour
 
             child.transform.position = newPosition;
         }
+
+        return 0;
+    }
+
+    private int SetRotation(ILuaState lua)
+    {
+        uint key = lua.L_CheckUnsigned(1);
+
+        if(childs.ContainsKey(key))
+        {
+            GameObject child = childs[key];
+            float angle = (float)lua.L_CheckNumber(2);
+
+            child.transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
+        }     
 
         return 0;
     }
