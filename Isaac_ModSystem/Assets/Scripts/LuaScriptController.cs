@@ -46,6 +46,9 @@ public class LuaScriptController : MonoBehaviour
     private int         OnEnableRef = -1;
     private int         OnDisableRef = -1;
     private int         OnEquippedRef = -1;
+    private int         OnEnemyHitStartRef = -1;
+    private int         OnEnemyHitStayRef = -1;
+    private int         OnEnemyHitExitRef = -1;
     #endregion 
 
     //C# Functions container
@@ -105,6 +108,9 @@ public class LuaScriptController : MonoBehaviour
             FixedUpdateRef = StoreMethod("FixedUpdate");
 
             OnEquippedRef = StoreMethod("OnEquipped");
+            OnEnemyHitStartRef = StoreMethod("OnEnemyHitStart");
+            OnEnemyHitStayRef = StoreMethod("OnEnemyHitStay");
+            OnEnemyHitExitRef = StoreMethod("OnEnemyHitExit");
             #endregion         
 
             Lua.Pop(-1);
@@ -160,23 +166,26 @@ public class LuaScriptController : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision) 
     {
-        //CallMethod(OnCollisionEnter2DRef); 
     }
 
     private void OnTriggerEnter2D(Collider2D collider) 
     {
-
-        
-
+        CallMethod(OnEnemyHitStartRef);   
     }
 
     private void OnCollisionStay2D(Collision2D collision) { }
 
-    private void OnTriggerStay2D(Collider2D collider) { }
+    private void OnTriggerStay2D(Collider2D collider) 
+    {
+        CallMethod(OnEnemyHitStayRef);
+    }
 
     private void OnCollisionExit2D(Collision2D collision) { }
 
-    private void OnTriggerExit2D(Collider2D collider) { }
+    private void OnTriggerExit2D(Collider2D collider) 
+    {
+        CallMethod(OnEnemyHitExitRef);
+    }
 
     public void OnEnable() { }
 

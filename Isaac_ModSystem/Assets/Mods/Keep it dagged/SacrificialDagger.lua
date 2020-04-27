@@ -69,8 +69,30 @@ function CalculatePosition(origin, dir, radius)
 
 end
 
+function OnEnemyHitStart()
+
+print("start hit")
+
+end
+
+function OnEnemyHitStay()
+
+print("stay hit")
+
+end
+
+
+function OnEnemyHitExit()
+
+print("exit hit")
+
+end
+
 return
 {
 	OnEquipped = OnEquipped,
-	Update = Update
+	Update = Update,
+	OnEnemyHitStart = OnEnemyHitStart,
+	OnEnemyHitStay = OnEnemyHitStay,
+	OnEnemyHitExit = OnEnemyHitExit,
 }
