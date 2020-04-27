@@ -6,11 +6,14 @@ angle = 0
 radius = 1.5
 angularSpeed = 80
 
+boxCollider = {isTrigger = true, center = {x = 0.01466, y = 0.01759207}, size = {x = 0.36885, y = 0.8966106}}
+
 function OnEquipped()
 
 	for i = 1, 3 do		
 		daggers[i] = AddChild()
 		SetComponent(daggers[i], "SpriteRenderer", {sprite = 0})
+		SetComponent(daggers[i], "BoxCollider", boxCollider)
 	end	
 end
 

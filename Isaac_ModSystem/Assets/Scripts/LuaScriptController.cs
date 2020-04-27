@@ -163,7 +163,10 @@ public class LuaScriptController : MonoBehaviour
         //CallMethod(OnCollisionEnter2DRef); 
     }
 
-    private void OnTriggerEnter2D(Collider2D collider) { }
+    private void OnTriggerEnter2D(Collider2D collider) 
+    {
+        int a = 2;
+    }
 
     private void OnCollisionStay2D(Collision2D collision) { }
 
@@ -361,31 +364,103 @@ public class LuaScriptController : MonoBehaviour
         if(childs.ContainsKey(key))
         {
             GameObject child = childs[key];
-                        switch(lua.L_CheckString(2))
+            switch(lua.L_CheckString(2))
             {
                 case "SpriteRenderer":
-
-                    if (lua.IsTable(3))
                     {
-                        lua.Insert(3);
-
-                        lua.PushString("sprite");
-                        lua.GetTable(-2);
-                        if (!lua.IsNoneOrNil(-1))
+                        if (lua.IsTable(3))
                         {
-                            int spriteIndex = lua.L_CheckInteger(-1);
+                            lua.Insert(3);
 
-                            SpriteRenderer renderer = child.GetComponent<SpriteRenderer>();
-                            if (renderer == null)
-                                renderer = child.AddComponent<SpriteRenderer>();
+                            lua.PushString("sprite");
+                            lua.GetTable(-2);
+                            if (!lua.IsNoneOrNil(-1))
+                            {
+                                int spriteIndex = lua.L_CheckInteger(-1);
 
-                            renderer.sortingOrder = 10;
-                            renderer.sprite = spriteIndex == 0 ? sprite : null; //TODO: extraSprites[spriteIndex - 1]
+                                SpriteRenderer renderer = child.GetComponent<SpriteRenderer>();
+                                if (renderer == null)
+                                    renderer = child.AddComponent<SpriteRenderer>();
+
+                                renderer.sortingOrder = 10;
+                                renderer.sprite = spriteIndex == 0 ? sprite : null; //TODO: extraSprites[spriteIndex - 1]
+                            }
+
+                            lua.Pop(1);
                         }
-                       
-                        lua.Pop(1);
+                        break;
                     }
-                    break;
+                case "BoxCollider":
+                    {
+                        if (lua.IsTable(3))
+                        {
+                            lua.Insert(3);
+
+                            lua.PushString("isTrigger");
+                            lua.GetTable(-2);
+                            if (!lua.IsNoneOrNil(-1))
+                            {
+                                bool isTrigger = lua.ToBoolean(-1);
+
+                                BoxCollider2D box = child.GetComponent<BoxCollider2D>();
+                                if (box == null)
+                                    box = child.AddComponent<BoxCollider2D>();
+
+                                box.isTrigger = isTrigger;                              
+                            }
+                            lua.Pop(1);
+
+                            lua.PushString("center");
+                            lua.GetTable(-2);
+
+                            if (!lua.IsNoneOrNil(-1) && lua.IsTable(-1))
+                            {
+                                lua.PushString("x");
+                                lua.GetTable(-2);
+                                Vector2 center;
+                                center.x = (float)lua.L_CheckNumber(-1);
+                                lua.Pop(1);
+
+                                lua.PushString("y");
+                                lua.GetTable(-2);
+                                center.y = (float)lua.L_CheckNumber(-1);
+                                lua.Pop(1);
+
+                                BoxCollider2D box = child.GetComponent<BoxCollider2D>();
+                                if (box == null)
+                                    box = child.AddComponent<BoxCollider2D>();
+
+                                box.offset = center;
+                            }
+                            lua.Pop(1);
+
+                            lua.PushString("size");
+                            lua.GetTable(-2);
+
+                            if(!lua.IsNoneOrNil(-1) && lua.IsTable(-1))
+                            {
+                                lua.PushString("x");
+                                lua.GetTable(-2);
+                                Vector2 size;
+                                size.x = (float)lua.L_CheckNumber(-1);
+                                lua.Pop(1);
+
+                                lua.PushString("y");
+                                lua.GetTable(-2);
+                                size.y = (float)lua.L_CheckNumber(-1);
+                                lua.Pop(1);
+
+                                BoxCollider2D box = child.GetComponent<BoxCollider2D>();
+                                if (box == null)
+                                    box = child.AddComponent<BoxCollider2D>();
+
+                                box.size = size;
+                            }
+
+                            lua.Pop(1);
+                        }
+                        break;
+                    }
             }
 
         }
