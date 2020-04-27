@@ -18,9 +18,11 @@ public class EnemySquirt : Enemy
         enemyStats.attackSpeed = 3f;
 
         attackTimer = 1 / enemyStats.attackSpeed;
+
+        difficulty = 1;
     }
 
-    private void Awake()
+    protected override void Awake()
     {
         base.Awake();
     }
@@ -55,8 +57,9 @@ public class EnemySquirt : Enemy
     }
 
     IEnumerator AttackCoroutine()
-    {        
+    {
         animator.SetTrigger("Attack");
+
         Vector3 target = PlayerController.Instance.body.transform.position;
         Vector3 direction = Vector3.Normalize(target - transform.position);
 

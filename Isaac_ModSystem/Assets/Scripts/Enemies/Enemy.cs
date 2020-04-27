@@ -25,6 +25,8 @@ public abstract class Enemy : MonoBehaviour
 
     public EnemyStats enemyStats = new EnemyStats("");
 
+    public float difficulty = 1f;
+
     protected Animator animator;
     protected Rigidbody2D rb;
 
