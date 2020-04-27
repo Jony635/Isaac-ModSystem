@@ -165,7 +165,9 @@ public class LuaScriptController : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collider) 
     {
-        int a = 2;
+
+        
+
     }
 
     private void OnCollisionStay2D(Collision2D collision) { }
@@ -236,6 +238,7 @@ public class LuaScriptController : MonoBehaviour
     private int AddChild(ILuaState lua)
     {
         GameObject newChild = new GameObject();
+        newChild.layer = LayerMask.NameToLayer("Item");
         newChild.transform.SetParent(transform);
 
         uint rand = 0;
@@ -395,6 +398,12 @@ public class LuaScriptController : MonoBehaviour
                         if (lua.IsTable(3))
                         {
                             lua.Insert(3);
+
+                            if(GetComponent<Rigidbody2D>() == null)
+                            {
+                                Rigidbody2D rb = gameObject.AddComponent<Rigidbody2D>();
+                                rb.isKinematic = true;
+                            }
 
                             lua.PushString("isTrigger");
                             lua.GetTable(-2);
