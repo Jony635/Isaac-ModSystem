@@ -57,7 +57,7 @@ public class PlayerController : MonoBehaviour
 
     private bool detectControls = true;
 
-    public float difficulty = 2f;
+    public float difficulty = 1f;
 
     [Header("Character Stats")]
     public Stats stats = new Stats("");

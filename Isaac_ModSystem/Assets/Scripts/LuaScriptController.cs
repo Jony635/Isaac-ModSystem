@@ -9,11 +9,11 @@ using UnityEngine.InputSystem;
 
 using UnityEngine.UI;
 
-public class LuaScriptController : MonoBehaviour 
+public class LuaScriptController : MonoBehaviour
 {
     const bool GEN_LIB = false;
 
-	private ILuaState 	Lua;
+    private ILuaState Lua;
 
     [HideInInspector]
     public bool isMain = false;
@@ -32,23 +32,23 @@ public class LuaScriptController : MonoBehaviour
     private GameObject monsters = null;
 
     #region LUA FUNCTION REFERENCES
-    private int			AwakeRef = -1;
-	private int			StartRef = -1;
-	private int			UpdateRef = -1;
-	private int			FixedUpdateRef = -1;
-	private int			LateUpdateRef = -1;
-    private int         OnCollisionEnter2DRef = -1;
-    private int         OnTriggerEnter2DRef = -1;
-    private int         OnCollisionStay2DRef = -1;
-    private int         OnTriggerStay2DRef = -1;
-    private int         OnCollisionExit2DRef = -1;
-    private int         OnTriggerExit2DRef = -1;
-    private int         OnEnableRef = -1;
-    private int         OnDisableRef = -1;
-    private int         OnEquippedRef = -1;
-    private int         OnEnemyHitStartRef = -1;
-    private int         OnEnemyHitStayRef = -1;
-    private int         OnEnemyHitExitRef = -1;
+    private int AwakeRef = -1;
+    private int StartRef = -1;
+    private int UpdateRef = -1;
+    private int FixedUpdateRef = -1;
+    private int LateUpdateRef = -1;
+    private int OnCollisionEnter2DRef = -1;
+    private int OnTriggerEnter2DRef = -1;
+    private int OnCollisionStay2DRef = -1;
+    private int OnTriggerStay2DRef = -1;
+    private int OnCollisionExit2DRef = -1;
+    private int OnTriggerExit2DRef = -1;
+    private int OnEnableRef = -1;
+    private int OnDisableRef = -1;
+    private int OnEquippedRef = -1;
+    private int OnEnemyHitStartRef = -1;
+    private int OnEnemyHitStayRef = -1;
+    private int OnEnemyHitExitRef = -1;
     #endregion 
 
     //C# Functions container
@@ -83,10 +83,11 @@ public class LuaScriptController : MonoBehaviour
                 new NameFuncPair("SetPosition", SetPosition),
                 new NameFuncPair("SetRotation", SetRotation),
                 new NameFuncPair("SetComponent", SetComponent),
+                new NameFuncPair("Damage", Damage),
             };
 
             childs.Add(0, PlayerController.Instance.gameObject);
-            
+
             if (GEN_LIB)
                 Lua.L_RequireF("ModSystem", OpenModSystemLib, false);
             else
@@ -116,11 +117,11 @@ public class LuaScriptController : MonoBehaviour
             Lua.Pop(-1);
 
             string spritePath = GetGlobalString("sprite");
-            if(spritePath != null)
+            if (spritePath != null)
                 sprite = ImportSprite(basePath + "/" + spritePath);
 
-            if(isMain)
-            {           
+            if (isMain)
+            {
                 passiveItems = new GameObject();
                 passiveItems.name = "PassiveItems";
                 passiveItems.transform.SetParent(transform);
@@ -134,57 +135,70 @@ public class LuaScriptController : MonoBehaviour
                 monsters.transform.SetParent(transform);
 
                 LoadItemsAndMonsters();
-            }           
+            }
         }
     }
 
     #region C#->Lua FUNCTIONS
-    private void Awake() 
+    private void Awake()
     {
-		CallMethod( AwakeRef );
-	}
-
-    private void Start() 
-    {
-        CallMethod( StartRef );
+        CallMethod(AwakeRef);
     }
 
-    private void Update() 
+    private void Start()
     {
-        CallMethod( UpdateRef );
-	}
+        CallMethod(StartRef);
+    }
+
+    private void Update()
+    {
+        CallMethod(UpdateRef);
+    }
 
     private void FixedUpdate()
     {
         CallMethod(FixedUpdateRef);
     }
 
-    private void LateUpdate() 
+    private void LateUpdate()
     {
-		CallMethod( LateUpdateRef );
-	}
-
-    private void OnCollisionEnter2D(Collision2D collision) 
-    {
+        CallMethod(LateUpdateRef);
     }
 
-    private void OnTriggerEnter2D(Collider2D collider) 
+    private void OnCollisionEnter2D(Collision2D collision)
     {
-        CallMethod(OnEnemyHitStartRef);   
+
+    }
+
+    private void OnTriggerEnter2D(Collider2D collider)
+    {
+        if (collider.gameObject.layer == LayerMask.NameToLayer("Monster"))
+        {
+            uint enemyId = MonsterManager.Instance.AddRefEnemy(collider.GetComponent<Enemy>());
+            CallMethod(OnEnemyHitStartRef, 1, 0, enemyId);
+        }
     }
 
     private void OnCollisionStay2D(Collision2D collision) { }
 
-    private void OnTriggerStay2D(Collider2D collider) 
+    private void OnTriggerStay2D(Collider2D collider)
     {
-        CallMethod(OnEnemyHitStayRef);
+        if (collider.gameObject.layer == LayerMask.NameToLayer("Monster"))
+        {
+            uint enemyId = MonsterManager.Instance.AddRefEnemy(collider.GetComponent<Enemy>());
+            CallMethod(OnEnemyHitStayRef, 1, 0, enemyId);
+        }
     }
 
     private void OnCollisionExit2D(Collision2D collision) { }
 
     private void OnTriggerExit2D(Collider2D collider) 
     {
-        CallMethod(OnEnemyHitExitRef);
+        if (collider.gameObject.layer == LayerMask.NameToLayer("Monster"))
+        {
+            uint enemyId = MonsterManager.Instance.AddRefEnemy(collider.GetComponent<Enemy>());
+            CallMethod(OnEnemyHitExitRef, 1, 0, enemyId);
+        }
     }
 
     public void OnEnable() { }
@@ -214,15 +228,15 @@ public class LuaScriptController : MonoBehaviour
 
     private int AddFactorDamage(ILuaState lua)
     {
-        float sum = (float)lua.L_CheckNumber(1);
-        PlayerController.Instance.stats.factorDamage += sum;
+        float factor = (float)lua.L_CheckNumber(1);
+        PlayerController.Instance.stats.factorDamage *= factor;
         return 0;
     }
 
     private int SubstractFactorDamage(ILuaState lua)
     {
-        float sub = (float)lua.L_CheckNumber(1);
-        PlayerController.Instance.stats.factorDamage -= sub;
+        float factor = (float)lua.L_CheckNumber(1);
+        PlayerController.Instance.stats.factorDamage /= factor;
         return 0;
     }
 
@@ -485,6 +499,20 @@ public class LuaScriptController : MonoBehaviour
         return 0;
     }
 
+    private int Damage(ILuaState lua)
+    {
+        uint monsterKey = lua.L_CheckUnsigned(1);
+
+        Enemy enemy = MonsterManager.Instance.GetRefEnemy(monsterKey);
+        if (enemy)
+        {
+            float number = (float)lua.L_CheckNumber(2);
+            enemy.TakeDamage((float)lua.L_CheckNumber(2));
+        }
+
+        return 0;
+    }
+
     #endregion
 
     #region Utils
@@ -553,6 +581,10 @@ public class LuaScriptController : MonoBehaviour
             else if (type == typeof(int))
             {
                 Lua.PushInteger((int)argument);
+            }
+            else if (type == typeof(uint))
+            {
+                Lua.PushUnsigned((uint)argument);
             }
         }
 

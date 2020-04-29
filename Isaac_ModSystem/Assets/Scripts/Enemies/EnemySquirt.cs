@@ -8,6 +8,8 @@ public class EnemySquirt : Enemy
     private bool attacking = false;
     private bool attackFinished = true;
 
+    protected CapsuleCollider2D capsule;
+
     public EnemySquirt()
     {
         enemyStats.damage = 1f;
@@ -23,6 +25,14 @@ public class EnemySquirt : Enemy
     protected override void Awake()
     {
         base.Awake();
+        animator.runtimeAnimatorController = Resources.Load<RuntimeAnimatorController>("Animations/Monsters/Squirt");
+
+        capsule = gameObject.GetComponent<CapsuleCollider2D>();
+        if (!capsule)
+            capsule = gameObject.AddComponent<CapsuleCollider2D>();
+        capsule.direction = CapsuleDirection2D.Horizontal;
+        capsule.offset = new Vector2(0.01248912f, 0.4911186f);
+        capsule.size = new Vector2(1.338645f, 0.909272f);
     }
 
     // Update is called once per frame

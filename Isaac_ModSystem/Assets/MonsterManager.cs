@@ -10,6 +10,8 @@ public class MonsterManager : MonoBehaviour
 
     private List<Enemy> enemies = new List<Enemy>();
 
+    public Dictionary<uint, Enemy> enemiesRef = new Dictionary<uint, Enemy>();
+
     private void Awake()
     {
         Instance = this;
@@ -43,7 +45,7 @@ public class MonsterManager : MonoBehaviour
         List<Enemy> spawnable;
         do
         {
-            spawnable = enemies.FindAll(enemy => enemy.difficulty <= difficulty - achievedDifficulty);
+            spawnable = enemies.FindAll(enemy => enemy.difficulty <= (PlayerController.Instance.difficulty - achievedDifficulty));
             if(spawnable.Count > 0)
             {
                 int rand = UnityEngine.Random.Range(0, spawnable.Count);
@@ -53,5 +55,33 @@ public class MonsterManager : MonoBehaviour
         } while (spawnable.Count > 0);
        
         return ret.ToArray();
+    }
+
+    public uint AddRefEnemy(Enemy enemy)
+    {
+        if (enemiesRef.ContainsValue(enemy))
+        {
+            Func<uint> func = () => { foreach (uint _key in enemiesRef.Keys){ if (enemiesRef[_key] == enemy) return _key; } return 0; };
+            return func.Invoke(); 
+        }
+
+        uint key = 0u;
+        do
+        {
+            key = (uint)UnityEngine.Random.Range(1, uint.MaxValue);
+
+        } while (enemiesRef.ContainsKey(key));
+
+        enemiesRef.Add(key, enemy);
+
+        return key;
+    }
+
+    public Enemy GetRefEnemy(uint key)
+    {
+        if (!enemiesRef.ContainsKey(key))
+            return null;
+
+        return enemiesRef[key];
     }
 }

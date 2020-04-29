@@ -38,17 +38,17 @@ public class Enemy : MonoBehaviour
     protected Animator animator;
     protected Rigidbody2D rb;
     protected SpriteRenderer spriteRenderer;
-    protected CapsuleCollider2D capsule;
 
     [HideInInspector]
     public Room currentRoom;
 
     protected virtual void Awake()
     {
+        gameObject.layer = LayerMask.NameToLayer("Monster");
+
         animator = gameObject.GetComponent<Animator>();
         if (!animator)
             animator = gameObject.AddComponent<Animator>();
-        animator.runtimeAnimatorController = Resources.Load<RuntimeAnimatorController>("Animations/Monsters/Squirt");
 
         rb = gameObject.GetComponent<Rigidbody2D>();
         if (!rb)
@@ -58,14 +58,7 @@ public class Enemy : MonoBehaviour
 
         spriteRenderer = gameObject.GetComponent<SpriteRenderer>();
         if(!spriteRenderer)
-            spriteRenderer = gameObject.AddComponent<SpriteRenderer>();
-
-        capsule = gameObject.GetComponent<CapsuleCollider2D>();
-        if (!capsule)
-            capsule = gameObject.AddComponent<CapsuleCollider2D>();
-        capsule.direction = CapsuleDirection2D.Horizontal;
-        capsule.offset = new Vector2(0.01248912f, 0.4911186f);
-        capsule.size = new Vector2(1.338645f, 0.909272f);
+            spriteRenderer = gameObject.AddComponent<SpriteRenderer>();  
     }
 
     protected virtual void OnTriggerEnter2D(Collider2D collider)
@@ -74,11 +67,6 @@ public class Enemy : MonoBehaviour
         {
             TakeDamage(PlayerController.Instance.stats.plainDamage * PlayerController.Instance.stats.factorDamage);
         }
-    }
-
-    protected virtual void OnCollisionEnter2D(Collision2D collision)
-    {
-        
     }
 
     public void TakeDamage(float damage)
