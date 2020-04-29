@@ -641,12 +641,12 @@ public class LuaScriptController : MonoBehaviour
                 Lua.Pop(1);
             }
 
-            foreach (string item in elements)
+            foreach (string file in elements)
             {
-                string path = basePath + "/" + item;
+                string path = basePath + "/" + file;
                 if (File.Exists(path))
                 {
-                    string name = item.Substring(item.LastIndexOf('/') + 1);
+                    string name = file.Substring(file.LastIndexOf('/') + 1);
                     name = name.Remove(name.IndexOf('.'));
 
                     GameObject element = new GameObject();
@@ -677,7 +677,7 @@ public class LuaScriptController : MonoBehaviour
                             break;
                         case 2:
                             element.transform.SetParent(monsters.transform);
-                            //element.AddComponent<Monster>().luaScript = controller;
+                            element.AddComponent<Enemy>().luaScript = controller;
                             break;
                     }               
                 }

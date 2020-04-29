@@ -47,7 +47,6 @@ public class PlayerController : MonoBehaviour
     public float tearMaxInertia = 0.4f;
 
     public GameObject tearsContainer;
-
     public SpriteRenderer pickedItemRenderer;
 
     private Rigidbody2D rb;
@@ -57,6 +56,8 @@ public class PlayerController : MonoBehaviour
     private bool detectPickUp = true;
 
     private bool detectControls = true;
+
+    public float difficulty = 2f;
 
     [Header("Character Stats")]
     public Stats stats = new Stats("");

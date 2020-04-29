@@ -7,7 +7,10 @@ public class Room : MonoBehaviour
 {
     public Door[] doors = { };
     public GameObject itemAltar;
-    public GameObject monsters;
+    public GameObject monstersParent;
+
+    [HideInInspector]
+    public Enemy[] monsters;
 
     public bool alreadyDefeated = false;
 
@@ -16,18 +19,23 @@ public class Room : MonoBehaviour
         //Spawn Monsters
         if(this != RoomManager.Instance.initialRoom && !alreadyDefeated)
         {
-            if(monsters.transform.childCount > 0)
+            monsters = MonsterManager.Instance.GetEnemiesWith(PlayerController.Instance.difficulty);
+
+            if(monsters.Length > 0 )
             {
-                foreach(Door door in doors)
+                foreach (Door door in doors)
                 {
                     door.LockDoor();
                 }
 
-                for (int i = 0; i < monsters.transform.childCount; ++i)
+                foreach(Enemy enemy in monsters)
                 {
-                    monsters.transform.GetChild(i).gameObject.SetActive(true);
+                    enemy.transform.SetParent(monstersParent.transform);
+                    enemy.transform.position = transform.position;
+                    enemy.currentRoom = this;
+                    enemy.gameObject.SetActive(true);
                 }
-            }           
+            }
         }
     }
 
@@ -35,7 +43,7 @@ public class Room : MonoBehaviour
     {
         bool unlockDoors = true;
 
-        foreach(Enemy enemy in monsters.GetComponentsInChildren<Enemy>())
+        foreach(Enemy enemy in monsters)
         {
             if (enemy.gameObject.activeInHierarchy)
                 unlockDoors = false;

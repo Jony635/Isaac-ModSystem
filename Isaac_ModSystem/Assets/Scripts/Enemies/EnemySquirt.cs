@@ -4,8 +4,6 @@ using UnityEngine;
 
 public class EnemySquirt : Enemy
 {
-    public Room currentRoom;
-
     private float attackTimer = 0.0f;
     private bool attacking = false;
     private bool attackFinished = true;

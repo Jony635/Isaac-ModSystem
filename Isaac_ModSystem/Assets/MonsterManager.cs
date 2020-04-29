@@ -15,6 +15,7 @@ public class MonsterManager : MonoBehaviour
         Instance = this;
 
         ImportEnemies();
+
     }
 
     private void ImportEnemies()
@@ -34,9 +35,9 @@ public class MonsterManager : MonoBehaviour
         }
     }
 
-    public GameObject[] GetEnemiesWith(float difficulty)
+    public Enemy[] GetEnemiesWith(float difficulty)
     {
-        List<GameObject> ret = new List<GameObject>();
+        List<Enemy> ret = new List<Enemy>();
         float achievedDifficulty = 0f;
 
         List<Enemy> spawnable;
@@ -46,7 +47,7 @@ public class MonsterManager : MonoBehaviour
             if(spawnable.Count > 0)
             {
                 int rand = UnityEngine.Random.Range(0, spawnable.Count);
-                ret.Add(Instantiate(enemies[rand].gameObject));
+                ret.Add(Instantiate(enemies[rand].gameObject).GetComponent<Enemy>());
                 achievedDifficulty += enemies[rand].difficulty;
             }          
         } while (spawnable.Count > 0);
