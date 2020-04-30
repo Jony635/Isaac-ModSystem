@@ -84,6 +84,10 @@ public class LuaScriptController : MonoBehaviour
                 new NameFuncPair("SetRotation", SetRotation),
                 new NameFuncPair("SetComponent", SetComponent),
                 new NameFuncPair("Damage", Damage),
+                new NameFuncPair("Slow", Slow),
+                new NameFuncPair("ClearSlow", ClearSlow),
+                new NameFuncPair("GetSlowFactor", GetSlowFactor),
+                new NameFuncPair("GetRoomEnemies", GetRoomEnemies),
             };
 
             childs.Add(0, PlayerController.Instance.gameObject);
@@ -174,7 +178,7 @@ public class LuaScriptController : MonoBehaviour
     {
         if (collider.gameObject.layer == LayerMask.NameToLayer("Monster"))
         {
-            uint enemyId = MonsterManager.Instance.AddRefEnemy(collider.GetComponent<Enemy>());
+            uint enemyId = MonsterManager.Instance.RefEnemy(collider.GetComponent<Enemy>());
             CallMethod(OnEnemyHitStartRef, 1, 0, enemyId);
         }
     }
@@ -185,7 +189,7 @@ public class LuaScriptController : MonoBehaviour
     {
         if (collider.gameObject.layer == LayerMask.NameToLayer("Monster"))
         {
-            uint enemyId = MonsterManager.Instance.AddRefEnemy(collider.GetComponent<Enemy>());
+            uint enemyId = MonsterManager.Instance.RefEnemy(collider.GetComponent<Enemy>());
             CallMethod(OnEnemyHitStayRef, 1, 0, enemyId);
         }
     }
@@ -196,7 +200,7 @@ public class LuaScriptController : MonoBehaviour
     {
         if (collider.gameObject.layer == LayerMask.NameToLayer("Monster"))
         {
-            uint enemyId = MonsterManager.Instance.AddRefEnemy(collider.GetComponent<Enemy>());
+            uint enemyId = MonsterManager.Instance.RefEnemy(collider.GetComponent<Enemy>());
             CallMethod(OnEnemyHitExitRef, 1, 0, enemyId);
         }
     }
@@ -511,6 +515,78 @@ public class LuaScriptController : MonoBehaviour
         }
 
         return 0;
+    }
+
+    private int Slow(ILuaState lua)
+    {
+        uint monsterKey = lua.L_CheckUnsigned(1);
+
+        Enemy enemy = MonsterManager.Instance.GetRefEnemy(monsterKey);
+        if (enemy)
+        {
+            float number = (float)lua.L_CheckNumber(2);
+            enemy.enemyStats.speedFactor *= ((float)lua.L_CheckNumber(2));
+        }
+
+        return 0;
+    }
+
+    private int ClearSlow(ILuaState lua)
+    {
+        uint monsterKey = lua.L_CheckUnsigned(1);
+
+        Enemy enemy = MonsterManager.Instance.GetRefEnemy(monsterKey);
+        if (enemy)
+        {
+            float number = (float)lua.L_CheckNumber(2);
+            enemy.enemyStats.speedFactor /= ((float)lua.L_CheckNumber(2));
+        }
+
+        return 0;
+    }
+
+    private int GetSlowFactor(ILuaState lua)
+    {
+        uint monsterKey = lua.L_CheckUnsigned(1);
+
+        Enemy enemy = MonsterManager.Instance.GetRefEnemy(monsterKey);
+        if (enemy)
+            lua.PushNumber(enemy.enemyStats.speedFactor);
+
+        return 1;
+    }
+
+    private int GetRoomEnemies(ILuaState lua)
+    {
+        if (RoomManager.Instance.currentRoom.monsters.Length > 0)
+        {
+            uint amountEnemies = 0;
+
+            lua.NewTable();
+            for (int i = 0; i < RoomManager.Instance.currentRoom.monsters.Length; ++i)
+            { 
+                Enemy monster = RoomManager.Instance.currentRoom.monsters[i];
+
+                if (monster.gameObject.activeInHierarchy)
+                {
+                    amountEnemies++;
+                    lua.PushInteger(i+1);
+                    lua.PushUnsigned(MonsterManager.Instance.RefEnemy(monster));
+                    lua.SetTable(-3);                    
+                }
+            }
+
+            lua.PushUnsigned(amountEnemies);
+            lua.Insert(-2);
+
+            return 2;
+        }
+        else
+        {
+            lua.PushInteger(0);
+            return 1;
+        }
+   
     }
 
     #endregion

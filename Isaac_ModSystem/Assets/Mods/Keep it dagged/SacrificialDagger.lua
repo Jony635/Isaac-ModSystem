@@ -69,22 +69,10 @@ function CalculatePosition(origin, dir, radius)
 
 end
 
-function OnEnemyHitStart(enemy)
-
-	
-
-end
-
 function OnEnemyHitStay(enemy)
 
 	-- 70 damage/second = 21 damage in 1/3 seconds = 1/3 seconds to kill one Squirt (Just as an example, not taking extra damage into account here)
 	Damage(enemy, 70 * GetDT())
-
-end
-
-
-function OnEnemyHitExit()
-
 
 end
 

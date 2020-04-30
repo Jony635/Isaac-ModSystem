@@ -45,7 +45,7 @@ public class MonsterManager : MonoBehaviour
         List<Enemy> spawnable;
         do
         {
-            spawnable = enemies.FindAll(enemy => enemy.difficulty <= (PlayerController.Instance.difficulty - achievedDifficulty));
+            spawnable = enemies.FindAll(enemy => enemy.difficulty <= (difficulty - achievedDifficulty));
             if(spawnable.Count > 0)
             {
                 int rand = UnityEngine.Random.Range(0, spawnable.Count);
@@ -57,7 +57,7 @@ public class MonsterManager : MonoBehaviour
         return ret.ToArray();
     }
 
-    public uint AddRefEnemy(Enemy enemy)
+    public uint RefEnemy(Enemy enemy)
     {
         if (enemiesRef.ContainsValue(enemy))
         {
@@ -83,5 +83,10 @@ public class MonsterManager : MonoBehaviour
             return null;
 
         return enemiesRef[key];
+    }
+
+    public void ClearEnemiesRef()
+    {
+        enemiesRef.Clear();
     }
 }

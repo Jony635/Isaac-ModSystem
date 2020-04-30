@@ -57,6 +57,7 @@ public class PlayerController : MonoBehaviour
 
     private bool detectControls = true;
 
+    [HideInInspector]
     public float difficulty = 1f;
 
     [Header("Character Stats")]

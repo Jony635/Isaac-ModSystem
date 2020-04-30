@@ -14,7 +14,6 @@ public class EnemySquirt : Enemy
     {
         enemyStats.damage = 1f;
         enemyStats.hp = enemyStats.maxHP = 20;
-        enemyStats.runSpeed = 1f;
         enemyStats.attackSpeed = 3f;
 
         attackTimer = 1 / enemyStats.attackSpeed;
@@ -78,7 +77,7 @@ public class EnemySquirt : Enemy
 
         while(attacking)
         {
-            rb.MovePosition(transform.position + direction * 0.5f);
+            rb.MovePosition(transform.position + direction * enemyStats.runSpeed * enemyStats.speedFactor * Time.deltaTime);
 
             yield return null;
         }    

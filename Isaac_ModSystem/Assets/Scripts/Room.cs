@@ -62,6 +62,7 @@ public class Room : MonoBehaviour
 
             RoomManager.Instance.OnNewRoomCleared();
             ItemManager.Instance.OnNewRoomCleared();
+            MonsterManager.Instance.ClearEnemiesRef();
         }
     }
 }
