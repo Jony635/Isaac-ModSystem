@@ -151,6 +151,17 @@ public class ItemManager : MonoBehaviour
         }
     }
 
+    public void OnMonsterHittedByTear(Enemy enemy)
+    {
+        foreach(Item item in equippedItems)
+        {
+            item.OnMonsterHittedByTear(enemy);
+        }
+
+        if(activeItemEquipped)
+            activeItemEquipped.OnMonsterHittedByTear(enemy);
+    }
+
     public void AddItem(Item item)
     {
         availableItems.Add(item);

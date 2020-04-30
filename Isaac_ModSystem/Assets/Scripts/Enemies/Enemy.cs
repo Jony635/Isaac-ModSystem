@@ -67,6 +67,7 @@ public class Enemy : MonoBehaviour
     {
         if (LayerMask.LayerToName(collider.gameObject.layer) == "PlayerTear")
         {
+            ItemManager.Instance.OnMonsterHittedByTear(this);
             TakeDamage(PlayerController.Instance.stats.plainDamage * PlayerController.Instance.stats.factorDamage);
         }
     }

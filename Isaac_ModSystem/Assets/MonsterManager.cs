@@ -61,14 +61,17 @@ public class MonsterManager : MonoBehaviour
     {
         if (enemiesRef.ContainsValue(enemy))
         {
-            Func<uint> func = () => { foreach (uint _key in enemiesRef.Keys){ if (enemiesRef[_key] == enemy) return _key; } return 0; };
-            return func.Invoke(); 
+            foreach(uint _key in enemiesRef.Keys)
+            {
+                if (enemiesRef[_key] == enemy)
+                    return _key;
+            }
         }
 
         uint key = 0u;
         do
         {
-            key = (uint)UnityEngine.Random.Range(1, uint.MaxValue);
+            key = (uint)UnityEngine.Random.Range(1, int.MaxValue);
 
         } while (enemiesRef.ContainsKey(key));
 

@@ -50,6 +50,8 @@ public class Item : MonoBehaviour
     public virtual void OnNewRoomEntered(bool alreadyDefeated) { }
 
     public virtual void OnNewRoomCleared() { }
+
+    public virtual void OnMonsterHittedByTear(Enemy enemy) { if (luaScript) luaScript.OnMonsterHittedByTear(enemy); }
 }
 
 public class PassiveItem : Item

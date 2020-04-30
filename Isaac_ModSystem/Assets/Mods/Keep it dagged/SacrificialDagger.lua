@@ -76,6 +76,12 @@ function OnEnemyHitStay(enemy)
 
 end
 
+function OnMonsterHittedByTear(enemy)
+
+	print(string.format("Enemy %d was hitted by a player tear!", enemy))
+
+end
+
 return
 {
 	OnEquipped = OnEquipped,
@@ -83,4 +89,5 @@ return
 	OnEnemyHitStart = OnEnemyHitStart,
 	OnEnemyHitStay = OnEnemyHitStay,
 	OnEnemyHitExit = OnEnemyHitExit,
+	OnMonsterHittedByTear = OnMonsterHittedByTear,
 }
