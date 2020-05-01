@@ -51,6 +51,7 @@ public class LuaScriptController : MonoBehaviour
     private int OnEnemyHitExitRef = -1;
     private int OnMonsterHittedByTearRef = -1;
     private int OnUsedRef = -1;
+    private int OnNewRoomEnteredRef = -1;
     #endregion 
 
     //C# Functions container
@@ -121,6 +122,7 @@ public class LuaScriptController : MonoBehaviour
 
             OnMonsterHittedByTearRef = StoreMethod("OnMonsterHittedByTear");
             OnUsedRef = StoreMethod("OnUsed");
+            OnNewRoomEnteredRef = StoreMethod("OnNewRoomEntered");
             #endregion         
 
             Lua.Pop(-1);
@@ -227,6 +229,11 @@ public class LuaScriptController : MonoBehaviour
     public void OnUsed()
     {
         CallMethod(OnUsedRef);
+    }
+
+    public void OnNewRoomEntered(bool alreadyDefeated)
+    {
+        CallMethod(OnNewRoomEnteredRef, 1, 0, alreadyDefeated);
     }
 
     #endregion
@@ -541,7 +548,7 @@ public class LuaScriptController : MonoBehaviour
         if (enemy)
         {
             float number = (float)lua.L_CheckNumber(2);
-            enemy.enemyStats.speedFactor *= ((float)lua.L_CheckNumber(2));
+            enemy.enemyStats.speedFactor *= (1 - ((float)lua.L_CheckNumber(2)));
         }
 
         return 0;
@@ -555,7 +562,7 @@ public class LuaScriptController : MonoBehaviour
         if (enemy)
         {
             float number = (float)lua.L_CheckNumber(2);
-            enemy.enemyStats.speedFactor /= ((float)lua.L_CheckNumber(2));
+            enemy.enemyStats.speedFactor /= (1 - ((float)lua.L_CheckNumber(2)));
         }
 
         return 0;

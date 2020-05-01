@@ -47,7 +47,11 @@ public class Item : MonoBehaviour
 
     public virtual void OnUnequipped() { }
 
-    public virtual void OnNewRoomEntered(bool alreadyDefeated) { }
+    public virtual void OnNewRoomEntered(bool alreadyDefeated) 
+    {
+        if (luaScript)
+            luaScript.OnNewRoomEntered(alreadyDefeated);
+    }
 
     public virtual void OnNewRoomCleared() { }
 

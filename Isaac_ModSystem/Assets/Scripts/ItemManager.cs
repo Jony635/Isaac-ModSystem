@@ -15,7 +15,7 @@ public class ItemManager : MonoBehaviour
 
     private List<Item> availableItems = new List<Item>();
     private List<Item> equippedItems = new List<Item>();
-    private List<ActiveItem> discardedItems = new List<ActiveItem>();
+    private List<Item> discardedItems = new List<Item>();
 
     private ActiveItem activeItemEquipped = null;
 
@@ -35,7 +35,12 @@ public class ItemManager : MonoBehaviour
             return null;
 
         int random = UnityEngine.Random.Range(0, availableItems.Count);
-        return availableItems[random];
+        Item item = availableItems[random];
+
+        availableItems.RemoveAt(random);
+        discardedItems.Add(item);
+
+        return item;
     }
 
     private void InstantiateAllAvailableItems()
