@@ -86,7 +86,7 @@ public class ItemManager : MonoBehaviour
     //Events
     public void EquipItem(Item item, ItemAltar altar = null)
     {
-        if (item.GetType().IsSubclassOf(typeof(ActiveItem)))
+        if (item.GetType() == typeof(ActiveItem) || item.GetType().IsSubclassOf(typeof(ActiveItem)))
         {
             if(activeItemEquipped != null)
             {
@@ -98,14 +98,17 @@ public class ItemManager : MonoBehaviour
             }
 
             activeItemEquipped = (ActiveItem)item;
-
             ActiveItemContainer.Instance.ActiveItemEquipped((ActiveItem)item);
-        }
 
+            
+        }
         else if (availableItems.Contains(item))
         {
             equippedItems.Add(item);
         }
+
+        if (altar.holdedItem == item)
+            altar.ChangeHoldedItem(null);
 
         availableItems.Remove(item);
         item.OnEquipped();

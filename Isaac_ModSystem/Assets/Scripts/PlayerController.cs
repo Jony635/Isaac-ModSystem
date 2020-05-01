@@ -213,7 +213,6 @@ public class PlayerController : MonoBehaviour
                 pickedItemRenderer.sprite = altar.ItemHolderRenderer.sprite;
 
                 ItemManager.Instance.EquipItem(altar.holdedItem, altar);
-                altar.ChangeHoldedItem(null);
             }
         }
         #endregion

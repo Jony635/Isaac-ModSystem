@@ -1,5 +1,4 @@
 sprite = "collectibles_172_sacrificialdagger.png"
-extraSprites = {}
 
 daggers = {}
 angle = 0
@@ -8,6 +7,7 @@ angularSpeed = 80
 
 boxCollider = {isTrigger = true, center = {x = 0.01466, y = 0.01759207}, size = {x = 0.36885, y = 0.8966106}}
 
+--API METHODS
 function OnEquipped()
 
 	for i = 1, 3 do		
@@ -45,6 +45,16 @@ function Update()
 
 end
 
+function OnEnemyHitStay(enemy)
+
+	-- 70 damage/second = 21 damage in 1/3 seconds = 1/3 seconds to kill one Squirt (Just as an example, not taking extra damage into account here)
+	Damage(enemy, 70 * GetDT())
+
+end
+--------------------------------------------------------------
+
+
+-- SCRIPT METHODS
 function Rotate2DVector(vec, degAngle)
 
 	return({x = cos(degAngle) * vec.x - sin(degAngle) * vec.y, y = sin(degAngle) * vec.x + cos(degAngle) * vec.y})
@@ -68,26 +78,11 @@ function CalculatePosition(origin, dir, radius)
 	return {x = origin.x + dir.x * radius, y = origin.y + dir.y * radius}
 
 end
-
-function OnEnemyHitStay(enemy)
-
-	-- 70 damage/second = 21 damage in 1/3 seconds = 1/3 seconds to kill one Squirt (Just as an example, not taking extra damage into account here)
-	Damage(enemy, 70 * GetDT())
-
-end
-
-function OnMonsterHittedByTear(enemy)
-
-	print(string.format("Enemy %d was hitted by a player tear!", enemy))
-
-end
+--------------------------------------------------------------
 
 return
 {
 	OnEquipped = OnEquipped,
 	Update = Update,
-	OnEnemyHitStart = OnEnemyHitStart,
 	OnEnemyHitStay = OnEnemyHitStay,
-	OnEnemyHitExit = OnEnemyHitExit,
-	OnMonsterHittedByTear = OnMonsterHittedByTear,
 }

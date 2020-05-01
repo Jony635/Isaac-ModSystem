@@ -4,3 +4,8 @@ passiveItems =
 {
 	"SacrificialDagger.lua"
 }
+
+activeItems = 
+{
+	"PermaFrozer.lua"
+}

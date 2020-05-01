@@ -53,10 +53,13 @@ public class ActiveItemContainer : MonoBehaviour
         activeItemIcon.gameObject.SetActive(true);
         chargesGO.gameObject.SetActive(true);
 
-        activeItemIcon.sprite = Resources.Load<Sprite>(item.pickUpSprite);
+        activeItemIcon.sprite = item.sprite;
         item.equiped = true;
 
         subdivisions.sprite = subdivisionSprites[(int)item.numCharges - 1];
+
+        maskPercent = (float)equippedItem.currentCharges / (float)equippedItem.numCharges;
+        Masking();
     }
 
     public void ActiveItemUsed()

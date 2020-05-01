@@ -50,6 +50,7 @@ public class LuaScriptController : MonoBehaviour
     private int OnEnemyHitStayRef = -1;
     private int OnEnemyHitExitRef = -1;
     private int OnMonsterHittedByTearRef = -1;
+    private int OnUsedRef = -1;
     #endregion 
 
     //C# Functions container
@@ -119,6 +120,7 @@ public class LuaScriptController : MonoBehaviour
             OnEnemyHitExitRef = StoreMethod("OnEnemyHitExit");
 
             OnMonsterHittedByTearRef = StoreMethod("OnMonsterHittedByTear");
+            OnUsedRef = StoreMethod("OnUsed");
             #endregion         
 
             Lua.Pop(-1);
@@ -220,6 +222,11 @@ public class LuaScriptController : MonoBehaviour
     public void OnMonsterHittedByTear(Enemy enemy)
     {
         CallMethod(OnMonsterHittedByTearRef, 1, 0, MonsterManager.Instance.RefEnemy(enemy));
+    }
+
+    public void OnUsed()
+    {
+        CallMethod(OnUsedRef);
     }
 
     #endregion
@@ -790,6 +797,7 @@ public class LuaScriptController : MonoBehaviour
                             ActiveItem aItem = element.AddComponent<ActiveItem>();
                             aItem.luaScript = controller;
                             aItem.sprite = controller.sprite;
+                            aItem.InitFromScript();
                             ItemManager.Instance.AddItem(aItem);
                             break;
                         case 2:
@@ -800,6 +808,15 @@ public class LuaScriptController : MonoBehaviour
                 }
             }
         }    
+    }
+
+    public int GetNumCharges()
+    {
+        Lua.GetGlobal("numCharges");
+        int ret = Lua.L_CheckInteger(-1);
+        Lua.Pop(1);
+
+        return ret;
     }
 
     public static Sprite ImportSprite(string path)

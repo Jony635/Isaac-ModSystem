@@ -57,6 +57,7 @@ public class Enemy : MonoBehaviour
             rb = gameObject.AddComponent<Rigidbody2D>();
         rb.gravityScale = 0f;
         rb.freezeRotation = true;
+        rb.collisionDetectionMode = CollisionDetectionMode2D.Continuous;
 
         spriteRenderer = gameObject.GetComponent<SpriteRenderer>();
         if(!spriteRenderer)

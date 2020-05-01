@@ -61,10 +61,22 @@ public class PassiveItem : Item
 
 public class ActiveItem : Item
 {
-    public virtual void OnUsed() { }
-
     public uint numCharges = 1u;
     public uint currentCharges = 1u;
-
     public bool equiped = false;
+
+    public void InitFromScript()
+    {
+        if(luaScript)
+        {
+            numCharges = (uint)luaScript.GetNumCharges();
+            currentCharges = numCharges;
+        }
+    }
+
+    public virtual void OnUsed() 
+    {
+        if (luaScript)
+            luaScript.OnUsed();
+    }
 }
