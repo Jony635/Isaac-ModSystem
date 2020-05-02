@@ -30,4 +30,33 @@ public class HeartsManager : MonoBehaviour
                 transform.GetChild(i).GetComponent<Image>().sprite = emptyHeart;
         }    
     }
+
+    public void OnCharacterMaxHealthChanged()
+    {
+        float hearts = PlayerController.Instance.stats.maxHp / 2f;
+        hearts = Mathf.Floor(hearts);
+
+        if (hearts < 1) hearts = 1;
+
+        if (hearts == transform.childCount)
+            return;
+
+        if(hearts < transform.childCount)
+        {
+            int destroyedHearts = 0;
+
+            while (destroyedHearts < transform.childCount - hearts)
+            {
+                Destroy(transform.GetChild(transform.childCount - destroyedHearts - 1).gameObject);
+                destroyedHearts++;
+            }
+        }
+        else if(hearts > transform.childCount)
+        {
+            while (transform.childCount < hearts)
+            {
+                Instantiate(transform.GetChild(0).gameObject, this.transform);
+            }
+        }
+    }
 }

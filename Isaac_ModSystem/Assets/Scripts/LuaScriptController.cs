@@ -91,6 +91,10 @@ public class LuaScriptController : MonoBehaviour
                 new NameFuncPair("ClearSlow", ClearSlow),
                 new NameFuncPair("GetSlowFactor", GetSlowFactor),
                 new NameFuncPair("GetRoomEnemies", GetRoomEnemies),
+                new NameFuncPair("GetMaxHealth", GetMaxHealth),
+                new NameFuncPair("SetMaxHealth", SetMaxHealth),
+                new NameFuncPair("GetHealth", GetHealth),
+                new NameFuncPair("SetHealth", SetHealth),
             };
 
             childs.Add(0, PlayerController.Instance.gameObject);
@@ -242,28 +246,48 @@ public class LuaScriptController : MonoBehaviour
     private int AddDamage(ILuaState lua)
     {
         float sum = (float)lua.L_CheckNumber(1);
-        PlayerController.Instance.stats.plainDamage += sum;
+
+        PlayerController.Stats newStats = PlayerController.Instance.stats;
+        newStats.plainDamage += sum;
+
+        PlayerController.Instance.stats = newStats;
+
         return 0;
     }
 
     private int SubstractDamage(ILuaState lua)
     {
         float sub = (float)lua.L_CheckNumber(1);
-        PlayerController.Instance.stats.plainDamage -= sub;
+
+        PlayerController.Stats newStats = PlayerController.Instance.stats;
+        newStats.plainDamage -= sub;
+
+        PlayerController.Instance.stats = newStats;
+
         return 0;
     }
 
     private int AddFactorDamage(ILuaState lua)
     {
         float factor = (float)lua.L_CheckNumber(1);
-        PlayerController.Instance.stats.factorDamage *= factor;
+
+        PlayerController.Stats newStats = PlayerController.Instance.stats;
+        newStats.factorDamage *= factor;
+
+        PlayerController.Instance.stats = newStats;
+
         return 0;
     }
 
     private int SubstractFactorDamage(ILuaState lua)
     {
         float factor = (float)lua.L_CheckNumber(1);
-        PlayerController.Instance.stats.factorDamage /= factor;
+
+        PlayerController.Stats newStats = PlayerController.Instance.stats;
+        newStats.factorDamage /= factor;
+
+        PlayerController.Instance.stats = newStats;
+
         return 0;
     }
 
@@ -610,6 +634,34 @@ public class LuaScriptController : MonoBehaviour
             return 1;
         }
    
+    }
+
+    private int GetMaxHealth(ILuaState lua)
+    {
+        lua.PushNumber(PlayerController.Instance.stats.maxHp);
+        return 1;
+    }
+
+    private int SetMaxHealth(ILuaState lua)
+    {
+        double maxHealth = lua.L_CheckNumber(1);
+
+        PlayerController.Stats newStats = PlayerController.Instance.stats;
+        newStats.maxHp = (float)maxHealth;
+
+        PlayerController.Instance.stats = newStats;
+
+        return 0;
+    }
+
+    private int GetHealth(ILuaState lua)
+    {
+        return 0;
+    }
+
+    private int SetHealth(ILuaState lua)
+    {
+        return 0;
     }
 
     #endregion

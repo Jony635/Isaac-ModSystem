@@ -60,8 +60,10 @@ public class PlayerController : MonoBehaviour
     [HideInInspector]
     public float difficulty = 1f;
 
-    [Header("Character Stats")]
-    public Stats stats = new Stats("");
+    [Header("Character Stats")] [SerializeField]
+    private Stats _stats = new Stats("");
+
+    public Stats stats { get { return _stats; } set { ModifyStats(value); _stats = value; } }
 
     private void Awake()
     {
@@ -231,7 +233,9 @@ public class PlayerController : MonoBehaviour
 
     public void TakeDamage(float damage)
     {
-        stats.hp -= damage;
+        Stats newStats = stats;
+        newStats.hp -= damage;
+        stats = newStats;
 
         if(stats.hp <= 0)
         {
@@ -246,6 +250,65 @@ public class PlayerController : MonoBehaviour
         col.enabled = false;
 
         HeartsManager.Instance.OnCharacterHealthChanged();
+    }
+
+    private void ModifyStats(Stats newStats)
+    {
+        int changes = 0;
+
+        if(stats.factorDamage != newStats.factorDamage)
+        {
+            changes |= 1 << 0;
+        }
+
+        if(stats.hp != newStats.hp)
+        {
+            changes |= 1 << 1;
+        }
+
+        if(stats.maxHp != newStats.maxHp)
+        {
+            changes |= 1 << 2;
+        }
+
+        if(stats.plainDamage != newStats.plainDamage)
+        {
+            changes |= 1 << 3;
+        }
+
+        if(stats.speed != newStats.speed)
+        {
+            changes |= 1 << 4;
+        }
+
+        _stats = newStats;
+
+        if((changes >> 0 & 1) == 1)
+        {
+            //Factor damage changed
+        }
+
+        if ((changes >> 1 & 1) == 1)
+        {
+            //Hp changed
+            HeartsManager.Instance.OnCharacterHealthChanged();
+        }
+
+        if ((changes >> 2 & 1) == 1)
+        {
+            //Max hp changed
+            HeartsManager.Instance.OnCharacterMaxHealthChanged();
+        }
+
+        if ((changes >> 3 & 1) == 1)
+        {
+            //Plain damage changed
+        }
+
+        if ((changes >> 4 & 1) == 1)
+        {
+            //Speed changed
+        }
     }
 
     private void Die()
