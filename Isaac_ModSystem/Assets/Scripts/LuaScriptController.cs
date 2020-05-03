@@ -656,11 +656,23 @@ public class LuaScriptController : MonoBehaviour
 
     private int GetHealth(ILuaState lua)
     {
+        double health = lua.L_CheckNumber(1);
+
+        PlayerController.Stats newStats = PlayerController.Instance.stats;
+        newStats.hp = (float)health;
+
+        PlayerController.Instance.stats = newStats;
         return 0;
     }
 
     private int SetHealth(ILuaState lua)
     {
+        double health = lua.L_CheckNumber(1);
+
+        PlayerController.Stats newStats = PlayerController.Instance.stats;
+        newStats.hp = (float)health;
+
+        PlayerController.Instance.stats = newStats;
         return 0;
     }
 
