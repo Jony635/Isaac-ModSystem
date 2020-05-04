@@ -1375,6 +1375,8 @@ MonoBehaviour:
   - {fileID: -7133332237823581912, guid: ff94dca80cc8575498d7c861352dffae, type: 3}
   - {fileID: -1826835768152646453, guid: ff94dca80cc8575498d7c861352dffae, type: 3}
   - {fileID: 8180823283899976579, guid: ff94dca80cc8575498d7c861352dffae, type: 3}
+  - {fileID: 0}
+  - {fileID: 6743577608852675109, guid: ff94dca80cc8575498d7c861352dffae, type: 3}
   maskPercent: 1
 --- !u!1 &2133747466
 GameObject:

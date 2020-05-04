@@ -883,8 +883,15 @@ public class LuaScriptController : MonoBehaviour
 
     public int GetNumCharges()
     {
+        int ret = 1;
+
         Lua.GetGlobal("numCharges");
-        int ret = Lua.L_CheckInteger(-1);
+
+        if (Lua.IsNoneOrNil(-1))
+            Debug.Log("NO CHARGES SPECIFIED ON ACTIVE ITEM");
+        else
+            ret = Lua.L_CheckInteger(-1);
+
         Lua.Pop(1);
 
         return ret;
