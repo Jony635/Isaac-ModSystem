@@ -36,9 +36,9 @@ public class Item : MonoBehaviour
 
     public virtual void OnDisable() { }
 
-    public virtual void OnEquipped() 
-    { 
-        if(luaScript != null)
+    public virtual void OnEquipped()
+    {
+        if (luaScript != null)
         {
             luaScript.enabled = true;
             luaScript.OnEquipped();
@@ -47,7 +47,7 @@ public class Item : MonoBehaviour
 
     public virtual void OnUnequipped() { }
 
-    public virtual void OnNewRoomEntered(bool alreadyDefeated) 
+    public virtual void OnNewRoomEntered(bool alreadyDefeated)
     {
         if (luaScript)
             luaScript.OnNewRoomEntered(alreadyDefeated);
@@ -56,6 +56,8 @@ public class Item : MonoBehaviour
     public virtual void OnNewRoomCleared() { }
 
     public virtual void OnMonsterHittedByTear(Enemy enemy) { if (luaScript) luaScript.OnMonsterHittedByTear(enemy); }
+
+    public virtual void OnCharacterCollidedWithMonster(Enemy enemy) { if (luaScript) luaScript.OnCharacterCollidedWithMonster(enemy); }
 }
 
 public class PassiveItem : Item

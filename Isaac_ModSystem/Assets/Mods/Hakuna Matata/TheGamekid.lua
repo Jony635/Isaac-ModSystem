@@ -1,12 +1,30 @@
 sprite = "collectibles_093_thegamekid.png"
-
 numCharges = 6
 
-function Start()
+active = false
+activeDuration = 6
+hitRatio = 1
+
+function OnUsed()
+
+	active = true
+
+	SetInvincible(true)
+
+	Wait(activeDuration, function() active = false SetInvencible(false) end)
+
+end
+
+function OnCharacterCollidedWithMonster(enemy)
+
+	if active then
+		-- check if you are in the exact frame when you do damage
+	end
 
 end
 
 return
 {
-	Start = Start
+	OnUsed = OnUsed,
+	OnCharacterCollidedWithMonster = OnCharacterCollidedWithMonster
 }

@@ -17,12 +17,16 @@ public class PlayerController : MonoBehaviour
         public float hp;
         public float maxHp;
 
+        public bool invincible;
+
         public Stats(string useless)
         {
             plainDamage = 5f;
             factorDamage = 1f;
             speed = 7f;
             maxHp = hp = 6f;
+
+            invincible = false;
         }
     }
 
@@ -225,7 +229,10 @@ public class PlayerController : MonoBehaviour
             Enemy enemy = collision.gameObject.GetComponent<Enemy>();
             if(enemy != null)
             {
-                TakeDamage(enemy.enemyStats.damage);
+                if(!stats.invincible)
+                    TakeDamage(enemy.enemyStats.damage);
+
+                ItemManager.Instance.OnCharacterCollidedWithMonster(enemy);
             }
         }
         #endregion
@@ -281,6 +288,11 @@ public class PlayerController : MonoBehaviour
             changes |= 1 << 4;
         }
 
+        if(stats.invincible)
+        {
+            changes |= 1 << 5;
+        }
+
         _stats = newStats;
 
         if((changes >> 0 & 1) == 1)
@@ -308,6 +320,11 @@ public class PlayerController : MonoBehaviour
         if ((changes >> 4 & 1) == 1)
         {
             //Speed changed
+        }
+
+        if ((changes >> 5 & 1) == 1)
+        {
+            //Invincible changed
         }
     }
 

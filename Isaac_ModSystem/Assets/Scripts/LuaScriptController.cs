@@ -52,6 +52,7 @@ public class LuaScriptController : MonoBehaviour
     private int OnMonsterHittedByTearRef = -1;
     private int OnUsedRef = -1;
     private int OnNewRoomEnteredRef = -1;
+    private int OnCharacterCollidedWithMonsterRef = -1;
     #endregion 
 
     //C# Functions container
@@ -95,6 +96,8 @@ public class LuaScriptController : MonoBehaviour
                 new NameFuncPair("SetMaxHealth", SetMaxHealth),
                 new NameFuncPair("GetHealth", GetHealth),
                 new NameFuncPair("SetHealth", SetHealth),
+                new NameFuncPair("GetInvincible", GetInvincible),
+                new NameFuncPair("SetInvincible", SetInvincible),
             };
 
             childs.Add(0, PlayerController.Instance.gameObject);
@@ -127,6 +130,7 @@ public class LuaScriptController : MonoBehaviour
             OnMonsterHittedByTearRef = StoreMethod("OnMonsterHittedByTear");
             OnUsedRef = StoreMethod("OnUsed");
             OnNewRoomEnteredRef = StoreMethod("OnNewRoomEntered");
+            OnCharacterCollidedWithMonsterRef = StoreMethod("OnCharacterCollidedWithMonster");
             #endregion         
 
             Lua.Pop(-1);
@@ -238,6 +242,11 @@ public class LuaScriptController : MonoBehaviour
     public void OnNewRoomEntered(bool alreadyDefeated)
     {
         CallMethod(OnNewRoomEnteredRef, 1, 0, alreadyDefeated);
+    }
+
+    public void OnCharacterCollidedWithMonster(Enemy enemy)
+    {
+        CallMethod(OnCharacterCollidedWithMonsterRef, 1, 0, MonsterManager.Instance.RefEnemy(enemy));
     }
 
     #endregion
@@ -673,6 +682,24 @@ public class LuaScriptController : MonoBehaviour
         newStats.hp = (float)health;
 
         PlayerController.Instance.stats = newStats;
+        return 0;
+    }
+
+    private int GetInvincible(ILuaState lua)
+    {
+        lua.PushBoolean(PlayerController.Instance.stats.invincible);
+        return 1;
+    }
+
+    private int SetInvincible(ILuaState lua)
+    {
+        if(!lua.IsNoneOrNil(1))
+        {
+            PlayerController.Stats newStats = PlayerController.Instance.stats;
+            newStats.invincible = lua.ToBoolean(1);
+            PlayerController.Instance.stats = newStats;
+        }
+
         return 0;
     }
 
