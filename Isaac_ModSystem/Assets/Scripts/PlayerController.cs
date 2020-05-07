@@ -96,6 +96,106 @@ public class PlayerController : MonoBehaviour
             if (gamepad == null)
             {
                 gamepad = Gamepad.current;
+
+                #region SHOOTING
+                if (Keyboard.current.rightArrowKey.isPressed)
+                {
+                    headCtrl.SetBool("shootRight", true);
+                    headCtrl.SetBool("shootLeft", false);
+                    headCtrl.SetBool("shootDown", false);
+                    headCtrl.SetBool("shootUp", false);
+                }
+                else if (Keyboard.current.downArrowKey.isPressed)
+                {
+                    headCtrl.SetBool("shootRight", false);
+                    headCtrl.SetBool("shootLeft", false);
+                    headCtrl.SetBool("shootDown", true);
+                    headCtrl.SetBool("shootUp", false);
+                }
+                else if (Keyboard.current.leftArrowKey.isPressed)
+                {
+                    headCtrl.SetBool("shootRight", false);
+                    headCtrl.SetBool("shootLeft", true);
+                    headCtrl.SetBool("shootDown", false);
+                    headCtrl.SetBool("shootUp", false);
+                }
+                else if (Keyboard.current.upArrowKey.isPressed)
+                {
+                    headCtrl.SetBool("shootRight", false);
+                    headCtrl.SetBool("shootLeft", false);
+                    headCtrl.SetBool("shootDown", false);
+                    headCtrl.SetBool("shootUp", true);
+                }
+                else
+                {
+                    headCtrl.SetBool("shootRight", false);
+                    headCtrl.SetBool("shootLeft", false);
+                    headCtrl.SetBool("shootDown", false);
+                    headCtrl.SetBool("shootUp", false);
+                }
+                #endregion
+
+                #region MOVEMENT
+
+                move = Vector2.zero;
+
+                if(Keyboard.current.aKey.isPressed)
+                    move.x -= 1f;
+
+                if (Keyboard.current.dKey.isPressed)
+                    move.x += 1f;
+
+                if (Keyboard.current.wKey.isPressed)
+                    move.y += 1f;
+
+                if (Keyboard.current.sKey.isPressed)
+                    move.y -= 1f;
+
+                if(move == Vector2.zero)
+                {
+                    bodyCtrl.SetBool("walking_horizontal", false);
+                    bodyCtrl.SetBool("walking_upwards", false);
+                    bodyCtrl.SetBool("walking_downwards", false);
+                }
+                else
+                {
+                    if (Mathf.Abs(move.x) >= Mathf.Abs(move.y))
+                    {
+                        //Move horizontal
+                        bodyCtrl.SetBool("walking_horizontal", true);
+
+                        bodyCtrl.SetBool("walking_upwards", false);
+                        bodyCtrl.SetBool("walking_downwards", false);
+
+                        if (move.x >= 0)
+                        {
+                            body.transform.localScale = new Vector3(1, 1, 1);
+                        }
+                        else
+                        {
+                            body.transform.localScale = new Vector3(-1, 1, 1);
+                        }
+                    }
+                    else
+                    {
+                        //Move vertical
+                        bodyCtrl.SetBool("walking_horizontal", false);
+
+                        bodyCtrl.SetBool("walking_upwards", move.y > 0 ? true : false);
+                        bodyCtrl.SetBool("walking_downwards", move.y > 0 ? false : true);
+                    }
+
+                    //Movement is being applied on FixedUpdate
+                }
+
+                #endregion
+
+                #region ACTIVE ITEM USED
+                if (Keyboard.current.qKey.wasPressedThisFrame)
+                    ItemManager.Instance.OnActiveItemButtonPressed();
+                #endregion
+
+
             }
             else
             {
@@ -236,6 +336,18 @@ public class PlayerController : MonoBehaviour
             }
         }
         #endregion
+    }
+
+    private void OnCollisionStay2D(Collision2D collision)
+    {
+        if (collision.gameObject.layer == LayerMask.NameToLayer("Monster") || collision.gameObject.layer == LayerMask.NameToLayer("EnemyAttack"))
+        {
+            Enemy enemy = collision.gameObject.GetComponent<Enemy>();
+            if (enemy != null)
+            {
+                ItemManager.Instance.OnCharacterCollidingWithMonster(enemy);
+            }
+        }
     }
 
     public void TakeDamage(float damage)

@@ -53,6 +53,7 @@ public class LuaScriptController : MonoBehaviour
     private int OnUsedRef = -1;
     private int OnNewRoomEnteredRef = -1;
     private int OnCharacterCollidedWithMonsterRef = -1;
+    private int OnCharacterCollidingWithMonsterRef = -1;
     #endregion 
 
     //C# Functions container
@@ -131,6 +132,7 @@ public class LuaScriptController : MonoBehaviour
             OnUsedRef = StoreMethod("OnUsed");
             OnNewRoomEnteredRef = StoreMethod("OnNewRoomEntered");
             OnCharacterCollidedWithMonsterRef = StoreMethod("OnCharacterCollidedWithMonster");
+            OnCharacterCollidingWithMonsterRef = StoreMethod("OnCharacterCollidingWithMonster");
             #endregion         
 
             Lua.Pop(-1);
@@ -247,6 +249,11 @@ public class LuaScriptController : MonoBehaviour
     public void OnCharacterCollidedWithMonster(Enemy enemy)
     {
         CallMethod(OnCharacterCollidedWithMonsterRef, 1, 0, MonsterManager.Instance.RefEnemy(enemy));
+    }
+
+    public void OnCharacterCollidingWithMonster(Enemy enemy)
+    {
+        CallMethod(OnCharacterCollidingWithMonsterRef, 1, 0, MonsterManager.Instance.RefEnemy(enemy));
     }
 
     #endregion

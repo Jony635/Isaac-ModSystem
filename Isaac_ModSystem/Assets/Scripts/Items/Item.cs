@@ -58,6 +58,8 @@ public class Item : MonoBehaviour
     public virtual void OnMonsterHittedByTear(Enemy enemy) { if (luaScript) luaScript.OnMonsterHittedByTear(enemy); }
 
     public virtual void OnCharacterCollidedWithMonster(Enemy enemy) { if (luaScript) luaScript.OnCharacterCollidedWithMonster(enemy); }
+
+    public virtual void OnCharacterCollidingWithMonster(Enemy enemy) { if (luaScript) luaScript.OnCharacterCollidingWithMonster(enemy); }
 }
 
 public class PassiveItem : Item

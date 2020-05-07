@@ -5,20 +5,46 @@ active = false
 activeDuration = 6
 hitRatio = 1
 
+damageCooldown = 1
+damageTimer = damageCooldown
+flexTime = 0.2
+
 function OnUsed()
 
 	active = true
 
 	SetInvincible(true)
 
-	Wait(activeDuration, function() active = false SetInvencible(false) end)
+	Wait(activeDuration, function() active = false damageTimer = damageCooldown SetInvincible(false) end)
 
 end
 
 function OnCharacterCollidedWithMonster(enemy)
 
+	if active and damageTimer <= flexTime then
+		print("damage")
+		Damage(enemy, 5)
+	end
+end
+
+function OnCharacterCollidingWithMonster(enemy)
+
+	if active and damageTimer <= flexTime then
+		print("damage")
+		Damage(enemy, 5)
+	end
+
+end
+
+function Update()
+
 	if active then
-		-- check if you are in the exact frame when you do damage
+
+		damageTimer = damageTimer - GetDT()
+		if damageTimer <= 0 then
+			damageTimer = damageCooldown
+		end
+
 	end
 
 end
@@ -26,5 +52,7 @@ end
 return
 {
 	OnUsed = OnUsed,
-	OnCharacterCollidedWithMonster = OnCharacterCollidedWithMonster
+	OnCharacterCollidedWithMonster = OnCharacterCollidedWithMonster,
+	OnCharacterCollidingWithMonster = OnCharacterCollidingWithMonster,
+	Update = Update,
 }
