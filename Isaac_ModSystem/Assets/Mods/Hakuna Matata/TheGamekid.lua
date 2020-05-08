@@ -3,11 +3,8 @@ numCharges = 6
 
 active = false
 activeDuration = 6
-hitRatio = 1
 
-damageCooldown = 1
-damageTimer = damageCooldown
-flexTime = 0.2
+damageSecond = 40
 
 function OnUsed()
 
@@ -21,30 +18,16 @@ end
 
 function OnCharacterCollidedWithMonster(enemy)
 
-	if active and damageTimer <= flexTime then
-		print("damage")
-		Damage(enemy, 5)
+	if active then
+		Damage(enemy, damageSecond * GetDT())
 	end
+
 end
 
 function OnCharacterCollidingWithMonster(enemy)
 
-	if active and damageTimer <= flexTime then
-		print("damage")
-		Damage(enemy, 5)
-	end
-
-end
-
-function Update()
-
 	if active then
-
-		damageTimer = damageTimer - GetDT()
-		if damageTimer <= 0 then
-			damageTimer = damageCooldown
-		end
-
+		Damage(enemy, damageSecond * GetDT())
 	end
 
 end
@@ -54,5 +37,4 @@ return
 	OnUsed = OnUsed,
 	OnCharacterCollidedWithMonster = OnCharacterCollidedWithMonster,
 	OnCharacterCollidingWithMonster = OnCharacterCollidingWithMonster,
-	Update = Update,
 }
