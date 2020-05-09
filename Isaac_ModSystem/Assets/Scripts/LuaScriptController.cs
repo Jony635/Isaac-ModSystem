@@ -80,19 +80,26 @@ public class LuaScriptController : MonoBehaviour
                 new NameFuncPair("SubstractFactorDamage", SubstractFactorDamage),
                 new NameFuncPair("GetFactorDamage", GetFactorDamage),
                 new NameFuncPair("GetDamage", GetDamage),
+
                 new NameFuncPair("AddChild", AddChild),
                 new NameFuncPair("DeleteChild", DeleteChild),
+
                 new NameFuncPair("Wait", Wait),
                 new NameFuncPair("GetDT", GetDT),
+
                 new NameFuncPair("GetPosition", GetPosition),
                 new NameFuncPair("SetPosition", SetPosition),
                 new NameFuncPair("SetRotation", SetRotation),
+
                 new NameFuncPair("SetComponent", SetComponent),
+
                 new NameFuncPair("Damage", Damage),
                 new NameFuncPair("Slow", Slow),
                 new NameFuncPair("ClearSlow", ClearSlow),
                 new NameFuncPair("GetSlowFactor", GetSlowFactor),
+
                 new NameFuncPair("GetRoomEnemies", GetRoomEnemies),
+
                 new NameFuncPair("GetMaxHealth", GetMaxHealth),
                 new NameFuncPair("SetMaxHealth", SetMaxHealth),
                 new NameFuncPair("GetHealth", GetHealth),

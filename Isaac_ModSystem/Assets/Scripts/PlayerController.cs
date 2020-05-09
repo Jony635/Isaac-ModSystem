@@ -336,6 +336,8 @@ public class PlayerController : MonoBehaviour
             }
         }
         #endregion
+
+
     }
 
     private void OnCollisionStay2D(Collision2D collision)

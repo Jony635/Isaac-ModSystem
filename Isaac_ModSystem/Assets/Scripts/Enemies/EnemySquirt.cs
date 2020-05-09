@@ -67,8 +67,8 @@ public class EnemySquirt : Enemy
     {
         animator.SetTrigger("Attack");
 
-        Vector3 target = PlayerController.Instance.body.transform.position;
-        Vector3 direction = Vector3.Normalize(target - transform.position);
+        Vector2 target = PlayerController.Instance.body.transform.position;
+        Vector2 direction = Vector3.Normalize(target - (Vector2)transform.position);
 
         while(!attacking)
         {
@@ -77,7 +77,7 @@ public class EnemySquirt : Enemy
 
         while(attacking)
         {
-            rb.MovePosition(transform.position + direction * enemyStats.runSpeed * enemyStats.speedFactor * Time.deltaTime);
+            rb.MovePosition(rb.position + direction * enemyStats.runSpeed * enemyStats.speedFactor * Time.fixedDeltaTime);
 
             yield return null;
         }    

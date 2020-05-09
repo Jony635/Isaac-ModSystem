@@ -26,7 +26,7 @@ public class Enemy : MonoBehaviour
 
             maxHP = hp = 2f;
             damage = tick_damage = 0.5f;
-            speed = 30f;
+            speed = 20f;
             speedFactor = 1f;
             runSpeed = speed * 1.5f;
             attackSpeed = 1f;
