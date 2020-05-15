@@ -61,6 +61,9 @@ public class PlayerController : MonoBehaviour
 
     private bool detectControls = true;
 
+    private float takeDamageCD = 0.5f;
+    private bool takeDamage = true;
+
     [HideInInspector]
     public float difficulty = 1f;
 
@@ -329,8 +332,10 @@ public class PlayerController : MonoBehaviour
             Enemy enemy = collision.gameObject.GetComponent<Enemy>();
             if(enemy != null)
             {
-                if(!stats.invincible)
-                    TakeDamage(enemy.enemyStats.damage);
+                if(!stats.invincible && takeDamage)
+                {
+                    StartCoroutine(TakeDamage(enemy.enemyStats.damage));
+                }
 
                 ItemManager.Instance.OnCharacterCollidedWithMonster(enemy);
             }
@@ -342,18 +347,27 @@ public class PlayerController : MonoBehaviour
 
     private void OnCollisionStay2D(Collision2D collision)
     {
+        #region TAKE DAMAGE
         if (collision.gameObject.layer == LayerMask.NameToLayer("Monster") || collision.gameObject.layer == LayerMask.NameToLayer("EnemyAttack"))
         {
             Enemy enemy = collision.gameObject.GetComponent<Enemy>();
             if (enemy != null)
             {
+                if (!stats.invincible && takeDamage)
+                {
+                    StartCoroutine(TakeDamage(enemy.enemyStats.damage));
+                }
+
                 ItemManager.Instance.OnCharacterCollidingWithMonster(enemy);
             }
         }
+        #endregion
     }
 
-    public void TakeDamage(float damage)
+    public IEnumerator TakeDamage(float damage)
     {
+        takeDamage = false;
+
         Stats newStats = stats;
         newStats.hp -= damage;
         stats = newStats;
@@ -371,6 +385,9 @@ public class PlayerController : MonoBehaviour
         col.enabled = false;
 
         HeartsManager.Instance.OnCharacterHealthChanged();
+
+        yield return new WaitForSeconds(takeDamageCD);
+        takeDamage = true;
     }
 
     private void ModifyStats(Stats newStats)
