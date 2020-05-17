@@ -1,0 +1,4 @@
+passiveItems =
+{
+	"Incubus.lua"
+}

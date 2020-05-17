@@ -197,8 +197,6 @@ public class PlayerController : MonoBehaviour
                 if (Keyboard.current.qKey.wasPressedThisFrame)
                     ItemManager.Instance.OnActiveItemButtonPressed();
                 #endregion
-
-
             }
             else
             {
@@ -289,8 +287,6 @@ public class PlayerController : MonoBehaviour
             }
         }
         #endregion
-
-
     }
 
     private void FixedUpdate()
