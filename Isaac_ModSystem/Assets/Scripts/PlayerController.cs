@@ -522,6 +522,8 @@ public class PlayerController : MonoBehaviour
         GameObject tear = Instantiate(tearPrefab, tearPositions[index]);
         tear.GetComponent<Rigidbody2D>().AddForce(direction * tearImpulse + inertia * stats.speed, ForceMode2D.Impulse);
         tear.transform.SetParent(tearsContainer.transform);
+
+        ItemManager.Instance.OnPlayerShoot(direction * tearImpulse + inertia * stats.speed);
     }
 
     public void ResetHeadAnimator()

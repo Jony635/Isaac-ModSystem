@@ -54,6 +54,7 @@ public class LuaScriptController : MonoBehaviour
     private int OnNewRoomEnteredRef = -1;
     private int OnCharacterCollidedWithMonsterRef = -1;
     private int OnCharacterCollidingWithMonsterRef = -1;
+    private int OnPlayerShootRef = -1;
     #endregion 
 
     //C# Functions container
@@ -140,6 +141,7 @@ public class LuaScriptController : MonoBehaviour
             OnNewRoomEnteredRef = StoreMethod("OnNewRoomEntered");
             OnCharacterCollidedWithMonsterRef = StoreMethod("OnCharacterCollidedWithMonster");
             OnCharacterCollidingWithMonsterRef = StoreMethod("OnCharacterCollidingWithMonster");
+            OnPlayerShootRef = StoreMethod("OnPlayerShoot");
             #endregion         
 
             Lua.Pop(-1);
@@ -203,7 +205,7 @@ public class LuaScriptController : MonoBehaviour
         if (collider.gameObject.layer == LayerMask.NameToLayer("Monster"))
         {
             uint enemyId = MonsterManager.Instance.RefEnemy(collider.GetComponent<Enemy>());
-            CallMethod(OnEnemyHitStartRef, 1, 0, enemyId);
+            CallMethod(OnEnemyHitStartRef, 1, 0, null, enemyId);
         }
     }
 
@@ -214,7 +216,7 @@ public class LuaScriptController : MonoBehaviour
         if (collider.gameObject.layer == LayerMask.NameToLayer("Monster"))
         {
             uint enemyId = MonsterManager.Instance.RefEnemy(collider.GetComponent<Enemy>());
-            CallMethod(OnEnemyHitStayRef, 1, 0, enemyId);
+            CallMethod(OnEnemyHitStayRef, 1, 0, null, enemyId);
         }
     }
 
@@ -225,7 +227,7 @@ public class LuaScriptController : MonoBehaviour
         if (collider.gameObject.layer == LayerMask.NameToLayer("Monster"))
         {
             uint enemyId = MonsterManager.Instance.RefEnemy(collider.GetComponent<Enemy>());
-            CallMethod(OnEnemyHitExitRef, 1, 0, enemyId);
+            CallMethod(OnEnemyHitExitRef, 1, 0, null, enemyId);
         }
     }
 
@@ -240,7 +242,7 @@ public class LuaScriptController : MonoBehaviour
 
     public void OnMonsterHittedByTear(Enemy enemy)
     {
-        CallMethod(OnMonsterHittedByTearRef, 1, 0, MonsterManager.Instance.RefEnemy(enemy));
+        CallMethod(OnMonsterHittedByTearRef, 1, 0, null, MonsterManager.Instance.RefEnemy(enemy));
     }
 
     public void OnUsed()
@@ -250,17 +252,34 @@ public class LuaScriptController : MonoBehaviour
 
     public void OnNewRoomEntered(bool alreadyDefeated)
     {
-        CallMethod(OnNewRoomEnteredRef, 1, 0, alreadyDefeated);
+        CallMethod(OnNewRoomEnteredRef, 1, 0, null, alreadyDefeated);
     }
 
     public void OnCharacterCollidedWithMonster(Enemy enemy)
     {
-        CallMethod(OnCharacterCollidedWithMonsterRef, 1, 0, MonsterManager.Instance.RefEnemy(enemy));
+        CallMethod(OnCharacterCollidedWithMonsterRef, 1, 0, null, MonsterManager.Instance.RefEnemy(enemy));
     }
 
     public void OnCharacterCollidingWithMonster(Enemy enemy)
     {
-        CallMethod(OnCharacterCollidingWithMonsterRef, 1, 0, MonsterManager.Instance.RefEnemy(enemy));
+        CallMethod(OnCharacterCollidingWithMonsterRef, 1, 0, null, MonsterManager.Instance.RefEnemy(enemy));
+    }
+
+    public void OnPlayerShoot(Vector2 direction)
+    {
+        CallMethod(OnPlayerShootRef, 1, 0, () =>
+        {
+            Lua.NewTable();
+
+            Lua.PushString("x");
+            Lua.PushNumber(direction.x);
+            Lua.SetTable(-3);
+
+            Lua.PushString("y");
+            Lua.PushNumber(direction.y);
+
+            Lua.SetTable(-3);
+        });
     }
 
     #endregion
@@ -754,7 +773,7 @@ public class LuaScriptController : MonoBehaviour
 		return Lua.L_Ref( LuaDef.LUA_REGISTRYINDEX );
 	}
 
-	private void CallMethod( int funcRef, int numArguments = 0, int numResults = 0, params object[] arguments)
+	private void CallMethod( int funcRef, int numArguments = 0, int numResults = 0, Action customTypesCallback = null, params object[] arguments)
 	{
         if (funcRef == -1) return;
 
@@ -765,7 +784,7 @@ public class LuaScriptController : MonoBehaviour
         Lua.PushCSharpFunction(Traceback);
         Lua.Insert(b);
 
-        for (int i = 0; i < numArguments; ++i)
+        for (int i = 0; i < numArguments && arguments.Length > 0; ++i)
         {
             object argument = arguments[i];
             Type type = argument.GetType();
@@ -791,6 +810,9 @@ public class LuaScriptController : MonoBehaviour
                 Lua.PushUnsigned((uint)argument);
             }
         }
+
+        if (customTypesCallback != null)
+            customTypesCallback.Invoke();
 
         var status = Lua.PCall( numArguments, numResults, b );
 		if( status != ThreadStatus.LUA_OK )

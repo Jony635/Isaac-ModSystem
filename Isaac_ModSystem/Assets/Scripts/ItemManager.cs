@@ -37,8 +37,7 @@ public class ItemManager : MonoBehaviour
         int random = UnityEngine.Random.Range(0, availableItems.Count);
         Item item = availableItems[random];
 
-        availableItems.RemoveAt(random);
-        discardedItems.Add(item);
+        availableItems.Remove(item);
 
         return item;
     }
@@ -104,10 +103,8 @@ public class ItemManager : MonoBehaviour
 
             activeItemEquipped = (ActiveItem)item;
             ActiveItemContainer.Instance.ActiveItemEquipped((ActiveItem)item);
-
-            
         }
-        else if (availableItems.Contains(item))
+        else
         {
             equippedItems.Add(item);
         }
@@ -115,7 +112,6 @@ public class ItemManager : MonoBehaviour
         if (altar.holdedItem == item)
             altar.ChangeHoldedItem(null);
 
-        availableItems.Remove(item);
         item.OnEquipped();
     }
 
@@ -195,5 +191,16 @@ public class ItemManager : MonoBehaviour
     public void AddItem(Item item)
     {
         availableItems.Add(item);
+    }
+
+    public void OnPlayerShoot(Vector2 direction)
+    {
+        foreach (Item item in equippedItems)
+        {
+            item.OnPlayerShoot(direction);
+        }
+
+        if (activeItemEquipped)
+            activeItemEquipped.OnPlayerShoot(direction);
     }
 }
