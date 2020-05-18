@@ -3,7 +3,7 @@ sprite = "collectibles_360_incubus.png"
 incubusOBJ = nil
 
 positions = {}
-delay = 1
+delay = 0.15
 
 tears = {}
 maxTears = 20
