@@ -33,14 +33,7 @@ function Update()
 		SetPosition(incubusOBJ, {x = newPosition.x, y = newPosition.y})
 
 	end
-
-	for i, tear in ipairs(tears) do
-
-		tearPosition = GetPosition(tear.id)
-		SetPosition(tear.id, {x = tearPosition.x + (tear.direction.x * dt) , y = tearPosition.y + (tear.direction.y * dt)})
-
-	end
-
+	
 end
 
 function OnPlayerShoot(dir)
@@ -49,7 +42,8 @@ function OnPlayerShoot(dir)
 
 	local newTear = {id = AddChild(), direction = dir}
 	SetPosition(newTear.id, {x = initialPosition.x, y = initialPosition.y})
-	SetComponent(newTear.id, "SpriteRenderer", {sprite = 0})
+	SetComponent(newTear.id, "TearController")
+	AddForce(newTear.id, dir, "Impulse")
 
 	table.insert(tears, newTear)
 

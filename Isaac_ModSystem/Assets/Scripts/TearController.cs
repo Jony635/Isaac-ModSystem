@@ -11,8 +11,29 @@ public class TearController : MonoBehaviour
 
     private void Awake()
     {
+        if (!GetComponent<SpriteRenderer>())
+            gameObject.AddComponent<SpriteRenderer>();
+
         animator = GetComponent<Animator>();
+        if (animator == null)
+            animator = gameObject.AddComponent<Animator>();
+
+        animator.runtimeAnimatorController = Resources.Load<RuntimeAnimatorController>("Animations/Tears/Tear");
+
         rb = GetComponent<Rigidbody2D>();
+        if (rb == null)
+            rb = gameObject.AddComponent<Rigidbody2D>();
+
+        rb.gravityScale = 0;
+
+        CircleCollider2D col = GetComponent<CircleCollider2D>();
+        if (!col)
+            col = gameObject.AddComponent<CircleCollider2D>();
+
+        col.radius = 0.2196912f;
+        col.isTrigger = true;
+
+        gameObject.layer = LayerMask.NameToLayer("PlayerTear");
     }
 
     private void Start()
@@ -34,13 +55,10 @@ public class TearController : MonoBehaviour
         Destroy(gameObject);
     }
 
-    private void OnTriggerEnter2D(Collider2D collision)
+    private void OnTriggerEnter2D(Collider2D collider)
     {
-        if (!collision.CompareTag("PlayerTear") && !collision.CompareTag("Player"))
-        {
-            rb.isKinematic = true;
-            rb.velocity = Vector2.zero;
-            animator.SetTrigger("Destroy");
-        }
+        rb.isKinematic = true;
+        rb.velocity = Vector2.zero;
+        animator.SetTrigger("Destroy");
     }
 }
