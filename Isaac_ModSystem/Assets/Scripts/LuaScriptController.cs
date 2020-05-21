@@ -108,6 +108,10 @@ public class LuaScriptController : MonoBehaviour
 
                 new NameFuncPair("SetLayer", SetLayer),
                 new NameFuncPair("AddForce", AddForce),
+
+                new NameFuncPair("SetActivePercent", SetActivePercent),
+                new NameFuncPair("GetCurrentCharges", GetCurrentCharges),
+
             };
 
             childs.Add(0, PlayerController.Instance.gameObject);
@@ -801,7 +805,16 @@ public class LuaScriptController : MonoBehaviour
 
     private int GetMaxHealth(ILuaState lua)
     {
-        lua.PushNumber(PlayerController.Instance.stats.maxHp);
+        uint id = 0;
+
+        if(!lua.IsNoneOrNil(1))
+            id = lua.L_CheckUnsigned(1);
+
+        if (id == 0)
+            lua.PushNumber(PlayerController.Instance.stats.maxHp);
+        else
+            lua.PushNumber(MonsterManager.Instance.GetRefEnemy(id).enemyStats.maxHP);
+
         return 1;
     }
 
@@ -905,6 +918,24 @@ public class LuaScriptController : MonoBehaviour
         }
 
         return 0;
+    }
+
+    private int SetActivePercent(ILuaState lua)
+    {
+        if (ActiveItemContainer.Instance.GetActiveItem() != GetComponent<Item>())
+            return 0;
+
+        float percent = (float)lua.L_CheckNumber(1);
+
+        ActiveItemContainer.Instance.SetActivePercent(percent);
+
+        return 0;
+    }
+
+    private int GetCurrentCharges(ILuaState lua)
+    {
+        lua.PushInteger(ActiveItemContainer.Instance.GetCurrentCharges());
+        return 1;
     }
 
     #endregion

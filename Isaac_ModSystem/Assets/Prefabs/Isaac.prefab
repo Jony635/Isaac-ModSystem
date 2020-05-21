@@ -275,7 +275,7 @@ Rigidbody2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7189916234951951379}
-  m_BodyType: 0
+  m_BodyType: 1
   m_Simulated: 1
   m_UseFullKinematicContacts: 1
   m_UseAutoMass: 0
@@ -332,11 +332,14 @@ MonoBehaviour:
   tearMaxInertia: 0.4
   tearsContainer: {fileID: 0}
   pickedItemRenderer: {fileID: 978591583}
-  stats:
-    damage: 5
+  difficulty: 1
+  _stats:
+    plainDamage: 5
+    factorDamage: 1
     speed: 7
     hp: 6
     maxHp: 6
+    invincible: 0
 --- !u!1 &8041023832312522774
 GameObject:
   m_ObjectHideFlags: 0

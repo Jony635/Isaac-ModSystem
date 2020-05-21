@@ -1523,6 +1523,10 @@ PrefabInstance:
       propertyPath: tearsContainer
       value: 
       objectReference: {fileID: 1260135603}
+    - target: {fileID: 504767557, guid: 502cef8e59113d74bbc2b13b077071b4, type: 3}
+      propertyPath: m_BodyType
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 502cef8e59113d74bbc2b13b077071b4, type: 3}
 --- !u!1001 &5753106078741565311

@@ -335,6 +335,8 @@ public class PlayerController : MonoBehaviour
 
                 ItemManager.Instance.OnCharacterCollidedWithMonster(enemy);
             }
+
+            rb.velocity = Vector2.zero;
         }
         #endregion
 
@@ -357,6 +359,9 @@ public class PlayerController : MonoBehaviour
                 ItemManager.Instance.OnCharacterCollidingWithMonster(enemy);
             }
         }
+
+        rb.velocity = Vector2.zero;
+
         #endregion
     }
 

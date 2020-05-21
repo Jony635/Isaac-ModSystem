@@ -46,6 +46,28 @@ public class ActiveItemContainer : MonoBehaviour
         green.SetParent(mask);
     }
 
+    public int GetCurrentCharges()
+    {
+        return equippedItem ? (int)equippedItem.currentCharges : -1;
+    }
+
+    public ActiveItem GetActiveItem()
+    {
+        return equippedItem;
+    }
+
+    public void SetActivePercent(float percent)
+    {
+        if (equippedItem == null)
+            return;
+
+        maskPercent = percent;
+
+        equippedItem.currentCharges = (uint)maskPercent * equippedItem.numCharges;
+
+        Masking();
+    }
+
     public void ActiveItemEquipped(ActiveItem item)
     {
         equippedItem = item;
