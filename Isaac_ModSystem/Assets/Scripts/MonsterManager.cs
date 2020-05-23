@@ -17,7 +17,6 @@ public class MonsterManager : MonoBehaviour
         Instance = this;
 
         ImportEnemies();
-
     }
 
     private void ImportEnemies()
@@ -37,6 +36,12 @@ public class MonsterManager : MonoBehaviour
         }
     }
 
+    public void AddEnemy(Enemy enemy)
+    {
+        if (!enemies.Contains(enemy))
+            enemies.Add(enemy);
+    }
+
     public Enemy[] GetEnemiesWith(float difficulty)
     {
         List<Enemy> ret = new List<Enemy>();
@@ -49,9 +54,22 @@ public class MonsterManager : MonoBehaviour
             if(spawnable.Count > 0)
             {
                 int rand = UnityEngine.Random.Range(0, spawnable.Count);
-                ret.Add(Instantiate(enemies[rand].gameObject).GetComponent<Enemy>());
+                GameObject templateEnemy = enemies[rand].gameObject;
+                GameObject newEnemy = Instantiate(templateEnemy);
+
+                LuaScriptController enemyScript = newEnemy.GetComponent<LuaScriptController>();
+                if(enemyScript != null)
+                {
+                    LuaScriptController templateScript = templateEnemy.GetComponent<LuaScriptController>();
+                    enemyScript.LuaScriptFile = templateScript.LuaScriptFile;
+                    enemyScript.basePath = templateScript.basePath;
+                    enemyScript.Initialize();
+                }
+
+                ret.Add(newEnemy.GetComponent<Enemy>());
                 achievedDifficulty += enemies[rand].difficulty;
             }          
+
         } while (spawnable.Count > 0);
        
         return ret.ToArray();

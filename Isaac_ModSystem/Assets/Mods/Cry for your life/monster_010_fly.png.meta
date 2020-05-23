@@ -1,0 +1,703 @@
+fileFormatVersion: 2
+guid: 2ba5e625710c758408a6c2e3671e7234
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: -5299569770125686202
+    second: monster_010_fly_0
+  - first:
+      213: 4821142141097857574
+    second: monster_010_fly_1
+  - first:
+      213: 261861055493632039
+    second: monster_010_fly_2
+  - first:
+      213: -1670045906556784241
+    second: monster_010_fly_3
+  - first:
+      213: 1737004247144790068
+    second: monster_010_fly_4
+  - first:
+      213: -3751469024963254881
+    second: monster_010_fly_5
+  - first:
+      213: 2385488938726472590
+    second: monster_010_fly_6
+  - first:
+      213: 3558890194700940222
+    second: monster_010_fly_7
+  - first:
+      213: 6819989312605574997
+    second: monster_010_fly_8
+  - first:
+      213: -6903743430853209571
+    second: monster_010_fly_9
+  - first:
+      213: -438593719935503673
+    second: monster_010_fly_10
+  - first:
+      213: -2751730026503575467
+    second: monster_010_fly_11
+  - first:
+      213: -5384669909779468222
+    second: monster_010_fly_12
+  - first:
+      213: 6724876383583026521
+    second: monster_010_fly_13
+  - first:
+      213: -4265708157831686079
+    second: monster_010_fly_14
+  - first:
+      213: 8407756734881191
+    second: monster_010_fly_16
+  - first:
+      213: -5463527314688081908
+    second: monster_010_fly_17
+  - first:
+      213: -7443871201454242762
+    second: monster_010_fly_18
+  - first:
+      213: 1900225986507816626
+    second: monster_010_fly_47
+  - first:
+      213: 2593670563252402120
+    second: monster_010_fly_15
+  - first:
+      213: 7126823011338025204
+    second: monster_010_fly_19
+  - first:
+      213: 6403259451497623597
+    second: monster_010_fly_20
+  - first:
+      213: 3096788731573986820
+    second: monster_010_fly_21
+  - first:
+      213: 4686305611289003163
+    second: monster_010_fly_22
+  - first:
+      213: 2322601005036126298
+    second: monster_010_fly_23
+  externalObjects: {}
+  serializedVersion: 10
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: -1
+    aniso: -1
+    mipBias: -100
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  platformSettings:
+  - serializedVersion: 3
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: monster_010_fly_0
+      rect:
+        serializedVersion: 2
+        x: 7
+        y: 236
+        width: 19
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4567dd327f05f714ab4ef64964bed68a
+      internalID: -5299569770125686202
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: monster_010_fly_1
+      rect:
+        serializedVersion: 2
+        x: 41
+        y: 236
+        width: 13
+        height: 15
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6c23a41ef2e279040a1c30c76fb6917e
+      internalID: 4821142141097857574
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: monster_010_fly_2
+      rect:
+        serializedVersion: 2
+        x: 71
+        y: 236
+        width: 19
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 977c12640754b2e4f9b759a347ca410e
+      internalID: 261861055493632039
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: monster_010_fly_3
+      rect:
+        serializedVersion: 2
+        x: 105
+        y: 236
+        width: 13
+        height: 15
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: dc763d04720ddbe4b87847640ef26d8e
+      internalID: -1670045906556784241
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: monster_010_fly_4
+      rect:
+        serializedVersion: 2
+        x: 135
+        y: 236
+        width: 19
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a198ae6fcf1259d4f931612222bb76b0
+      internalID: 1737004247144790068
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: monster_010_fly_5
+      rect:
+        serializedVersion: 2
+        x: 169
+        y: 236
+        width: 13
+        height: 15
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f5fde3415caa6934bae74baea0621190
+      internalID: -3751469024963254881
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: monster_010_fly_6
+      rect:
+        serializedVersion: 2
+        x: 199
+        y: 236
+        width: 19
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e318d77c295f6e141b730e84371ebb11
+      internalID: 2385488938726472590
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: monster_010_fly_7
+      rect:
+        serializedVersion: 2
+        x: 233
+        y: 236
+        width: 13
+        height: 15
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4f0ce542550face49a526dce86d6d588
+      internalID: 3558890194700940222
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: monster_010_fly_8
+      rect:
+        serializedVersion: 2
+        x: 7
+        y: 204
+        width: 19
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2416218dd2126b24dbad498cc8d20673
+      internalID: 6819989312605574997
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: monster_010_fly_9
+      rect:
+        serializedVersion: 2
+        x: 41
+        y: 204
+        width: 13
+        height: 15
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5549ad680a49d224a999348bdeee740c
+      internalID: -6903743430853209571
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: monster_010_fly_10
+      rect:
+        serializedVersion: 2
+        x: 71
+        y: 204
+        width: 19
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: de4e6d56bc046114d9cba79497ef0474
+      internalID: -438593719935503673
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: monster_010_fly_11
+      rect:
+        serializedVersion: 2
+        x: 105
+        y: 204
+        width: 13
+        height: 15
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: fe7ce72f96e446d46b3969ebd6444fd9
+      internalID: -2751730026503575467
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: monster_010_fly_12
+      rect:
+        serializedVersion: 2
+        x: 137
+        y: 204
+        width: 13
+        height: 15
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9553ac67be89f3c41b58ca773b68730d
+      internalID: -5384669909779468222
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: monster_010_fly_13
+      rect:
+        serializedVersion: 2
+        x: 167
+        y: 204
+        width: 19
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7cf443f85219330409dbfa1e09f7c9ff
+      internalID: 6724876383583026521
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: monster_010_fly_14
+      rect:
+        serializedVersion: 2
+        x: 135
+        y: 144
+        width: 44
+        height: 33
+      alignment: 9
+      pivot: {x: 0.54254013, y: 0.5103131}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9d762646a2b80a3469f4c1d31a8b8179
+      internalID: -4265708157831686079
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: monster_010_fly_16
+      rect:
+        serializedVersion: 2
+        x: 196
+        y: 136
+        width: 53
+        height: 44
+      alignment: 9
+      pivot: {x: 0.52987844, y: 0.5899748}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 364c3f83dde31ae47b989814eea602c8
+      internalID: 8407756734881191
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: monster_010_fly_17
+      rect:
+        serializedVersion: 2
+        x: 22
+        y: 155
+        width: 17
+        height: 14
+      alignment: 9
+      pivot: {x: 0.53984857, y: 0.4516122}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 015a77ab33e29624f927a92fbd42da68
+      internalID: -5463527314688081908
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: monster_010_fly_18
+      rect:
+        serializedVersion: 2
+        x: 75
+        y: 147
+        width: 32
+        height: 27
+      alignment: 9
+      pivot: {x: 0.6063509, y: 0.43697724}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b8b02740ab40f8344841845009f56f57
+      internalID: -7443871201454242762
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: monster_010_fly_47
+      rect:
+        serializedVersion: 2
+        x: 146
+        y: 16
+        width: 30
+        height: 34
+      alignment: 9
+      pivot: {x: 0.5064641, y: 0.5114073}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 34d61bd2de163a944acdcc2a5b197ad5
+      internalID: 1900225986507816626
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: monster_010_fly_15
+      rect:
+        serializedVersion: 2
+        x: 3
+        y: 71
+        width: 67
+        height: 45
+      alignment: 9
+      pivot: {x: 0.42878875, y: 0.4506858}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6071aef41bdd8594688bfc2fb49c51e6
+      internalID: 2593670563252402120
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: monster_010_fly_19
+      rect:
+        serializedVersion: 2
+        x: 71
+        y: 68
+        width: 60
+        height: 47
+      alignment: 9
+      pivot: {x: 0.41591606, y: 0.51006335}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3d2280172dab4bf41a6f71d13ff103cf
+      internalID: 7126823011338025204
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: monster_010_fly_20
+      rect:
+        serializedVersion: 2
+        x: 143
+        y: 66
+        width: 51
+        height: 47
+      alignment: 9
+      pivot: {x: 0.33243006, y: 0.5971139}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7c919f511a16d3d46b25022d24e5ed5c
+      internalID: 6403259451497623597
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: monster_010_fly_21
+      rect:
+        serializedVersion: 2
+        x: 207
+        y: 68
+        width: 38
+        height: 45
+      alignment: 9
+      pivot: {x: 0.42122048, y: 0.6101827}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 87d78ff27a802414b867f3def4fb964e
+      internalID: 3096788731573986820
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: monster_010_fly_22
+      rect:
+        serializedVersion: 2
+        x: 15
+        y: 15
+        width: 33
+        height: 34
+      alignment: 9
+      pivot: {x: 0.47483814, y: 0.54535484}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 81f7f25136355304f8e543d96a6bd292
+      internalID: 4686305611289003163
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: monster_010_fly_23
+      rect:
+        serializedVersion: 2
+        x: 79
+        y: 16
+        width: 33
+        height: 33
+      alignment: 9
+      pivot: {x: 0.49798536, y: 0.5584324}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1637a835ad897114dad7b0323afaa37b
+      internalID: 2322601005036126298
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    physicsShape: []
+    bones: []
+    spriteID: 5e97eb03825dee720800000000000000
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+  spritePackingTag: 
+  pSDRemoveMatte: 0
+  pSDShowRemoveMatteOption: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

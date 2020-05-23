@@ -89,6 +89,10 @@ public class LuaScriptController : MonoBehaviour
                 new NameFuncPair("GetPosition", GetPosition),
                 new NameFuncPair("SetPosition", SetPosition),
                 new NameFuncPair("SetRotation", SetRotation),
+                
+                new NameFuncPair("GetLocalPosition", GetLocalPosition),
+                new NameFuncPair("SetLocalPosition", SetLocalPosition),
+                new NameFuncPair("SetLocalRotation", SetLocalRotation),
 
                 new NameFuncPair("SetComponent", SetComponent),
 
@@ -111,6 +115,8 @@ public class LuaScriptController : MonoBehaviour
 
                 new NameFuncPair("SetActivePercent", SetActivePercent),
                 new NameFuncPair("GetCurrentCharges", GetCurrentCharges),
+
+                new NameFuncPair("This", This),
 
             };
 
@@ -366,13 +372,14 @@ public class LuaScriptController : MonoBehaviour
         GameObject newChild = new GameObject();
         newChild.layer = LayerMask.NameToLayer("Item");
         newChild.transform.SetParent(transform);
+        newChild.transform.localPosition = Vector3.zero;
 
         uint rand = 0;
         do
         {
             rand = (uint)(UnityEngine.Random.value * uint.MaxValue);
 
-        } while(childs.ContainsKey(rand) || rand == 0);
+        } while(childs.ContainsKey(rand) || rand == 0 || rand == 1);
 
         childs.Add(rand, newChild);
 
@@ -421,9 +428,9 @@ public class LuaScriptController : MonoBehaviour
     private int GetPosition(ILuaState lua)
     {
         uint key = lua.L_CheckUnsigned(1);
-        if(childs.ContainsKey(key))
+        if (childs.ContainsKey(key) || key == 1)
         {
-            GameObject child = childs[key];
+            GameObject child = key != 1 ? childs[key] : gameObject;
 
             lua.NewTable();
 
@@ -443,9 +450,9 @@ public class LuaScriptController : MonoBehaviour
     {
         uint key = lua.L_CheckUnsigned(1);
 
-        if(childs.ContainsKey(key))
+        if(childs.ContainsKey(key) || key == 1)
         {
-            GameObject child = childs[key];
+            GameObject child = key != 1 ? childs[key] : gameObject;
 
             Vector2 newPosition = new Vector2(0, 0);
 
@@ -476,12 +483,81 @@ public class LuaScriptController : MonoBehaviour
     {
         uint key = lua.L_CheckUnsigned(1);
 
-        if(childs.ContainsKey(key))
+        if (childs.ContainsKey(key) || key == 1)
         {
-            GameObject child = childs[key];
+            GameObject child = key != 1 ? childs[key] : gameObject;
             float angle = (float)lua.L_CheckNumber(2);
 
             child.transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
+        }     
+
+        return 0;
+    }    
+    
+    private int GetLocalPosition(ILuaState lua)
+    {
+        uint key = lua.L_CheckUnsigned(1);
+        if (childs.ContainsKey(key) || key == 1)
+        {
+            GameObject child = key != 1 ? childs[key] : gameObject;
+
+            lua.NewTable();
+
+            lua.PushString("x");
+            lua.PushNumber(child.transform.localPosition.x);
+            lua.SetTable(-3);
+
+            lua.PushString("y");
+            lua.PushNumber(child.transform.localPosition.y);
+            lua.SetTable(-3);
+        }     
+
+        return 1;
+    }
+
+    private int SetLocalPosition(ILuaState lua)
+    {
+        uint key = lua.L_CheckUnsigned(1);
+
+        if (childs.ContainsKey(key) || key == 1)
+        {
+            GameObject child = key != 1 ? childs[key] : gameObject;
+
+            Vector2 newPosition = new Vector2(0, 0);
+
+            if(lua.IsTable(2))
+            {
+                lua.Insert(2);
+
+                lua.PushString("x");
+                lua.GetTable(-2);
+                double x = lua.L_CheckNumber(-1);
+                lua.Pop(1);
+
+                lua.PushString("y");
+                lua.GetTable(-2);
+                double y = lua.L_CheckNumber(-1);
+                lua.Pop(1);
+
+                newPosition = new Vector2((float)x, (float)y);
+            }
+
+            child.transform.localPosition = newPosition;
+        }
+
+        return 0;
+    }
+
+    private int SetLocalRotation(ILuaState lua)
+    {
+        uint key = lua.L_CheckUnsigned(1);
+
+        if (childs.ContainsKey(key) || key == 1)
+        {
+            GameObject child = key != 1 ? childs[key] : gameObject;
+            float angle = (float)lua.L_CheckNumber(2);
+
+            child.transform.localRotation = Quaternion.AngleAxis(angle, Vector3.forward);
         }     
 
         return 0;
@@ -490,9 +566,9 @@ public class LuaScriptController : MonoBehaviour
     private int SetComponent(ILuaState lua)
     {
         uint key = lua.L_CheckUnsigned(1);
-        if(childs.ContainsKey(key))
+        if(childs.ContainsKey(key) || key == 1)
         {
-            GameObject child = childs[key];
+            GameObject child = key != 1 ? childs[key] : gameObject;
             switch(lua.L_CheckString(2))
             {
                 case "SpriteRenderer":
@@ -938,6 +1014,17 @@ public class LuaScriptController : MonoBehaviour
         return 1;
     }
 
+    private int This(ILuaState lua)
+    {
+        Enemy enemy = GetComponent<Enemy>();
+        if (enemy != null)
+            lua.PushUnsigned(1);
+        else
+            lua.PushNil();
+
+        return 1;
+    }
+
     #endregion
 
     #region Utils
@@ -1111,9 +1198,10 @@ public class LuaScriptController : MonoBehaviour
 
                     GameObject element = new GameObject();
                     element.name = name;
+                    element.SetActive(false);
 
                     LuaScriptController controller = element.AddComponent<LuaScriptController>();
-                    controller.enabled = false;
+                    controller.enabled = true;
                     controller.LuaScriptFile = path;
                     controller.basePath = path.Substring(0, path.LastIndexOf('/'));
                     controller.Initialize();
@@ -1138,7 +1226,10 @@ public class LuaScriptController : MonoBehaviour
                             break;
                         case 2:
                             element.transform.SetParent(monsters.transform);
-                            element.AddComponent<Enemy>().luaScript = controller;
+                            Enemy newEnemy = element.AddComponent<Enemy>();
+                            newEnemy.luaScript = controller;
+                            MonsterManager.Instance.AddEnemy(newEnemy);
+
                             break;
                     }               
                 }
