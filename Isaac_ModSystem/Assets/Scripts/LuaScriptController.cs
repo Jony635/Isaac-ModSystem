@@ -123,6 +123,8 @@ public class LuaScriptController : MonoBehaviour
                 new NameFuncPair("SetActive", SetActive),
 
                 new NameFuncPair("Notify", Notify),
+                new NameFuncPair("GetStats", GetStats),
+                new NameFuncPair("SetStats", SetStats),
 
             };
 
@@ -1182,6 +1184,123 @@ public class LuaScriptController : MonoBehaviour
                     break;
                 }
         }
+
+        return 0;
+    }
+
+    private int GetStats(ILuaState lua)
+    {
+        Enemy enemy = GetComponent<Enemy>();
+        if(!enemy)
+        {
+            lua.PushNil(); return 1;
+        }
+
+        lua.NewTable();
+
+        lua.PushString("attackSpeed");
+        lua.PushNumber(enemy.enemyStats.attackSpeed);
+        lua.SetTable(-3);
+
+        lua.PushString("damage");
+        lua.PushNumber(enemy.enemyStats.damage);
+        lua.SetTable(-3);
+
+        lua.PushString("hp");
+        lua.PushNumber(enemy.enemyStats.hp);
+        lua.SetTable(-3);
+
+        lua.PushString("maxHP");
+        lua.PushNumber(enemy.enemyStats.maxHP);
+        lua.SetTable(-3);
+
+        lua.PushString("runSpeed");
+        lua.PushNumber(enemy.enemyStats.runSpeed);
+        lua.SetTable(-3);
+
+        lua.PushString("speed");
+        lua.PushNumber(enemy.enemyStats.speed);
+        lua.SetTable(-3);
+
+        lua.PushString("speedFactor");
+        lua.PushNumber(enemy.enemyStats.speedFactor);
+        lua.SetTable(-3);
+
+        return 1;
+    }
+
+    private int SetStats(ILuaState lua)
+    {
+        Enemy enemy = GetComponent<Enemy>();
+        if (!enemy)
+            return 0;
+
+        Enemy.EnemyStats enemyStats = enemy.enemyStats;
+
+        if(!lua.IsNoneOrNil(1) && lua.IsTable(1))
+        {
+            lua.PushValue(1);
+
+            lua.PushString("attackSpeed");
+            lua.GetTable(-2);
+            if(!lua.IsNoneOrNil(-1))
+            {
+                enemyStats.attackSpeed = (float)lua.L_CheckNumber(-1);
+            }
+            lua.Pop(1);
+
+            lua.PushString("damage");
+            lua.GetTable(-2);
+            if(!lua.IsNoneOrNil(-1))
+            {
+                enemyStats.damage = (float)lua.L_CheckNumber(-1);
+            }
+            lua.Pop(1);
+
+            lua.PushString("hp");
+            lua.GetTable(-2);
+            if (!lua.IsNoneOrNil(-1))
+            {
+                enemyStats.hp = (float)lua.L_CheckNumber(-1);
+            }
+            lua.Pop(1);
+
+            lua.PushString("maxHP");
+            lua.GetTable(-2);
+            if (!lua.IsNoneOrNil(-1))
+            {
+                enemyStats.maxHP = (float)lua.L_CheckNumber(-1);
+            }
+            lua.Pop(1);
+
+            lua.PushString("runSpeed");
+            lua.GetTable(-2);
+            if (!lua.IsNoneOrNil(-1))
+            {
+                enemyStats.runSpeed = (float)lua.L_CheckNumber(-1);
+            }
+            lua.Pop(1);
+
+            lua.PushString("speed");
+            lua.GetTable(-2);
+            if (!lua.IsNoneOrNil(-1))
+            {
+                enemyStats.speed = (float)lua.L_CheckNumber(-1);
+            }
+            lua.Pop(1);
+
+            lua.PushString("speedFactor");
+            lua.GetTable(-2);
+            if (!lua.IsNoneOrNil(-1))
+            {
+                enemyStats.speedFactor = (float)lua.L_CheckNumber(-1);
+            }
+            lua.Pop(1);
+
+            lua.Pop(1);
+        }
+
+        enemy.enemyStats = enemyStats;
 
         return 0;
     }

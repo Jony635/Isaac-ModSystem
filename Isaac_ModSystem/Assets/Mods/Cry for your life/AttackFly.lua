@@ -5,12 +5,13 @@ red1 = {x = 71, y = 204, w = 19, h = 10}
 black2 = {x = 41, y = 236, w = 13, h = 15}
 
 animSpeed = 3 --sprites per second
-flySpeed = 4
 
 function Awake()
 
 	SetComponent(This(), "SpriteRenderer", {sprite = 1, rect = red1})
 	SetComponent(This(), "CapsuleCollider", {isTrigger = false, center = {x = 0, y = 0}, size = {x = 0.6333333, y = 0.3333333}, direction = "Horizontal"})
+
+	SetStats({hp = 40, maxHP = 40, damage = 1, speed = 4})
 
 	Wait(1 / animSpeed, function() Red1() end)
 end
@@ -39,9 +40,11 @@ function Update()
 
 	local dt = GetDT()
 
+	local stats = GetStats()
+
 	local newPosition = {}
-	newPosition.x = thisPos.x + dir.x * flySpeed * dt
-	newPosition.y = thisPos.y + dir.y * flySpeed * dt
+	newPosition.x = thisPos.x + dir.x * stats.speed * stats.speedFactor * dt
+	newPosition.y = thisPos.y + dir.y * stats.speed * stats.speedFactor * dt
 
 	SetPosition(This(), newPosition)
 end

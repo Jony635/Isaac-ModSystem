@@ -12,8 +12,8 @@ public class EnemySquirt : Enemy
 
     public EnemySquirt()
     {
-        enemyStats.damage = 1f;
-        enemyStats.hp = enemyStats.maxHP = 20;
+        enemyStats.damage = 2f;
+        enemyStats.hp = enemyStats.maxHP = 50;
         enemyStats.attackSpeed = 3f;
 
         attackTimer = 1 / enemyStats.attackSpeed;

@@ -14,7 +14,6 @@ public class Enemy : MonoBehaviour
         public float maxHP;
         public float hp;
         public float damage;
-        public float tick_damage;
         public float speed;
         public float speedFactor;
         public float runSpeed;
@@ -25,7 +24,7 @@ public class Enemy : MonoBehaviour
             constant_damage = false;
 
             maxHP = hp = 2f;
-            damage = tick_damage = 0.5f;
+            damage = 1f;
             speed = 20f;
             speedFactor = 1f;
             runSpeed = speed * 1.5f;
@@ -61,7 +60,9 @@ public class Enemy : MonoBehaviour
 
         spriteRenderer = gameObject.GetComponent<SpriteRenderer>();
         if(!spriteRenderer)
-            spriteRenderer = gameObject.AddComponent<SpriteRenderer>();  
+            spriteRenderer = gameObject.AddComponent<SpriteRenderer>();
+
+        spriteRenderer.sortingOrder = 10;
     }
 
     protected virtual void OnTriggerEnter2D(Collider2D collider)
