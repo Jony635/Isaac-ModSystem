@@ -51,6 +51,7 @@ public class LuaScriptController : MonoBehaviour
     private int OnCharacterCollidedWithMonsterRef = -1;
     private int OnCharacterCollidingWithMonsterRef = -1;
     private int OnPlayerShootRef = -1;
+    private int OnEnemyDieRef = -1;
     #endregion 
 
     //C# Functions container
@@ -118,6 +119,11 @@ public class LuaScriptController : MonoBehaviour
 
                 new NameFuncPair("This", This),
 
+                new NameFuncPair("GetActive", GetActive),
+                new NameFuncPair("SetActive", SetActive),
+
+                new NameFuncPair("Notify", Notify),
+
             };
 
             childs.Add(0, PlayerController.Instance.gameObject);
@@ -153,6 +159,8 @@ public class LuaScriptController : MonoBehaviour
             OnCharacterCollidedWithMonsterRef = StoreMethod("OnCharacterCollidedWithMonster");
             OnCharacterCollidingWithMonsterRef = StoreMethod("OnCharacterCollidingWithMonster");
             OnPlayerShootRef = StoreMethod("OnPlayerShoot");
+
+            OnEnemyDieRef = StoreMethod("OnEnemyDie");
             #endregion
 
             Lua.Pop(-1);
@@ -296,6 +304,11 @@ public class LuaScriptController : MonoBehaviour
 
             Lua.SetTable(-3);
         });
+    }
+
+    public void OnEnemyDie()
+    {
+        CallMethod(OnEnemyDieRef);
     }
 
     #endregion
@@ -643,9 +656,9 @@ public class LuaScriptController : MonoBehaviour
                         {
                             lua.Insert(3);
 
-                            if(child.GetComponent<Rigidbody2D>() == null)
+                            if(gameObject.GetComponent<Rigidbody2D>() == null)
                             {
-                                Rigidbody2D rb = child.AddComponent<Rigidbody2D>();
+                                Rigidbody2D rb = gameObject.AddComponent<Rigidbody2D>();
                                 rb.isKinematic = true;
                             }
 
@@ -720,9 +733,9 @@ public class LuaScriptController : MonoBehaviour
                         {
                             lua.Insert(3);
 
-                            if (child.GetComponent<Rigidbody2D>() == null)
+                            if (gameObject.GetComponent<Rigidbody2D>() == null)
                             {
-                                Rigidbody2D rb = child.AddComponent<Rigidbody2D>();
+                                Rigidbody2D rb = gameObject.AddComponent<Rigidbody2D>();
                                 rb.isKinematic = true;
                             }
 
@@ -782,13 +795,106 @@ public class LuaScriptController : MonoBehaviour
                         }
                         break;
                     }
+                case "CapsuleCollider":
+                    {
+                        if (lua.IsTable(3))
+                        {
+                            lua.Insert(3);
+
+                            if (gameObject.GetComponent<Rigidbody2D>() == null)
+                            {
+                                Rigidbody2D rb = gameObject.AddComponent<Rigidbody2D>();
+                                rb.isKinematic = true;
+                            }
+
+                            lua.PushString("isTrigger");
+                            lua.GetTable(-2);
+                            if (!lua.IsNoneOrNil(-1))
+                            {
+                                bool isTrigger = lua.ToBoolean(-1);
+
+                                CapsuleCollider2D capsule = child.GetComponent<CapsuleCollider2D>();
+                                if (capsule == null)
+                                    capsule = child.AddComponent<CapsuleCollider2D>();
+
+                                capsule.isTrigger = isTrigger;
+                            }
+                            lua.Pop(1);
+
+                            lua.PushString("center");
+                            lua.GetTable(-2);
+
+                            if (!lua.IsNoneOrNil(-1) && lua.IsTable(-1))
+                            {
+                                lua.PushString("x");
+                                lua.GetTable(-2);
+                                Vector2 center;
+                                center.x = (float)lua.L_CheckNumber(-1);
+                                lua.Pop(1);
+
+                                lua.PushString("y");
+                                lua.GetTable(-2);
+                                center.y = (float)lua.L_CheckNumber(-1);
+                                lua.Pop(1);
+
+                                CapsuleCollider2D capsule = child.GetComponent<CapsuleCollider2D>();
+                                if (capsule == null)
+                                    capsule = child.AddComponent<CapsuleCollider2D>();
+
+                                capsule.offset = center;
+                            }
+                            lua.Pop(1);
+
+                            lua.PushString("size");
+                            lua.GetTable(-2);
+
+                            if (!lua.IsNoneOrNil(-1) && lua.IsTable(-1))
+                            {
+                                lua.PushString("x");
+                                lua.GetTable(-2);
+                                Vector2 size;
+                                size.x = (float)lua.L_CheckNumber(-1);
+                                lua.Pop(1);
+
+                                lua.PushString("y");
+                                lua.GetTable(-2);
+                                size.y = (float)lua.L_CheckNumber(-1);
+                                lua.Pop(1);
+
+                                CapsuleCollider2D capsule = child.GetComponent<CapsuleCollider2D>();
+                                if (capsule == null)
+                                    capsule = child.AddComponent<CapsuleCollider2D>();
+
+                                capsule.size = size;
+                            }
+
+                            lua.Pop(1);
+
+                            lua.PushString("direction");
+                            lua.GetTable(-2);
+
+                            if(!lua.IsNoneOrNil(-1))
+                            {
+                                string direction = lua.L_CheckString(-1);
+
+                                CapsuleCollider2D capsule = child.GetComponent<CapsuleCollider2D>();
+                                if (capsule == null)
+                                    capsule = child.AddComponent<CapsuleCollider2D>();
+
+                                capsule.direction = direction == "Vertical" ? CapsuleDirection2D.Vertical : CapsuleDirection2D.Horizontal;
+                            }
+
+                            lua.Pop(1);
+
+                        }
+                        break;
+                    }
                 case "TearController":
                     {
                         child.AddComponent<TearController>();
                         break;
                     }
             }
-
         }
         return 0;
     }
@@ -1025,6 +1131,61 @@ public class LuaScriptController : MonoBehaviour
         return 1;
     }
 
+    private int GetActive(ILuaState lua)
+    {
+        uint index = lua.L_CheckUnsigned(1);
+
+        if(index == 1 || childs.ContainsKey(index))
+        {
+            GameObject child = index == 1 ? gameObject : childs[index];
+            lua.PushBoolean(child.activeSelf);
+        }
+        else
+            lua.PushNil();
+
+        return 1;
+    }
+
+    private int SetActive(ILuaState lua)
+    {
+        uint index = lua.L_CheckUnsigned(1);
+
+        if (index == 1 || childs.ContainsKey(index))
+        {
+            GameObject child = index == 1 ? gameObject : childs[index];
+
+            bool active = lua.ToBoolean(2);
+
+            if (!active)
+                StopAllCoroutines();
+
+            child.SetActive(active);
+        }
+
+        return 0;
+    }
+
+    private int Notify(ILuaState lua)
+    {
+        string notification = lua.L_CheckString(1);
+
+        switch(notification)
+        {
+            case "OnMonsterDied":
+                {
+                    Enemy enemy = GetComponent<Enemy>();
+                    if (enemy != null)
+                    {
+                        gameObject.SetActive(false);
+                        enemy.currentRoom.OnMonsterDied();
+                    }
+                    break;
+                }
+        }
+
+        return 0;
+    }
+
     #endregion
 
     #region Utils
@@ -1191,6 +1352,7 @@ public class LuaScriptController : MonoBehaviour
             foreach (string file in elements)
             {
                 string path = basePath + "/" + file;
+
                 if (File.Exists(path))
                 {
                     string name = file.Substring(file.LastIndexOf('/') + 1);
@@ -1229,7 +1391,6 @@ public class LuaScriptController : MonoBehaviour
                             Enemy newEnemy = element.AddComponent<Enemy>();
                             newEnemy.luaScript = controller;
                             MonsterManager.Instance.AddEnemy(newEnemy);
-
                             break;
                     }               
                 }

@@ -10,6 +10,8 @@ flySpeed = 4
 function Awake()
 
 	SetComponent(This(), "SpriteRenderer", {sprite = 1, rect = red1})
+	SetComponent(This(), "CapsuleCollider", {isTrigger = false, center = {x = 0, y = 0}, size = {x = 0.6333333, y = 0.3333333}, direction = "Horizontal"})
+
 	Wait(1 / animSpeed, function() Red1() end)
 end
 
@@ -42,7 +44,10 @@ function Update()
 	newPosition.y = thisPos.y + dir.y * flySpeed * dt
 
 	SetPosition(This(), newPosition)
+end
 
+function OnEnemyDie()
+	Notify("OnMonsterDied")
 end
 
 function Normalize(vector)
@@ -54,14 +59,13 @@ function Normalize(vector)
 	ret.y = vector.y / magnitude
 
 	return ret
-
 end
-
 
 return 
 {
 	Awake = Awake,
-	Update = Update
+	Update = Update,
+	OnEnemyDie = OnEnemyDie,
 }
 
 --red2 = {x = 41, y = 204, w = 13, h = 15}

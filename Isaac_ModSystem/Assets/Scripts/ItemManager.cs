@@ -112,6 +112,7 @@ public class ItemManager : MonoBehaviour
         if (altar.holdedItem == item)
             altar.ChangeHoldedItem(null);
 
+        item.gameObject.SetActive(true);
         item.OnEquipped();
     }
 

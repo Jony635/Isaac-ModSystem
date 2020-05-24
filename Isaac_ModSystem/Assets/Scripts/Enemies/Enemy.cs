@@ -85,6 +85,6 @@ public class Enemy : MonoBehaviour
 
     protected virtual void Die()
     {
-
+        if (luaScript != null) luaScript.OnEnemyDie();
     }
 }
