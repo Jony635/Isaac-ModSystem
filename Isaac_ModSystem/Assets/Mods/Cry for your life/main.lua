@@ -1,4 +1,4 @@
 monsters = 
 {
-	"AttackFly.lua",
+	"AttackFly.lua", "Pooter.lua"
 }
