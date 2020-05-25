@@ -266,9 +266,18 @@ public class LuaScriptController : MonoBehaviour
         CallMethod(OnEquippedRef);
     }
 
-    public void OnMonsterHittedByTear(Enemy enemy)
+    public void OnMonsterHittedByTear(Enemy enemy, Vector2 velocity = new Vector2())
     {
-        CallMethod(OnMonsterHittedByTearRef, 1, 0, null, MonsterManager.Instance.RefEnemy(enemy));
+        uint key = 0;
+
+        Enemy thisEnemy = GetComponent<Enemy>();
+        if (enemy != null)
+            key = enemy == thisEnemy ? 1u : 0u;
+
+        if(key == 0)
+            key = MonsterManager.Instance.RefEnemy(enemy);
+
+        CallMethod(OnMonsterHittedByTearRef, 1, 0, null, key);
     }
 
     public void OnUsed()
@@ -592,12 +601,25 @@ public class LuaScriptController : MonoBehaviour
                         {
                             lua.Insert(3);
 
+                            lua.PushString("enabled");
+                            lua.GetTable(-2);
+                            if(!lua.IsNoneOrNil(-1))
+                            {
+                                bool enabled = lua.ToBoolean(-1);
+
+                                SpriteRenderer renderer = child.GetComponent<SpriteRenderer>();
+                                if (renderer == null)
+                                    renderer = child.AddComponent<SpriteRenderer>();
+
+                                renderer.enabled = enabled;
+                            }
+                            lua.Pop(1);
+
                             lua.PushString("sprite");
                             lua.GetTable(-2);
                             if (!lua.IsNoneOrNil(-1))
                             {
                                 int spriteIndex = lua.L_CheckInteger(-1);
-                                lua.Pop(1);
 
                                 SpriteRenderer renderer = child.GetComponent<SpriteRenderer>();
                                 if (renderer == null)
@@ -612,7 +634,7 @@ public class LuaScriptController : MonoBehaviour
                                     Texture2D texture = extraTextures[spriteIndex - 1];
 
                                     lua.PushString("rect");
-                                    lua.GetTable(-2);
+                                    lua.GetTable(-3);
                                     if (lua.IsNoneOrNil(-1))
                                     {
                                         Sprite newSprite = Sprite.Create(texture, new Rect(0.0f, 0.0f, texture.width, texture.height), new Vector2(0.5f, 0.5f), 30);
@@ -642,13 +664,16 @@ public class LuaScriptController : MonoBehaviour
                                         float h = (float)lua.L_CheckNumber(-1);
                                         lua.Pop(1);
 
+                                        lua.Pop(1);
+
                                         Sprite newSprite = Sprite.Create(texture, new Rect(x, y, w, h), new Vector2(0.5f, 0.5f), 30);
                                         renderer.sprite = newSprite;
                                     }
                                 }
                             }
+                            lua.Pop(1);
 
-                            
+                            lua.Pop(1);
                         }
                         break;
                     }
@@ -656,13 +681,27 @@ public class LuaScriptController : MonoBehaviour
                     {
                         if (lua.IsTable(3))
                         {
-                            lua.Insert(3);
-
                             if(gameObject.GetComponent<Rigidbody2D>() == null)
                             {
                                 Rigidbody2D rb = gameObject.AddComponent<Rigidbody2D>();
                                 rb.isKinematic = true;
                             }
+
+                            lua.Insert(3);
+
+                            lua.PushString("enabled");
+                            lua.GetTable(-2);
+                            if(!lua.IsNoneOrNil(-1))
+                            {
+                                bool enabled = lua.ToBoolean(-1);
+
+                                BoxCollider2D box = child.GetComponent<BoxCollider2D>();
+                                if (box == null)
+                                    box = child.AddComponent<BoxCollider2D>();
+
+                                box.enabled = enabled;
+                            }
+                            lua.Pop(1);
 
                             lua.PushString("isTrigger");
                             lua.GetTable(-2);
@@ -680,7 +719,6 @@ public class LuaScriptController : MonoBehaviour
 
                             lua.PushString("center");
                             lua.GetTable(-2);
-
                             if (!lua.IsNoneOrNil(-1) && lua.IsTable(-1))
                             {
                                 lua.PushString("x");
@@ -704,7 +742,6 @@ public class LuaScriptController : MonoBehaviour
 
                             lua.PushString("size");
                             lua.GetTable(-2);
-
                             if(!lua.IsNoneOrNil(-1) && lua.IsTable(-1))
                             {
                                 lua.PushString("x");
@@ -724,6 +761,7 @@ public class LuaScriptController : MonoBehaviour
 
                                 box.size = size;
                             }
+                            lua.Pop(1);
 
                             lua.Pop(1);
                         }
@@ -733,13 +771,27 @@ public class LuaScriptController : MonoBehaviour
                     {
                         if (lua.IsTable(3))
                         {
-                            lua.Insert(3);
-
                             if (gameObject.GetComponent<Rigidbody2D>() == null)
                             {
                                 Rigidbody2D rb = gameObject.AddComponent<Rigidbody2D>();
                                 rb.isKinematic = true;
                             }
+
+                            lua.Insert(3);
+
+                            lua.PushString("enabled");
+                            lua.GetTable(-2);
+                            if(!lua.IsNoneOrNil(-1))
+                            {
+                                bool enabled = lua.ToBoolean(-1);
+
+                                CircleCollider2D circle = child.GetComponent<CircleCollider2D>();
+                                if (circle == null)
+                                    circle = child.AddComponent<CircleCollider2D>();
+
+                                circle.enabled = enabled;
+                            }
+                            lua.Pop(1);
 
                             lua.PushString("isTrigger");
                             lua.GetTable(-2);
@@ -757,7 +809,6 @@ public class LuaScriptController : MonoBehaviour
 
                             lua.PushString("center");
                             lua.GetTable(-2);
-
                             if (!lua.IsNoneOrNil(-1) && lua.IsTable(-1))
                             {
                                 lua.PushString("x");
@@ -781,7 +832,6 @@ public class LuaScriptController : MonoBehaviour
 
                             lua.PushString("radius");
                             lua.GetTable(-2);
-
                             if (!lua.IsNoneOrNil(-1))
                             {
                                 float radius = (float)lua.L_CheckNumber(-1);
@@ -792,6 +842,7 @@ public class LuaScriptController : MonoBehaviour
 
                                 circle.radius = radius;
                             }
+                            lua.Pop(1);
 
                             lua.Pop(1);
                         }
@@ -801,13 +852,27 @@ public class LuaScriptController : MonoBehaviour
                     {
                         if (lua.IsTable(3))
                         {
-                            lua.Insert(3);
-
                             if (gameObject.GetComponent<Rigidbody2D>() == null)
                             {
                                 Rigidbody2D rb = gameObject.AddComponent<Rigidbody2D>();
                                 rb.isKinematic = true;
                             }
+
+                            lua.Insert(3);
+
+                            lua.PushString("enabled");
+                            lua.GetTable(-2);
+                            if(!lua.IsNoneOrNil(-1))
+                            {
+                                bool enabled = lua.ToBoolean(-1);
+
+                                CapsuleCollider2D capsule = child.GetComponent<CapsuleCollider2D>();
+                                if (capsule == null)
+                                    capsule = child.AddComponent<CapsuleCollider2D>();
+
+                                capsule.enabled = enabled;
+                            }
+                            lua.Pop(1);
 
                             lua.PushString("isTrigger");
                             lua.GetTable(-2);
@@ -825,7 +890,6 @@ public class LuaScriptController : MonoBehaviour
 
                             lua.PushString("center");
                             lua.GetTable(-2);
-
                             if (!lua.IsNoneOrNil(-1) && lua.IsTable(-1))
                             {
                                 lua.PushString("x");
@@ -849,7 +913,6 @@ public class LuaScriptController : MonoBehaviour
 
                             lua.PushString("size");
                             lua.GetTable(-2);
-
                             if (!lua.IsNoneOrNil(-1) && lua.IsTable(-1))
                             {
                                 lua.PushString("x");
@@ -869,12 +932,10 @@ public class LuaScriptController : MonoBehaviour
 
                                 capsule.size = size;
                             }
-
                             lua.Pop(1);
 
                             lua.PushString("direction");
                             lua.GetTable(-2);
-
                             if(!lua.IsNoneOrNil(-1))
                             {
                                 string direction = lua.L_CheckString(-1);
@@ -885,9 +946,9 @@ public class LuaScriptController : MonoBehaviour
 
                                 capsule.direction = direction == "Vertical" ? CapsuleDirection2D.Vertical : CapsuleDirection2D.Horizontal;
                             }
-
                             lua.Pop(1);
 
+                            lua.Pop(1);
                         }
                         break;
                     }

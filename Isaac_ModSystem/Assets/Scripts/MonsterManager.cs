@@ -110,4 +110,12 @@ public class MonsterManager : MonoBehaviour
     {
         enemiesRef.Clear();
     }
+
+    public void OnMonsterHittedByTear(Enemy enemy, Vector2 velocity = new Vector2())
+    {
+        foreach(Enemy enemyStored in enemies)
+        {
+            enemyStored.OnMonsterHittedByTear(enemy, velocity);
+        }
+    }
 }

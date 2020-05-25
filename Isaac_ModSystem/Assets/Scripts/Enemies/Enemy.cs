@@ -69,7 +69,10 @@ public class Enemy : MonoBehaviour
     {
         if (LayerMask.LayerToName(collider.gameObject.layer) == "PlayerTear")
         {
+            Rigidbody2D tearRB = collider.GetComponent<Rigidbody2D>();
+
             ItemManager.Instance.OnMonsterHittedByTear(this);
+            MonsterManager.Instance.OnMonsterHittedByTear(this, tearRB.velocity);
             TakeDamage(PlayerController.Instance.stats.plainDamage * PlayerController.Instance.stats.factorDamage);
         }
     }
@@ -87,5 +90,11 @@ public class Enemy : MonoBehaviour
     protected virtual void Die()
     {
         if (luaScript != null) luaScript.OnEnemyDie();
+    }
+
+    public virtual void OnMonsterHittedByTear(Enemy enemy, Vector2 velocity)
+    {
+        if (luaScript)
+            luaScript.OnMonsterHittedByTear(enemy, velocity);
     }
 }
