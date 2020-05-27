@@ -88,7 +88,9 @@ public class LuaScriptController : MonoBehaviour
                 new NameFuncPair("GetDT", GetDT),
 
                 new NameFuncPair("GetPosition", GetPosition),
+                new NameFuncPair("GetScale", GetScale),
                 new NameFuncPair("SetPosition", SetPosition),
+                new NameFuncPair("SetScale", SetScale),
                 new NameFuncPair("SetRotation", SetRotation),
                 
                 new NameFuncPair("GetLocalPosition", GetLocalPosition),
@@ -470,6 +472,27 @@ public class LuaScriptController : MonoBehaviour
         return 1;
     }
 
+    private int GetScale(ILuaState lua)
+    {
+        uint key = lua.L_CheckUnsigned(1);
+        if (childs.ContainsKey(key) || key == 1)
+        {
+            GameObject child = key != 1 ? childs[key] : gameObject;
+
+            lua.NewTable();
+
+            lua.PushString("x");
+            lua.PushNumber(child.transform.localScale.x);
+            lua.SetTable(-3);
+
+            lua.PushString("y");
+            lua.PushNumber(child.transform.localScale.y);
+            lua.SetTable(-3);
+        }
+
+        return 1;
+    }
+
     private int SetPosition(ILuaState lua)
     {
         uint key = lua.L_CheckUnsigned(1);
@@ -518,6 +541,40 @@ public class LuaScriptController : MonoBehaviour
         return 0;
     }    
     
+    private int SetScale(ILuaState lua)
+    {
+        uint key = lua.L_CheckUnsigned(1);
+
+        if (childs.ContainsKey(key) || key == 1)
+        {
+            GameObject child = key != 1 ? childs[key] : gameObject;
+
+            Vector2 newScale = new Vector2(0, 0);
+
+            if (lua.IsTable(2))
+            {
+                lua.Insert(2);
+
+                lua.PushString("x");
+                lua.GetTable(-2);
+                double x = lua.L_CheckNumber(-1);
+                lua.Pop(1);
+
+                lua.PushString("y");
+                lua.GetTable(-2);
+                double y = lua.L_CheckNumber(-1);
+                lua.Pop(1);
+
+                newScale = new Vector2((float)x, (float)y);
+            }
+
+            child.transform.localScale = newScale;
+        }
+
+
+        return 0;
+    }
+
     private int GetLocalPosition(ILuaState lua)
     {
         uint key = lua.L_CheckUnsigned(1);

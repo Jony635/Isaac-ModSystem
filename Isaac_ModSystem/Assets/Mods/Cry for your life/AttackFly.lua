@@ -140,20 +140,3 @@ return
 	Update = Update,
 	OnEnemyDie = OnEnemyDie,
 }
-
---red2 = {x = 41, y = 204, w = 13, h = 15}
---black1 = {x = 7, y = 236, w = 19, h = 10}
-
---function Red2()
-
---	SetComponent(This(), "SpriteRenderer", {sprite = 1, rect = red2})
---	Wait(1 / animSpeed, function() Black1() end)
-
---end
-
---function Black1()
-	
---	SetComponent(This(), "SpriteRenderer", {sprite = 1, rect = black1})
---	Wait(1 / animSpeed, function() Black2() end)
-
---end

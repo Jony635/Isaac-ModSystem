@@ -30,12 +30,14 @@ enabled = true
 flyIndex = 1
 flyTimer = 0
 attacking = false
+wanderDestination = nil
+attackRadius = 5
 
 function FlyAnimation()
 	if attacking then flyTimer = 0 flyIndex = 1 return end
 
 	flyTimer = flyTimer + GetDT()
-	if flyTimer > 0.2 then
+	if flyTimer > 0.02 then
 		flyIndex = flyIndex + 1
 		if flyIndex > 2 then flyIndex = 1 end
 		SetComponent(This(), "SpriteRenderer", {sprite = 1, rect = fly[flyIndex]})
@@ -43,9 +45,66 @@ function FlyAnimation()
 	end
 end
 
+function SetRandomWanderDestination()
+	-- Get a Vector2 whose members are between 0 and 1 (both inclusive)
+	local rand = {x = math.random(), y = math.random()}
+
+	--Convert this number into a [-1, 1] range
+	rand.x = rand.x * 2 - 1
+	rand.y = rand.y * 2 - 1
+	
+	--Get the real localPosition to set the destination
+	rand.x = rand.x * 5
+	rand.y = rand.y * 2.5
+	
+	--Assign the new destination to wanderDestination global variable
+	wanderDestination = rand
+end
+
+function Wander()
+	local stats = GetStats()
+
+	if wanderDestination == nil then
+		SetRandomWanderDestination()
+	end
+
+	local localPosition = GetLocalPosition(This())
+	
+	local direction = {}
+	direction.x = wanderDestination.x - localPosition.x
+	direction.y = wanderDestination.y - localPosition.y
+	direction = Normalize(direction)
+	
+	local dt = GetDT()
+
+	local newLocalPosition = {}
+	newLocalPosition.x = localPosition.x + direction.x * dt * stats.speed * stats.speedFactor
+	newLocalPosition.y = localPosition.y + direction.y * dt * stats.speed * stats.speedFactor
+
+	if math.abs(newLocalPosition.x - wanderDestination.x) < dt * stats.speed * stats.speedFactor then newLocalPosition.x = wanderDestination.x end
+	if math.abs(newLocalPosition.y - wanderDestination.y) < dt * stats.speed * stats.speedFactor then newLocalPosition.y = wanderDestination.y end
+
+	SetLocalPosition(This(), newLocalPosition)
+
+	if newLocalPosition.x == wanderDestination.x and newLocalPosition.y == wanderDestination.y then SetRandomWanderDestination() end
+
+	--Flip horizontally to look at destination
+	if newLocalPosition.x <= wanderDestination.x then
+		SetScale(This(), {x = 1, y = 1})
+	else
+		SetScale(This(), {x = -1, y = 1})
+	end
+
+end
+
+function Attack()
+
+
+end
+
 function Awake()
 	SetComponent(This(), "CapsuleCollider", {isTrigger = false, center = {x = 0, y = 0}, size = {x = 0.6333333, y = 0.3333333}, direction = "Horizontal"})
-	SetStats({hp = 40, maxHP = 40, damage = 1, speed = 4})
+	SetStats({hp = 40, maxHP = 40, damage = 1, speed = 2})
 	SetComponent(This(), "SpriteRenderer", {sprite = 1, rect = fly[flyIndex]})
 end
 
@@ -53,29 +112,21 @@ function Update()
 
 	if not enabled then return end
 	
-	FlyAnimation()
-
-	--TODO: FLIP HORIZONTAL WHEN NEEDED TO LOOK AT ISAAC
-	--TODO: SHOOTING
-	--math.random() number between 0 and 1 (To wander)
-
 	local IsaacPos = GetPosition(0)
 	local thisPos = GetPosition(This())
 
-	local dir = {}
-	dir.x = IsaacPos.x - thisPos.x
-	dir.y = IsaacPos.y - thisPos.y
-	dir = Normalize(dir)
+	local distance = {}
+	distance.x = IsaacPos.x - thisPos.x
+	distance.y = IsaacPos.y - thisPos.y
+	distance = math.sqrt(math.pow(distance.x, 2) + math.pow(distance.y, 2))
 
-	local dt = GetDT()
+	if distance <= attackRadius then
+		Attack()
+	else
+		FlyAnimation()
+		Wander()
+	end
 
-	local stats = GetStats()
-
-	local newPosition = {}
-	newPosition.x = thisPos.x + dir.x * stats.speed * stats.speedFactor * dt
-	newPosition.y = thisPos.y + dir.y * stats.speed * stats.speedFactor * dt
-
-	SetPosition(This(), newPosition)
 end
 
 function OnEnemyDie()
@@ -85,6 +136,8 @@ function OnEnemyDie()
 	--Disable collider and logic
 	enabled = false
 	SetComponent(This(), "CapsuleCollider", {enabled = false})
+
+	Notify("OnMonsterDied")
 
 	--Play the animation
 	return
@@ -154,20 +207,3 @@ return
 	Update = Update,
 	OnEnemyDie = OnEnemyDie,
 }
-
---red2 = {x = 41, y = 204, w = 13, h = 15}
---black1 = {x = 7, y = 236, w = 19, h = 10}
-
---function Red2()
-
---	SetComponent(This(), "SpriteRenderer", {sprite = 1, rect = red2})
---	Wait(1 / animSpeed, function() Black1() end)
-
---end
-
---function Black1()
-	
---	SetComponent(This(), "SpriteRenderer", {sprite = 1, rect = black1})
---	Wait(1 / animSpeed, function() Black2() end)
-
---end
