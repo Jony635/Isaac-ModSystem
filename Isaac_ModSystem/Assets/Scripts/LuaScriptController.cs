@@ -83,6 +83,7 @@ public class LuaScriptController : MonoBehaviour
 
                 new NameFuncPair("AddChild", AddChild),
                 new NameFuncPair("DeleteChild", DeleteChild),
+                new NameFuncPair("SetParent", SetParent),
 
                 new NameFuncPair("Wait", Wait),
                 new NameFuncPair("GetDT", GetDT),
@@ -423,6 +424,30 @@ public class LuaScriptController : MonoBehaviour
             GameObject destroyed = childs[key];
             Destroy(destroyed);
             childs.Remove(key);
+        }
+
+        return 0;
+    }
+
+    private int SetParent(ILuaState lua)
+    {
+        uint id = lua.L_CheckUnsigned(1);
+
+        GameObject child = childs.ContainsKey(id) ? childs[id] : null;
+        if (!child)
+            return 0;
+
+        if (lua.IsNil(2))
+            child.transform.SetParent(null);
+
+        else
+        {
+            uint parentID = lua.L_CheckUnsigned(2);
+            GameObject newParent = parentID == 1 ? gameObject : childs.ContainsKey(parentID) ? childs[parentID] : null;
+            if (!newParent)
+                return 0;
+
+            child.transform.SetParent(newParent.transform);
         }
 
         return 0;
