@@ -679,22 +679,19 @@ public class LuaScriptController : MonoBehaviour
             {
                 case "SpriteRenderer":
                     {
+                        SpriteRenderer renderer = child.GetComponent<SpriteRenderer>();
+                        if (renderer == null)
+                            renderer = child.AddComponent<SpriteRenderer>();
+
                         if (lua.IsTable(3))
                         {
                             lua.Insert(3);
 
                             lua.PushString("enabled");
                             lua.GetTable(-2);
-                            if(!lua.IsNoneOrNil(-1))
-                            {
-                                bool enabled = lua.ToBoolean(-1);
-
-                                SpriteRenderer renderer = child.GetComponent<SpriteRenderer>();
-                                if (renderer == null)
-                                    renderer = child.AddComponent<SpriteRenderer>();
-
-                                renderer.enabled = enabled;
-                            }
+                            if(!lua.IsNoneOrNil(-1))                          
+                                renderer.enabled = lua.ToBoolean(-1);
+                            
                             lua.Pop(1);
 
                             lua.PushString("sprite");
@@ -702,11 +699,6 @@ public class LuaScriptController : MonoBehaviour
                             if (!lua.IsNoneOrNil(-1))
                             {
                                 int spriteIndex = lua.L_CheckInteger(-1);
-
-                                SpriteRenderer renderer = child.GetComponent<SpriteRenderer>();
-                                if (renderer == null)
-                                    renderer = child.AddComponent<SpriteRenderer>();
-
                                 renderer.sortingOrder = 10;
 
                                 if (spriteIndex == 0)                                
@@ -761,42 +753,32 @@ public class LuaScriptController : MonoBehaviour
                     }
                 case "BoxCollider":
                     {
-                        if (lua.IsTable(3))
+                        if (gameObject.GetComponent<Rigidbody2D>() == null)
                         {
-                            if(gameObject.GetComponent<Rigidbody2D>() == null)
-                            {
-                                Rigidbody2D rb = gameObject.AddComponent<Rigidbody2D>();
-                                rb.isKinematic = true;
-                            }
+                            Rigidbody2D rb = gameObject.AddComponent<Rigidbody2D>();
+                            rb.isKinematic = true;
+                        }
 
+                        BoxCollider2D box = child.GetComponent<BoxCollider2D>();
+                        if (box == null)
+                            box = child.AddComponent<BoxCollider2D>();
+
+                        if (lua.IsTable(3))
+                        {                           
                             lua.Insert(3);
 
                             lua.PushString("enabled");
                             lua.GetTable(-2);
                             if(!lua.IsNoneOrNil(-1))
-                            {
-                                bool enabled = lua.ToBoolean(-1);
-
-                                BoxCollider2D box = child.GetComponent<BoxCollider2D>();
-                                if (box == null)
-                                    box = child.AddComponent<BoxCollider2D>();
-
-                                box.enabled = enabled;
-                            }
+                                box.enabled = lua.ToBoolean(-1);
+                            
                             lua.Pop(1);
 
                             lua.PushString("isTrigger");
                             lua.GetTable(-2);
                             if (!lua.IsNoneOrNil(-1))
-                            {
-                                bool isTrigger = lua.ToBoolean(-1);
-
-                                BoxCollider2D box = child.GetComponent<BoxCollider2D>();
-                                if (box == null)
-                                    box = child.AddComponent<BoxCollider2D>();
-
-                                box.isTrigger = isTrigger;                              
-                            }
+                                box.isTrigger = lua.ToBoolean(-1);                              
+                            
                             lua.Pop(1);
 
                             lua.PushString("center");
@@ -813,10 +795,6 @@ public class LuaScriptController : MonoBehaviour
                                 lua.GetTable(-2);
                                 center.y = (float)lua.L_CheckNumber(-1);
                                 lua.Pop(1);
-
-                                BoxCollider2D box = child.GetComponent<BoxCollider2D>();
-                                if (box == null)
-                                    box = child.AddComponent<BoxCollider2D>();
 
                                 box.offset = center;
                             }
@@ -836,57 +814,44 @@ public class LuaScriptController : MonoBehaviour
                                 lua.GetTable(-2);
                                 size.y = (float)lua.L_CheckNumber(-1);
                                 lua.Pop(1);
-
-                                BoxCollider2D box = child.GetComponent<BoxCollider2D>();
-                                if (box == null)
-                                    box = child.AddComponent<BoxCollider2D>();
-
+                             
                                 box.size = size;
                             }
                             lua.Pop(1);
 
                             lua.Pop(1);
                         }
+
                         break;
                     }
                 case "CircleCollider":
                     {
-                        if (lua.IsTable(3))
+                        if (gameObject.GetComponent<Rigidbody2D>() == null)
                         {
-                            if (gameObject.GetComponent<Rigidbody2D>() == null)
-                            {
-                                Rigidbody2D rb = gameObject.AddComponent<Rigidbody2D>();
-                                rb.isKinematic = true;
-                            }
+                            Rigidbody2D rb = gameObject.AddComponent<Rigidbody2D>();
+                            rb.isKinematic = true;
+                        }
 
+                        CircleCollider2D circle = child.GetComponent<CircleCollider2D>();
+                        if (circle == null)
+                            circle = child.AddComponent<CircleCollider2D>();
+
+                        if (lua.IsTable(3))
+                        {                          
                             lua.Insert(3);
 
                             lua.PushString("enabled");
                             lua.GetTable(-2);
                             if(!lua.IsNoneOrNil(-1))
-                            {
-                                bool enabled = lua.ToBoolean(-1);
-
-                                CircleCollider2D circle = child.GetComponent<CircleCollider2D>();
-                                if (circle == null)
-                                    circle = child.AddComponent<CircleCollider2D>();
-
-                                circle.enabled = enabled;
-                            }
+                                circle.enabled = lua.ToBoolean(-1);
+                            
                             lua.Pop(1);
 
                             lua.PushString("isTrigger");
                             lua.GetTable(-2);
                             if (!lua.IsNoneOrNil(-1))
-                            {
-                                bool isTrigger = lua.ToBoolean(-1);
+                                circle.isTrigger = lua.ToBoolean(-1);
 
-                                CircleCollider2D circle = child.GetComponent<CircleCollider2D>();
-                                if (circle == null)
-                                    circle = child.AddComponent<CircleCollider2D>();
-
-                                circle.isTrigger = isTrigger;
-                            }
                             lua.Pop(1);
 
                             lua.PushString("center");
@@ -904,10 +869,6 @@ public class LuaScriptController : MonoBehaviour
                                 center.y = (float)lua.L_CheckNumber(-1);
                                 lua.Pop(1);
 
-                                CircleCollider2D circle = child.GetComponent<CircleCollider2D>();
-                                if (circle == null)
-                                    circle = child.AddComponent<CircleCollider2D>();
-
                                 circle.offset = center;
                             }
                             lua.Pop(1);
@@ -915,15 +876,8 @@ public class LuaScriptController : MonoBehaviour
                             lua.PushString("radius");
                             lua.GetTable(-2);
                             if (!lua.IsNoneOrNil(-1))
-                            {
-                                float radius = (float)lua.L_CheckNumber(-1);
-
-                                CircleCollider2D circle = child.GetComponent<CircleCollider2D>();
-                                if (circle == null)
-                                    circle = child.AddComponent<CircleCollider2D>();
-
-                                circle.radius = radius;
-                            }
+                                circle.radius = (float)lua.L_CheckNumber(-1);
+                            
                             lua.Pop(1);
 
                             lua.Pop(1);
@@ -932,14 +886,18 @@ public class LuaScriptController : MonoBehaviour
                     }
                 case "CapsuleCollider":
                     {
-                        if (lua.IsTable(3))
+                        if (gameObject.GetComponent<Rigidbody2D>() == null)
                         {
-                            if (gameObject.GetComponent<Rigidbody2D>() == null)
-                            {
-                                Rigidbody2D rb = gameObject.AddComponent<Rigidbody2D>();
-                                rb.isKinematic = true;
-                            }
+                            Rigidbody2D rb = gameObject.AddComponent<Rigidbody2D>();
+                            rb.isKinematic = true;
+                        }
 
+                        CapsuleCollider2D capsule = child.GetComponent<CapsuleCollider2D>();
+                        if (capsule == null)
+                            capsule = child.AddComponent<CapsuleCollider2D>();
+
+                        if (lua.IsTable(3))
+                        {                           
                             lua.Insert(3);
 
                             lua.PushString("enabled");
@@ -947,11 +905,6 @@ public class LuaScriptController : MonoBehaviour
                             if(!lua.IsNoneOrNil(-1))
                             {
                                 bool enabled = lua.ToBoolean(-1);
-
-                                CapsuleCollider2D capsule = child.GetComponent<CapsuleCollider2D>();
-                                if (capsule == null)
-                                    capsule = child.AddComponent<CapsuleCollider2D>();
-
                                 capsule.enabled = enabled;
                             }
                             lua.Pop(1);
@@ -961,11 +914,6 @@ public class LuaScriptController : MonoBehaviour
                             if (!lua.IsNoneOrNil(-1))
                             {
                                 bool isTrigger = lua.ToBoolean(-1);
-
-                                CapsuleCollider2D capsule = child.GetComponent<CapsuleCollider2D>();
-                                if (capsule == null)
-                                    capsule = child.AddComponent<CapsuleCollider2D>();
-
                                 capsule.isTrigger = isTrigger;
                             }
                             lua.Pop(1);
@@ -984,10 +932,6 @@ public class LuaScriptController : MonoBehaviour
                                 lua.GetTable(-2);
                                 center.y = (float)lua.L_CheckNumber(-1);
                                 lua.Pop(1);
-
-                                CapsuleCollider2D capsule = child.GetComponent<CapsuleCollider2D>();
-                                if (capsule == null)
-                                    capsule = child.AddComponent<CapsuleCollider2D>();
 
                                 capsule.offset = center;
                             }
@@ -1008,10 +952,6 @@ public class LuaScriptController : MonoBehaviour
                                 size.y = (float)lua.L_CheckNumber(-1);
                                 lua.Pop(1);
 
-                                CapsuleCollider2D capsule = child.GetComponent<CapsuleCollider2D>();
-                                if (capsule == null)
-                                    capsule = child.AddComponent<CapsuleCollider2D>();
-
                                 capsule.size = size;
                             }
                             lua.Pop(1);
@@ -1021,16 +961,25 @@ public class LuaScriptController : MonoBehaviour
                             if(!lua.IsNoneOrNil(-1))
                             {
                                 string direction = lua.L_CheckString(-1);
-
-                                CapsuleCollider2D capsule = child.GetComponent<CapsuleCollider2D>();
-                                if (capsule == null)
-                                    capsule = child.AddComponent<CapsuleCollider2D>();
-
                                 capsule.direction = direction == "Vertical" ? CapsuleDirection2D.Vertical : CapsuleDirection2D.Horizontal;
                             }
                             lua.Pop(1);
 
                             lua.Pop(1);
+                        }
+                        break;
+                    }
+                case "Rigidbody":
+                    {
+                        if (child.GetComponent<Rigidbody2D>() == null)
+                        {
+                            Rigidbody2D rb = child.AddComponent<Rigidbody2D>();
+                            rb.isKinematic = true;
+                        }
+
+                        if (lua.IsTable(3))
+                        {
+                            //Component Setup             
                         }
                         break;
                     }

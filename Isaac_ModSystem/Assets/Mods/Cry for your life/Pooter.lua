@@ -130,6 +130,8 @@ function Attack()
 	--Instantiate a new monster tear and setup it
 	local bullet = AddChild()
 	SetComponent(bullet, "SpriteRenderer", {sprite = 2, rect = {x = 224, y = 32, w = 32, h = 32}})
+	SetComponent(bullet, "Rigidbody", {})
+	SetComponent(bullet, "CircleCollider", {radius = 0.19, center = {x = 0.016, y = 0.016}})
 	SetLayer(bullet, "MonsterProjectile")
 	SetParent(bullet, nil)
 
