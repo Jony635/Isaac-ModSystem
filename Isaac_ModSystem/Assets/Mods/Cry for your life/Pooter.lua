@@ -27,6 +27,23 @@ attack =
 
 enabled = true
 
+function OnBulletCollision(bullet, collided)
+	if collided == 0 then 
+		--Inflict damage to Isaac
+		stats = GetStats()
+		Damage(0, stats.damage)
+	end
+
+	for i = #bullets, 1, -1 do
+		if bullets[i].bulletID == bullet then
+			UnSubscribeEvent(bullets[i].event)
+			DeleteChild(bullets[i].bulletID)
+			table.remove(bullets, i)
+			break
+		end
+	end
+end
+
 flyIndex = 1
 flyTimer = 0
 wanderDestination = nil
@@ -131,11 +148,12 @@ function Attack()
 	local bullet = AddChild()
 	SetComponent(bullet, "SpriteRenderer", {sprite = 2, rect = {x = 224, y = 32, w = 32, h = 32}})
 	SetComponent(bullet, "Rigidbody", {})
-	SetComponent(bullet, "CircleCollider", {radius = 0.19, center = {x = 0.016, y = 0.016}})
+	SetComponent(bullet, "CircleCollider", {radius = 0.19, center = {x = 0.016, y = 0.016}, isTrigger = true})
 	SetLayer(bullet, "MonsterProjectile")
 	SetParent(bullet, nil)
+	event = SubscribeEvent(bullet, "OnTriggerEnter", OnBulletCollision)
 
-	--Calculate its movement direction
+	--Calculate its movement direction rg
 	local bulletPos = GetPosition(bullet)
 	local IsaacPos = GetPosition(0)
 
@@ -145,7 +163,7 @@ function Attack()
 	direction = Normalize(direction)
 
 	--Store it in the bullets table
-	table.insert(bullets, {bulletID = bullet, time = 0, direction = direction})
+	table.insert(bullets, {bulletID = bullet, time = 0, direction = direction, event = event})
 end
 
 function UpdateBullets()
@@ -194,7 +212,6 @@ function Update()
 		FlyAnimation()
 		Wander()
 	end
-
 end
 
 function OnEnemyDie()

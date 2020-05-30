@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UniLua;
 using System.IO;
+using System.Diagnostics.Tracing;
+using UnityEngine.Events;
 
 public class LuaScriptController : MonoBehaviour
 {
@@ -57,7 +59,7 @@ public class LuaScriptController : MonoBehaviour
     //C# Functions container
     private NameFuncPair[] lib;
 
-    private Dictionary<UInt32, GameObject> childs = new Dictionary<uint, GameObject>();
+    private Dictionary<UInt32, GameObject> references = new Dictionary<uint, GameObject>();
 
     private List<Texture2D> extraTextures = new List<Texture2D>();
 
@@ -129,9 +131,11 @@ public class LuaScriptController : MonoBehaviour
                 new NameFuncPair("GetStats", GetStats),
                 new NameFuncPair("SetStats", SetStats),
 
+                new NameFuncPair("SubscribeEvent", SubscribeEvent),
+                new NameFuncPair("UnSubscribeEvent", UnSubscribeEvent),
             };
 
-            childs.Add(0, PlayerController.Instance.gameObject);
+            references.Add(0, PlayerController.Instance.gameObject);
 
             if (GEN_LIB)
                 Lua.L_RequireF("ModSystem", OpenModSystemLib, false);
@@ -406,9 +410,9 @@ public class LuaScriptController : MonoBehaviour
         {
             rand = (uint)(UnityEngine.Random.value * uint.MaxValue);
 
-        } while(childs.ContainsKey(rand) || rand == 0 || rand == 1);
+        } while(references.ContainsKey(rand) || rand == 0 || rand == 1);
 
-        childs.Add(rand, newChild);
+        references.Add(rand, newChild);
 
         lua.PushUnsigned(rand);
 
@@ -419,11 +423,11 @@ public class LuaScriptController : MonoBehaviour
     {
         uint key = lua.L_CheckUnsigned(1);
 
-        if(childs.ContainsKey(key) && key != 0)
+        if(references.ContainsKey(key) && key != 0)
         {
-            GameObject destroyed = childs[key];
+            GameObject destroyed = references[key];
             Destroy(destroyed);
-            childs.Remove(key);
+            references.Remove(key);
         }
 
         return 0;
@@ -433,7 +437,7 @@ public class LuaScriptController : MonoBehaviour
     {
         uint id = lua.L_CheckUnsigned(1);
 
-        GameObject child = childs.ContainsKey(id) ? childs[id] : null;
+        GameObject child = references.ContainsKey(id) ? references[id] : null;
         if (!child)
             return 0;
 
@@ -443,7 +447,7 @@ public class LuaScriptController : MonoBehaviour
         else
         {
             uint parentID = lua.L_CheckUnsigned(2);
-            GameObject newParent = parentID == 1 ? gameObject : childs.ContainsKey(parentID) ? childs[parentID] : null;
+            GameObject newParent = parentID == 1 ? gameObject : references.ContainsKey(parentID) ? references[parentID] : null;
             if (!newParent)
                 return 0;
 
@@ -479,9 +483,9 @@ public class LuaScriptController : MonoBehaviour
     private int GetPosition(ILuaState lua)
     {
         uint key = lua.L_CheckUnsigned(1);
-        if (childs.ContainsKey(key) || key == 1)
+        if (references.ContainsKey(key) || key == 1)
         {
-            GameObject child = key != 1 ? childs[key] : gameObject;
+            GameObject child = key != 1 ? references[key] : gameObject;
 
             lua.NewTable();
 
@@ -500,9 +504,9 @@ public class LuaScriptController : MonoBehaviour
     private int GetScale(ILuaState lua)
     {
         uint key = lua.L_CheckUnsigned(1);
-        if (childs.ContainsKey(key) || key == 1)
+        if (references.ContainsKey(key) || key == 1)
         {
-            GameObject child = key != 1 ? childs[key] : gameObject;
+            GameObject child = key != 1 ? references[key] : gameObject;
 
             lua.NewTable();
 
@@ -522,9 +526,9 @@ public class LuaScriptController : MonoBehaviour
     {
         uint key = lua.L_CheckUnsigned(1);
 
-        if(childs.ContainsKey(key) || key == 1)
+        if(references.ContainsKey(key) || key == 1)
         {
-            GameObject child = key != 1 ? childs[key] : gameObject;
+            GameObject child = key != 1 ? references[key] : gameObject;
 
             Vector2 newPosition = new Vector2(0, 0);
 
@@ -555,9 +559,9 @@ public class LuaScriptController : MonoBehaviour
     {
         uint key = lua.L_CheckUnsigned(1);
 
-        if (childs.ContainsKey(key) || key == 1)
+        if (references.ContainsKey(key) || key == 1)
         {
-            GameObject child = key != 1 ? childs[key] : gameObject;
+            GameObject child = key != 1 ? references[key] : gameObject;
             float angle = (float)lua.L_CheckNumber(2);
 
             child.transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
@@ -570,9 +574,9 @@ public class LuaScriptController : MonoBehaviour
     {
         uint key = lua.L_CheckUnsigned(1);
 
-        if (childs.ContainsKey(key) || key == 1)
+        if (references.ContainsKey(key) || key == 1)
         {
-            GameObject child = key != 1 ? childs[key] : gameObject;
+            GameObject child = key != 1 ? references[key] : gameObject;
 
             Vector2 newScale = new Vector2(0, 0);
 
@@ -603,9 +607,9 @@ public class LuaScriptController : MonoBehaviour
     private int GetLocalPosition(ILuaState lua)
     {
         uint key = lua.L_CheckUnsigned(1);
-        if (childs.ContainsKey(key) || key == 1)
+        if (references.ContainsKey(key) || key == 1)
         {
-            GameObject child = key != 1 ? childs[key] : gameObject;
+            GameObject child = key != 1 ? references[key] : gameObject;
 
             lua.NewTable();
 
@@ -625,9 +629,9 @@ public class LuaScriptController : MonoBehaviour
     {
         uint key = lua.L_CheckUnsigned(1);
 
-        if (childs.ContainsKey(key) || key == 1)
+        if (references.ContainsKey(key) || key == 1)
         {
-            GameObject child = key != 1 ? childs[key] : gameObject;
+            GameObject child = key != 1 ? references[key] : gameObject;
 
             Vector2 newPosition = new Vector2(0, 0);
 
@@ -658,9 +662,9 @@ public class LuaScriptController : MonoBehaviour
     {
         uint key = lua.L_CheckUnsigned(1);
 
-        if (childs.ContainsKey(key) || key == 1)
+        if (references.ContainsKey(key) || key == 1)
         {
-            GameObject child = key != 1 ? childs[key] : gameObject;
+            GameObject child = key != 1 ? references[key] : gameObject;
             float angle = (float)lua.L_CheckNumber(2);
 
             child.transform.localRotation = Quaternion.AngleAxis(angle, Vector3.forward);
@@ -672,9 +676,9 @@ public class LuaScriptController : MonoBehaviour
     private int SetComponent(ILuaState lua)
     {
         uint key = lua.L_CheckUnsigned(1);
-        if(childs.ContainsKey(key) || key == 1)
+        if(references.ContainsKey(key) || key == 1)
         {
-            GameObject child = key != 1 ? childs[key] : gameObject;
+            GameObject child = key != 1 ? references[key] : gameObject;
             switch(lua.L_CheckString(2))
             {
                 case "SpriteRenderer":
@@ -700,6 +704,8 @@ public class LuaScriptController : MonoBehaviour
                             {
                                 int spriteIndex = lua.L_CheckInteger(-1);
                                 renderer.sortingOrder = 10;
+                                //renderer.sortingLayerName = "Character";
+                                //renderer.sortingOrder = 2;
 
                                 if (spriteIndex == 0)                                
                                     renderer.sprite = sprite;                               
@@ -995,14 +1001,13 @@ public class LuaScriptController : MonoBehaviour
 
     private int Damage(ILuaState lua)
     {
-        uint monsterKey = lua.L_CheckUnsigned(1);
+        uint targetKey = lua.L_CheckUnsigned(1);
 
-        Enemy enemy = MonsterManager.Instance.GetRefEnemy(monsterKey);
+        Enemy enemy = MonsterManager.Instance.GetRefEnemy(targetKey);
         if (enemy)
-        {
-            float number = (float)lua.L_CheckNumber(2);
             enemy.TakeDamage((float)lua.L_CheckNumber(2));
-        }
+        else if(targetKey == 0)
+            StartCoroutine(PlayerController.Instance.TakeDamage((float)lua.L_CheckNumber(2)));
 
         return 0;
     }
@@ -1150,9 +1155,9 @@ public class LuaScriptController : MonoBehaviour
     {
         uint id = lua.L_CheckUnsigned(1);
 
-        if(childs.ContainsKey(id))
+        if(references.ContainsKey(id))
         {
-            GameObject gameObject = childs[id];
+            GameObject gameObject = references[id];
 
             int layer = LayerMask.NameToLayer(lua.L_CheckString(2));
             if (layer == -1)
@@ -1167,9 +1172,9 @@ public class LuaScriptController : MonoBehaviour
     private int AddForce(ILuaState lua)
     {
         uint key = lua.L_CheckUnsigned(1);
-        if(childs.ContainsKey(key))
+        if(references.ContainsKey(key))
         {
-            GameObject child = childs[key];
+            GameObject child = references[key];
 
             lua.PushValue(2);
 
@@ -1229,9 +1234,9 @@ public class LuaScriptController : MonoBehaviour
     {
         uint index = lua.L_CheckUnsigned(1);
 
-        if(index == 1 || childs.ContainsKey(index))
+        if(index == 1 || references.ContainsKey(index))
         {
-            GameObject child = index == 1 ? gameObject : childs[index];
+            GameObject child = index == 1 ? gameObject : references[index];
             lua.PushBoolean(child.activeSelf);
         }
         else
@@ -1244,9 +1249,9 @@ public class LuaScriptController : MonoBehaviour
     {
         uint index = lua.L_CheckUnsigned(1);
 
-        if (index == 1 || childs.ContainsKey(index))
+        if (index == 1 || references.ContainsKey(index))
         {
-            GameObject child = index == 1 ? gameObject : childs[index];
+            GameObject child = index == 1 ? gameObject : references[index];
 
             bool active = lua.ToBoolean(2);
 
@@ -1394,6 +1399,101 @@ public class LuaScriptController : MonoBehaviour
 
         enemy.enemyStats = enemyStats;
 
+        return 0;
+    }
+
+    private int SubscribeEvent(ILuaState lua)
+    {
+        uint childId = lua.L_CheckUnsigned(1);
+
+        GameObject child = childId == 1 ? gameObject : references[childId];
+        CollisionListener listener = child.GetComponent<CollisionListener>();
+        if (listener == null)
+            listener = child.AddComponent<CollisionListener>();
+
+        string subscribedEvent = lua.L_CheckString(2);
+
+        lua.PushValue(3);
+        int reference = lua.L_Ref(LuaDef.LUA_REGISTRYINDEX);
+
+        UnityAction<Collision2D> collisionAction = (collision) => 
+        { 
+            lua.RawGetI(LuaDef.LUA_REGISTRYINDEX, reference);
+            if (lua.IsNil(-1))
+                return;
+
+            lua.PushUnsigned(childId); 
+            if(collision.gameObject == PlayerController.Instance.gameObject)          
+                lua.PushUnsigned(0);
+            else
+            {
+                uint rand = 0;
+                do
+                {
+                    rand = (uint)(UnityEngine.Random.value * uint.MaxValue);
+                } while (references.ContainsKey(rand) || rand == 0 || rand == 1);
+                references.Add(rand, collision.gameObject);
+
+                lua.PushUnsigned(rand);
+            }
+
+            lua.Call(2, 0); 
+        };
+
+        UnityAction<Collider2D> colliderAction = (collider) => 
+        {
+            lua.RawGetI(LuaDef.LUA_REGISTRYINDEX, reference);
+            if (lua.IsNil(-1))
+                return;
+
+            lua.PushUnsigned(childId);
+            if (collider.gameObject == PlayerController.Instance.gameObject)
+                lua.PushUnsigned(0);
+            else
+            {
+                uint rand = 0;
+                do
+                {
+                    rand = (uint)(UnityEngine.Random.value * uint.MaxValue);
+                } while (references.ContainsKey(rand) || rand == 0 || rand == 1);
+                references.Add(rand, collider.gameObject);
+
+                lua.PushUnsigned(rand);
+            }
+
+            lua.Call(2, 0);
+        };
+
+        switch(subscribedEvent)
+        {
+            case "OnCollisionEnter":
+                listener.OnCollisionEnter.AddListener(collisionAction);
+                break;
+            case "OnCollisionStay":
+                listener.OnCollisionStay.AddListener(collisionAction);
+                break;
+            case "OnCollisionExit":
+                listener.OnCollisionExit.AddListener(collisionAction);
+                break;
+            case "OnTriggerEnter":
+                listener.OnTriggerEnter.AddListener(colliderAction);
+                break;
+            case "OnTriggerStay":
+                listener.OnTriggerStay.AddListener(colliderAction);
+                break;
+            case "OnTriggerExit":
+                listener.OnTriggerExit.AddListener(colliderAction);
+                break;
+        }
+
+        lua.PushInteger(reference);
+
+        return 1;
+    }
+
+    private int UnSubscribeEvent(ILuaState lua)
+    {
+        lua.L_Unref(LuaDef.LUA_REGISTRYINDEX, lua.L_CheckInteger(1));
         return 0;
     }
 

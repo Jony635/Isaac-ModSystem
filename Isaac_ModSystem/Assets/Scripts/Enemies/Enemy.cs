@@ -62,7 +62,7 @@ public class Enemy : MonoBehaviour
         if(!spriteRenderer)
             spriteRenderer = gameObject.AddComponent<SpriteRenderer>();
 
-        spriteRenderer.sortingOrder = 10;
+        spriteRenderer.sortingOrder = 9;
     }
 
     protected virtual void OnTriggerEnter2D(Collider2D collider)

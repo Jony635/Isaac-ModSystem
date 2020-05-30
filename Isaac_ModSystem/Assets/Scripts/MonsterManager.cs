@@ -91,7 +91,7 @@ public class MonsterManager : MonoBehaviour
         {
             key = (uint)UnityEngine.Random.Range(1, int.MaxValue);
 
-        } while (enemiesRef.ContainsKey(key));
+        } while (key == 0 || key == 1 || enemiesRef.ContainsKey(key));
 
         enemiesRef.Add(key, enemy);
 

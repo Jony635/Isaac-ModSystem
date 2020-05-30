@@ -20,7 +20,7 @@ public class RoomManager : MonoBehaviour
     private Camera mainCamera;
     private List<Room> rooms = new List<Room>();
 
-    [Header("Room COnfiguration")]
+    [Header("Room Configuration")]
     public int amountRooms = 6;
     float chanceToGetARoom = 0.1f;
 

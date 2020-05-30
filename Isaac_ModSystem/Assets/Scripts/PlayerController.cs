@@ -296,9 +296,10 @@ public class PlayerController : MonoBehaviour
     }
 
     private void OnTriggerEnter2D(Collider2D collider)
-    {
+    {      
         Door door = collider.GetComponentInParent<Door>();
-        RoomManager.Instance.DoorTrespassed(door);
+        if(door)
+            RoomManager.Instance.DoorTrespassed(door);      
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
