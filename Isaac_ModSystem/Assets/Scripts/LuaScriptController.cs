@@ -229,9 +229,7 @@ public class LuaScriptController : MonoBehaviour
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
-    {
-
-    }
+    {    }
 
     private void OnTriggerEnter2D(Collider2D collider)
     {
@@ -977,15 +975,26 @@ public class LuaScriptController : MonoBehaviour
                     }
                 case "Rigidbody":
                     {
-                        if (child.GetComponent<Rigidbody2D>() == null)
+                        Rigidbody2D rb = child.GetComponent<Rigidbody2D>();
+                        if (rb == null)
                         {
-                            Rigidbody2D rb = child.AddComponent<Rigidbody2D>();
+                            rb = child.AddComponent<Rigidbody2D>();
                             rb.isKinematic = true;
                         }
 
-                        if (lua.IsTable(3))
+                        if (!lua.IsNoneOrNil(3) && lua.IsTable(3))
                         {
-                            //Component Setup             
+                            lua.Insert(3);
+
+                            lua.PushString("isKinematic");
+                            lua.GetTable(-2);
+                            if(!lua.IsNoneOrNil(-1))
+                                rb.isKinematic = lua.ToBoolean(-1);
+                            lua.Pop(1);
+
+                            //More fields
+
+                            lua.Pop(1);
                         }
                         break;
                     }
@@ -1155,15 +1164,14 @@ public class LuaScriptController : MonoBehaviour
     {
         uint id = lua.L_CheckUnsigned(1);
 
-        if(references.ContainsKey(id))
+        GameObject child = id == 1 ? gameObject : references.ContainsKey(id) ? references[id] : null;
+        if(child)
         {
-            GameObject gameObject = references[id];
-
             int layer = LayerMask.NameToLayer(lua.L_CheckString(2));
             if (layer == -1)
                 return 0;
 
-            gameObject.layer = layer;
+            child.layer = layer;
         }
 
         return 0;
@@ -1171,11 +1179,11 @@ public class LuaScriptController : MonoBehaviour
 
     private int AddForce(ILuaState lua)
     {
-        uint key = lua.L_CheckUnsigned(1);
-        if(references.ContainsKey(key))
-        {
-            GameObject child = references[key];
+        uint id = lua.L_CheckUnsigned(1);
 
+        GameObject child = id == 1 ? gameObject : references.ContainsKey(id) ? references[id] : null;
+        if (child)
+        {
             lua.PushValue(2);
 
             lua.PushString("x");
