@@ -578,7 +578,7 @@ public class LuaScriptController : MonoBehaviour
         {
             GameObject child = key != 1 ? references[key] : gameObject;
 
-            Vector2 newScale = new Vector2(0, 0);
+            Vector2 newScale = new Vector2(1, 1);
 
             if (lua.IsTable(2))
             {
