@@ -153,7 +153,7 @@ function Attack()
 	SetParent(bullet, nil)
 	event = SubscribeEvent(bullet, "OnTriggerEnter", OnBulletCollision)
 
-	--Calculate its movement direction rg
+	--Calculate its movement direction
 	local bulletPos = GetPosition(bullet)
 	local IsaacPos = GetPosition(0)
 

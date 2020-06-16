@@ -34,6 +34,8 @@ public class TearController : MonoBehaviour
         col.isTrigger = true;
 
         gameObject.layer = LayerMask.NameToLayer("PlayerTear");
+
+        FXPlayer.Instance.TearShootFX();
     }
 
     private void Start()
@@ -48,6 +50,7 @@ public class TearController : MonoBehaviour
         rb.isKinematic = true;
         rb.velocity = Vector2.zero;
         animator.SetTrigger("Destroy");
+        FXPlayer.Instance.TearDestroyed();
     }
 
     public void DestroyAnimFinished()
@@ -60,5 +63,6 @@ public class TearController : MonoBehaviour
         rb.isKinematic = true;
         rb.velocity = Vector2.zero;
         animator.SetTrigger("Destroy");
+        FXPlayer.Instance.TearDestroyed();
     }
 }
