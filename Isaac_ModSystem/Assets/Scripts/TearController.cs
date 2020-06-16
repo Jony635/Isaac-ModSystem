@@ -75,6 +75,7 @@ public class TearController : MonoBehaviour
         rb.isKinematic = true;
         rb.velocity = Vector2.zero;
         animator.SetTrigger("Destroy");
+
         audioSource.clip = FXReferences.Instance.tearDestroyed;
         audioSource.Play();
     }
