@@ -8,6 +8,9 @@ public class TearController : MonoBehaviour
 
     private Rigidbody2D rb;
     private Animator animator;
+    private AudioSource audioSource;
+
+    private static uint nextTearShootIndex = 0u;
 
     private void Awake()
     {
@@ -35,7 +38,14 @@ public class TearController : MonoBehaviour
 
         gameObject.layer = LayerMask.NameToLayer("PlayerTear");
 
-        FXPlayer.Instance.TearShootFX();
+        audioSource = GetComponent<AudioSource>();
+        if (!audioSource)
+            audioSource = gameObject.AddComponent<AudioSource>();
+        audioSource.spatialBlend = 0f;
+
+        audioSource.clip = FXReferences.Instance.tearShootClips[nextTearShootIndex];
+        audioSource.Play();
+        nextTearShootIndex = nextTearShootIndex + 1 < FXReferences.Instance.tearShootClips.Length ? nextTearShootIndex + 1 : 0;
     }
 
     private void Start()
@@ -50,7 +60,9 @@ public class TearController : MonoBehaviour
         rb.isKinematic = true;
         rb.velocity = Vector2.zero;
         animator.SetTrigger("Destroy");
-        FXPlayer.Instance.TearDestroyed();
+
+        audioSource.clip = FXReferences.Instance.tearDestroyed;
+        audioSource.Play();
     }
 
     public void DestroyAnimFinished()
@@ -63,6 +75,7 @@ public class TearController : MonoBehaviour
         rb.isKinematic = true;
         rb.velocity = Vector2.zero;
         animator.SetTrigger("Destroy");
-        FXPlayer.Instance.TearDestroyed();
+        audioSource.clip = FXReferences.Instance.tearDestroyed;
+        audioSource.Play();
     }
 }
