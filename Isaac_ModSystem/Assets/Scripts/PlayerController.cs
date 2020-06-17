@@ -64,6 +64,8 @@ public class PlayerController : MonoBehaviour
     private float takeDamageCD = 0.5f;
     private bool takeDamage = true;
 
+    private AudioSource audioSource;
+
     [HideInInspector]
     public float difficulty = 1f;
 
@@ -88,9 +90,10 @@ public class PlayerController : MonoBehaviour
 
         rb = GetComponent<Rigidbody2D>();
         col = GetComponent<CircleCollider2D>();
+
+        audioSource = GetComponent<AudioSource>();
     }
 
-    // Update is called once per frame
     void Update()
     {
         #region CONTROLS
@@ -294,7 +297,6 @@ public class PlayerController : MonoBehaviour
         //Apply actual movement
         rb.MovePosition((Vector2)(transform.position) + (move * stats.speed * Time.fixedDeltaTime));
     }
-
     private void OnTriggerEnter2D(Collider2D collider)
     {      
         Door door = collider.GetComponentInParent<Door>();
@@ -376,12 +378,16 @@ public class PlayerController : MonoBehaviour
 
         if(stats.hp <= 0)
         {
-            Die();
+            StartCoroutine(Die());
         }
         else
         {
             head.SetActive(false);
             bodyCtrl.SetTrigger("Damaged");
+
+            int rand = UnityEngine.Random.Range(0, FXReferences.Instance.playerHurtFX.Length);
+            audioSource.clip = FXReferences.Instance.playerHurtFX[rand];
+            audioSource.Play();
         }
 
         col.enabled = false;
@@ -461,7 +467,7 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    private void Die()
+    private IEnumerator Die()
     {
         move = Vector2.zero;
 
@@ -472,6 +478,12 @@ public class PlayerController : MonoBehaviour
 
         rb.isKinematic = true;
         rb.velocity = Vector2.zero;
+
+        int rand = UnityEngine.Random.Range(0, FXReferences.Instance.playerDeadFX.Length);
+        audioSource.clip = FXReferences.Instance.playerDeadFX[rand];
+        audioSource.Play();
+
+        yield return null;
     }
 
     public void OnShootEvent()
