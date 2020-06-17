@@ -321,6 +321,10 @@ public class PlayerController : MonoBehaviour
                 pickedItemRenderer.sprite = altar.ItemHolderRenderer.sprite;
 
                 ItemManager.Instance.EquipItem(altar.holdedItem, altar);
+
+                int rand = UnityEngine.Random.Range(0, FXReferences.Instance.itemPickup.Length);
+                audioSource.clip = FXReferences.Instance.itemPickup[rand];
+                audioSource.Play();
             }
         }
         #endregion

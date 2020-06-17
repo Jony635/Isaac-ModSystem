@@ -14,10 +14,16 @@ public class Room : MonoBehaviour
 
     public bool alreadyDefeated = false;
 
+    private AudioSource audioSource;
+
     public void SetUpRoom()
-    { 
+    {
+        audioSource = GetComponent<AudioSource>();
+        if (audioSource)
+            audioSource.clip = FXReferences.Instance.roomCleared;
+
         //Spawn Monsters
-        if(this != RoomManager.Instance.initialRoom && !alreadyDefeated)
+        if (this != RoomManager.Instance.initialRoom && !alreadyDefeated)
         {
             monsters = MonsterManager.Instance.GetEnemiesWith(PlayerController.Instance.difficulty);
 
@@ -63,6 +69,9 @@ public class Room : MonoBehaviour
             RoomManager.Instance.OnNewRoomCleared();
             ItemManager.Instance.OnNewRoomCleared();
             MonsterManager.Instance.ClearEnemiesRef();
+
+            if(audioSource)           
+                audioSource.Play();      
         }
     }
 }
