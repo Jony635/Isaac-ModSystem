@@ -26,17 +26,16 @@ public class ActiveItemContainer : MonoBehaviour
     private float height;
     private ActiveItem equippedItem;
 
+    private AudioSource audioSource;
+
     private void Awake()
     {
         Instance = this;
 
         initialLocalPosition = mask.localPosition;
         height = green.rect.height;
-    }
 
-    private void Update()
-    {
-        
+        audioSource = GetComponent<AudioSource>();
     }
 
     private void Masking()
@@ -61,11 +60,22 @@ public class ActiveItemContainer : MonoBehaviour
         if (equippedItem == null)
             return;
 
+        bool alreadyFull = false;
+
+        if (maskPercent == 1f)
+            alreadyFull = true;
+
         maskPercent = percent;
 
         equippedItem.currentCharges = (uint)maskPercent * equippedItem.numCharges;
 
         Masking();
+
+        if((uint)maskPercent == 1u && !alreadyFull)
+        {
+            audioSource.clip = FXReferences.Instance.energyFull;
+            audioSource.Play();
+        }
     }
 
     public void ActiveItemEquipped(ActiveItem item)
@@ -96,9 +106,20 @@ public class ActiveItemContainer : MonoBehaviour
     }
 
     public void OnNewRoomCleared()
-    {      
+    {
+        bool alreadyFull = false;
+
+        if (maskPercent == 1f)
+            alreadyFull = true;
+
         equippedItem.currentCharges = (uint)Mathf.Clamp(equippedItem.currentCharges + 1, 0, equippedItem.numCharges);
         maskPercent = (float)equippedItem.currentCharges / (float)equippedItem.numCharges;
         Masking();
+
+        if (maskPercent == 1.0f && !alreadyFull)
+        {
+            audioSource.clip = FXReferences.Instance.energyFull;
+            audioSource.Play();
+        }
     }
 }

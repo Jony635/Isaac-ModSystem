@@ -14,6 +14,11 @@ public class FXReferences : MonoBehaviour
     public AudioClip[] playerHurtFX;
     public AudioClip[] playerDeadFX;
 
+    [Header("More Effects")]
+    public AudioClip energyFull;
+    public AudioClip roomCleared;
+    public AudioClip[] itemPickup;
+
     private void Awake()
     {
         Instance = this;
