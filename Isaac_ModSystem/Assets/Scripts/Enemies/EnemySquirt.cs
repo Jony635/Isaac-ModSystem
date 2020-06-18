@@ -7,6 +7,7 @@ public class EnemySquirt : Enemy
     private float attackTimer = 0.0f;
     private bool attacking = false;
     private bool attackFinished = true;
+    private bool dead = false;
 
     protected CapsuleCollider2D capsule;
     protected AudioSource audioSource;
@@ -91,10 +92,25 @@ public class EnemySquirt : Enemy
 
     protected override void Die()
     {
+        if(!dead)
+        {
+            dead = true;
+            StartCoroutine(DieCorroutine());
+        }
+    }
+
+    private IEnumerator DieCorroutine()
+    {
         //TODO: Animations, delete/disable gameObjects, play FX, etc.
 
         audioSource.clip = FXReferences.Instance.squirtDie;
         audioSource.Play();
+
+        //Wait until the fx has finished playing
+        while(audioSource.isPlaying)
+        {
+            yield return null;
+        }
 
         gameObject.SetActive(false);
         currentRoom.OnMonsterDied();
