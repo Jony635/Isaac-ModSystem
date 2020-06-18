@@ -18,13 +18,15 @@ public class Room : MonoBehaviour
 
     public void SetUpRoom()
     {
-        audioSource = GetComponent<AudioSource>();
-        if (audioSource)
-            audioSource.clip = FXReferences.Instance.roomCleared;
-
-        //Spawn Monsters
+        //Spawn Monsters and Audio Source
         if (this != RoomManager.Instance.initialRoom && !alreadyDefeated)
         {
+            audioSource = GetComponent<AudioSource>();
+            if (!audioSource)
+                audioSource = gameObject.AddComponent<AudioSource>();
+            audioSource.spatialBlend = 0f;
+            audioSource.clip = FXReferences.Instance.roomCleared;
+
             monsters = MonsterManager.Instance.GetEnemiesWith(PlayerController.Instance.difficulty);
 
             if(monsters.Length > 0 )
@@ -70,8 +72,7 @@ public class Room : MonoBehaviour
             ItemManager.Instance.OnNewRoomCleared();
             MonsterManager.Instance.ClearEnemiesRef();
 
-            if(audioSource)           
-                audioSource.Play();      
+            audioSource.Play();
         }
     }
 }

@@ -29,6 +29,8 @@ public class LuaScriptController : MonoBehaviour
     private GameObject activeItems = null;
     private GameObject monsters = null;
 
+    private List<AudioClip> audioClips = new List<AudioClip>();
+
     #region LUA FUNCTION REFERENCES
     private int AwakeRef = -1;
     private int StartRef = -1;
@@ -181,7 +183,7 @@ public class LuaScriptController : MonoBehaviour
                 sprite = Sprite.Create(texture, new Rect(0.0f, 0.0f, texture.width, texture.height), new Vector2(0.5f, 0.5f), 30); 
             }
 
-            ExtraTextures();
+            LoadExtraTextures();
 
             if (isMain)
             {
@@ -198,6 +200,7 @@ public class LuaScriptController : MonoBehaviour
                 monsters.transform.SetParent(transform);
 
                 LoadItemsAndMonsters();
+                LoadAudioClips();
             }
         }
     }
@@ -998,6 +1001,36 @@ public class LuaScriptController : MonoBehaviour
                         }
                         break;
                     }
+                case "AudioSource":
+                    {
+                        AudioSource audioSource = child.GetComponent<AudioSource>();
+                        if (audioSource == null)
+                            audioSource = child.AddComponent<AudioSource>();
+
+                        if (lua.IsTable(3))
+                        {
+                            lua.Insert(3);
+
+                            lua.PushString("enabled");
+                            lua.GetTable(-2);
+                            if (!lua.IsNoneOrNil(-1))
+                            {
+                                bool enabled = lua.ToBoolean(-1);
+                                audioSource.enabled = enabled;
+                            }
+                            lua.Pop(1);
+
+                            lua.PushString("clip");
+                            lua.GetTable(-2);
+                            if(!lua.IsNoneOrNil(-1))
+                            {
+                                int clipIndex = lua.L_CheckInteger(-1);
+                                //CONTINUE
+                            }
+
+                        }
+                        break;
+                    }
                 case "TearController":
                     {
                         child.AddComponent<TearController>();
@@ -1733,7 +1766,7 @@ public class LuaScriptController : MonoBehaviour
         return ret;
     }
 
-    private void ExtraTextures()
+    private void LoadExtraTextures()
     {
         Lua.GetGlobal("extraTextures");
         if(!Lua.IsNoneOrNil(-1))
@@ -1759,6 +1792,32 @@ public class LuaScriptController : MonoBehaviour
         }
     }
 
+    private void LoadAudioClips()
+    {
+        Lua.GetGlobal("audioClips");
+        if (!Lua.IsNoneOrNil(-1))
+        {
+            for (int i = 1; true; ++i)
+            {
+                Lua.PushNumber(i);
+                Lua.GetTable(-2);
+
+                if (Lua.IsNoneOrNil(-1))
+                {
+                    Lua.Pop(2);
+                    return;
+                }
+
+                string clipPath = Lua.L_CheckString(-1);
+
+                AudioClip clip = ImportAudioClip(basePath + "/" + clipPath);
+                audioClips.Add(clip);
+
+                Lua.Pop(1);
+            }
+        }
+    } 
+
     public static Texture2D ImportTexture(string path)
     {
         byte[] textureBytes = File.ReadAllBytes(path);
@@ -1769,4 +1828,22 @@ public class LuaScriptController : MonoBehaviour
 
         return texture;
     } 
+
+    public static AudioClip ImportAudioClip(string path)
+    {
+        byte[] array = File.ReadAllBytes(path);
+
+        float[] floatArr = new float[array.Length / 4];
+        for (int i = 0; i < floatArr.Length; i++)
+        {
+            if (BitConverter.IsLittleEndian)
+                Array.Reverse(array, i * 4, 4);
+            floatArr[i] = BitConverter.ToSingle(array, i * 4) / 0x80000000;
+        }
+
+        AudioClip audioClip = AudioClip.Create("ModdedSound", floatArr.Length, 1, 44100, false);
+        audioClip.SetData(floatArr, 0);
+
+        return audioClip;
+    }
 }

@@ -14,6 +14,10 @@ public class FXReferences : MonoBehaviour
     public AudioClip[] playerHurtFX;
     public AudioClip[] playerDeadFX;
 
+    [Header("Monsters")]
+    public AudioClip squirtAttack;
+    public AudioClip squirtDie;
+
     [Header("More Effects")]
     public AudioClip energyFull;
     public AudioClip roomCleared;

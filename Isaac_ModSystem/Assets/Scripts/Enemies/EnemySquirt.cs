@@ -9,6 +9,7 @@ public class EnemySquirt : Enemy
     private bool attackFinished = true;
 
     protected CapsuleCollider2D capsule;
+    protected AudioSource audioSource;
 
     public EnemySquirt()
     {
@@ -32,6 +33,11 @@ public class EnemySquirt : Enemy
         capsule.direction = CapsuleDirection2D.Horizontal;
         capsule.offset = new Vector2(0.01248912f, 0.4911186f);
         capsule.size = new Vector2(1.338645f, 0.909272f);
+
+        audioSource = gameObject.GetComponent<AudioSource>();
+        if (!audioSource)
+            audioSource = gameObject.AddComponent<AudioSource>();
+        audioSource.spatialBlend = 0f;
     }
 
     // Update is called once per frame
@@ -68,7 +74,7 @@ public class EnemySquirt : Enemy
         animator.SetTrigger("Attack");
 
         Vector2 target = PlayerController.Instance.body.transform.position;
-        Vector2 direction = Vector3.Normalize(target - (Vector2)transform.position);
+        Vector2 direction = Vector3.Normalize(target - (Vector2)transform.position);  
 
         while(!attacking)
         {
@@ -86,6 +92,10 @@ public class EnemySquirt : Enemy
     protected override void Die()
     {
         //TODO: Animations, delete/disable gameObjects, play FX, etc.
+
+        audioSource.clip = FXReferences.Instance.squirtDie;
+        audioSource.Play();
+
         gameObject.SetActive(false);
         currentRoom.OnMonsterDied();
     }
@@ -93,6 +103,8 @@ public class EnemySquirt : Enemy
     public void AttackMovementStarted()
     {
         attacking = true;
+        audioSource.clip = FXReferences.Instance.squirtAttack;
+        audioSource.Play();
     }
 
     public void AttackMovementFinished()

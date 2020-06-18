@@ -358,6 +358,8 @@ MonoBehaviour:
   - {fileID: 8300000, guid: f6ddc6df9042f774d8418b88977f8da0, type: 3}
   - {fileID: 8300000, guid: fd7b14967f60de6408113c27ad3cbe3a, type: 3}
   - {fileID: 8300000, guid: ddf9fabedb5c5e54abde75fcc32152f2, type: 3}
+  squirtAttack: {fileID: 8300000, guid: 77cc4936fd4dd8f419267b786bf771b0, type: 3}
+  squirtDie: {fileID: 8300000, guid: 7578726f19dd32144b1a10d106e9d113, type: 3}
   energyFull: {fileID: 8300000, guid: fd0baa80217d0a4429d7c863490c10a2, type: 3}
   roomCleared: {fileID: 8300000, guid: 4a2d94ec7b8825c47a3928f157e07bcb, type: 3}
   itemPickup:
