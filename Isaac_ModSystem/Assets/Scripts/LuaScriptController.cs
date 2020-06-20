@@ -135,6 +135,8 @@ public class LuaScriptController : MonoBehaviour
 
                 new NameFuncPair("SubscribeEvent", SubscribeEvent),
                 new NameFuncPair("UnSubscribeEvent", UnSubscribeEvent),
+
+                new NameFuncPair("PlayFX", PlayFX),
             };
 
             references.Add(0, PlayerController.Instance.gameObject);
@@ -184,6 +186,7 @@ public class LuaScriptController : MonoBehaviour
             }
 
             LoadExtraTextures();
+            LoadAudioClips();
 
             if (isMain)
             {
@@ -200,7 +203,6 @@ public class LuaScriptController : MonoBehaviour
                 monsters.transform.SetParent(transform);
 
                 LoadItemsAndMonsters();
-                LoadAudioClips();
             }
         }
     }
@@ -1025,9 +1027,20 @@ public class LuaScriptController : MonoBehaviour
                             if(!lua.IsNoneOrNil(-1))
                             {
                                 int clipIndex = lua.L_CheckInteger(-1);
-                                //CONTINUE
+                                audioSource.clip = clipIndex < audioClips.Count ? audioClips[clipIndex] : null;
                             }
+                            lua.Pop(1);
 
+                            lua.PushString("volume");
+                            lua.GetTable(-2);
+                            if(!lua.IsNoneOrNil(-1))
+                            {
+                                float value = (float)lua.L_CheckNumber(-1);
+                                audioSource.volume = Mathf.Clamp(value, 0f, 1f);
+                            }
+                            lua.Pop(1);
+
+                            lua.Pop(1);
                         }
                         break;
                     }
@@ -1538,6 +1551,27 @@ public class LuaScriptController : MonoBehaviour
         return 0;
     }
 
+    private int PlayFX(ILuaState lua)
+    {
+        uint index = lua.L_CheckUnsigned(1);
+
+        if (index != 1 && !references.ContainsKey(index))      
+            return 0;
+        
+        GameObject child = index == 1 ? gameObject : references[index];
+        AudioSource source = child.GetComponent<AudioSource>();
+        if (!source)
+            source = child.AddComponent<AudioSource>();
+        source.spatialBlend = 0f;
+        source.playOnAwake = false;
+
+        uint clipIndex = lua.L_CheckUnsigned(2);
+        source.clip = clipIndex < audioClips.Count ? audioClips[(int)clipIndex] : null;
+        source.Play();
+
+        return 0;
+    }
+
     #endregion
 
     #region Utils
@@ -1810,9 +1844,7 @@ public class LuaScriptController : MonoBehaviour
 
                 string clipPath = Lua.L_CheckString(-1);
 
-                AudioClip clip = ImportAudioClip(basePath + "/" + clipPath);
-                audioClips.Add(clip);
-
+                ImportAudioClip(basePath + "/" + clipPath);
                 Lua.Pop(1);
             }
         }
@@ -1829,21 +1861,15 @@ public class LuaScriptController : MonoBehaviour
         return texture;
     } 
 
-    public static AudioClip ImportAudioClip(string path)
+    private void ImportAudioClip(string path)
     {
-        byte[] array = File.ReadAllBytes(path);
-
-        float[] floatArr = new float[array.Length / 4];
-        for (int i = 0; i < floatArr.Length; i++)
+        WWW www = new WWW("file://" + path);
+        AudioClip audioClip = www.GetAudioClip();
+        while(!audioClip.isReadyToPlay)
         {
-            if (BitConverter.IsLittleEndian)
-                Array.Reverse(array, i * 4, 4);
-            floatArr[i] = BitConverter.ToSingle(array, i * 4) / 0x80000000;
+            //Wait until the audioclip is loaded.
+            //If there are too many audioclips to be loaded, maybe use a loading bar
         }
-
-        AudioClip audioClip = AudioClip.Create("ModdedSound", floatArr.Length, 1, 44100, false);
-        audioClip.SetData(floatArr, 0);
-
-        return audioClip;
+        audioClips.Add(audioClip);
     }
 }

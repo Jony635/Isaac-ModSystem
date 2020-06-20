@@ -1,4 +1,5 @@
 extraTextures = { "monster_001_pooter.png", "tears.png" }
+audioClips = {"justice 3.wav"}
 
 --Init all the animation rects
 fly = 
@@ -26,6 +27,13 @@ attack =
 }
 
 enabled = true
+
+function PlaySound()
+
+	PlayFX(This(), 0)
+	Wait(1, function() PlaySound() end)
+
+end
 
 function OnBulletCollision(bullet, collided)
 	if collided == 0 then 
@@ -191,6 +199,7 @@ function Awake()
 	SetStats({hp = 40, maxHP = 40, damage = 1, speed = 2})
 	SetComponent(This(), "SpriteRenderer", {sprite = 1, rect = fly[flyIndex]})
 	SetRandomWanderDestination()
+	PlaySound()
 end
 
 function Update()
