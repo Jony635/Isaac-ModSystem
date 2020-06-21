@@ -1,5 +1,6 @@
 extraTextures = { "monster_001_pooter.png", "tears.png" }
 audioClips = {"insect swarm.wav", "tear block.wav", "tear fire 5.wav"}
+difficulty = 0.5
 
 --Init all the animation rects
 fly = 
@@ -203,7 +204,7 @@ function Awake()
 	SetComponent(This(), "SpriteRenderer", {sprite = 1, rect = fly[flyIndex]})
 	SetRandomWanderDestination()
 	
-	SetComponent(This(), "AudioSource", {volume = 0.5, loop = true, clip = 1})
+	SetComponent(This(), "AudioSource", {volume = 0.3, loop = true, clip = 1})
 	PlayFX(This(), 1)
 end
 

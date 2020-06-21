@@ -71,6 +71,7 @@ public class Room : MonoBehaviour
             RoomManager.Instance.OnNewRoomCleared();
             ItemManager.Instance.OnNewRoomCleared();
             MonsterManager.Instance.ClearEnemiesRef();
+            PlayerController.Instance.difficulty += 0.5f;
 
             audioSource.Play();
         }

@@ -374,32 +374,33 @@ public class PlayerController : MonoBehaviour
 
     public IEnumerator TakeDamage(float damage)
     {
-        takeDamage = false;
-
-        Stats newStats = stats;
-        newStats.hp -= damage;
-        stats = newStats;
-
-        if(stats.hp <= 0)
+        if(takeDamage)
         {
-            StartCoroutine(Die());
+            takeDamage = false;
+
+            Stats newStats = stats;
+            newStats.hp -= damage;
+            stats = newStats;
+
+            if (stats.hp <= 0)
+            {
+                StartCoroutine(Die());
+            }
+            else
+            {
+                head.SetActive(false);
+                bodyCtrl.SetTrigger("Damaged");
+
+                int rand = UnityEngine.Random.Range(0, FXReferences.Instance.playerHurtFX.Length);
+                audioSource.clip = FXReferences.Instance.playerHurtFX[rand];
+                audioSource.Play();
+            }
+
+            HeartsManager.Instance.OnCharacterHealthChanged();
+
+            yield return new WaitForSeconds(takeDamageCD);
+            takeDamage = true;
         }
-        else
-        {
-            head.SetActive(false);
-            bodyCtrl.SetTrigger("Damaged");
-
-            int rand = UnityEngine.Random.Range(0, FXReferences.Instance.playerHurtFX.Length);
-            audioSource.clip = FXReferences.Instance.playerHurtFX[rand];
-            audioSource.Play();
-        }
-
-        col.enabled = false;
-
-        HeartsManager.Instance.OnCharacterHealthChanged();
-
-        yield return new WaitForSeconds(takeDamageCD);
-        takeDamage = true;
     }
 
     private void ModifyStats(Stats newStats)

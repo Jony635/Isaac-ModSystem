@@ -1,5 +1,6 @@
 extraTextures = { "monster_010_fly.png" }
 audioClips = {"insect swarm.wav"}
+difficulty = 1
 
 --Init all the animation rects
 red1 = {x = 71, y = 204, w = 19, h = 10}
@@ -30,7 +31,7 @@ function Awake()
 
 	Wait(1 / animSpeed, function() Red1() end)
 
-	SetComponent(This(), "AudioSource", {volume = 0.5, loop = true, clip = 1})
+	SetComponent(This(), "AudioSource", {volume = 0.3, loop = true, clip = 1})
 	PlayFX(This(), 1)
 end
 

@@ -25,6 +25,9 @@ public class LuaScriptController : MonoBehaviour
     [HideInInspector]
     public Sprite sprite = null;
 
+    [HideInInspector]
+    public float difficulty = -1f;
+
     private GameObject passiveItems = null;
     private GameObject activeItems = null;
     private GameObject monsters = null;
@@ -185,6 +188,13 @@ public class LuaScriptController : MonoBehaviour
                 Texture2D texture = ImportTexture(basePath + "/" + spritePath);
                 sprite = Sprite.Create(texture, new Rect(0.0f, 0.0f, texture.width, texture.height), new Vector2(0.5f, 0.5f), 30); 
             }
+
+            Lua.GetGlobal("difficulty");
+            if(!Lua.IsNoneOrNil(-1))
+            {
+                difficulty = (float)Lua.L_CheckNumber(-1);
+            }
+            Lua.Pop(1);
 
             LoadExtraTextures();
             LoadAudioClips();
@@ -1813,6 +1823,7 @@ public class LuaScriptController : MonoBehaviour
                             element.transform.SetParent(monsters.transform);
                             Enemy newEnemy = element.AddComponent<Enemy>();
                             newEnemy.luaScript = controller;
+                            newEnemy.difficulty = controller.difficulty;
                             MonsterManager.Instance.AddEnemy(newEnemy);
                             break;
                     }               

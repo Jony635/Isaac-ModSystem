@@ -20,7 +20,7 @@ public class EnemySquirt : Enemy
 
         attackTimer = 1 / enemyStats.attackSpeed;
 
-        difficulty = 1;
+        difficulty = 2;
     }
 
     protected override void Awake()
