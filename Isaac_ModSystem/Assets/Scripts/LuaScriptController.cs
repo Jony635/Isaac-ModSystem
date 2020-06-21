@@ -137,6 +137,7 @@ public class LuaScriptController : MonoBehaviour
                 new NameFuncPair("UnSubscribeEvent", UnSubscribeEvent),
 
                 new NameFuncPair("PlayFX", PlayFX),
+                new NameFuncPair("SetMusic", SetMusic),
             };
 
             references.Add(0, PlayerController.Instance.gameObject);
@@ -1072,7 +1073,7 @@ public class LuaScriptController : MonoBehaviour
         Enemy enemy = MonsterManager.Instance.GetRefEnemy(targetKey);
         if (enemy)
             enemy.TakeDamage((float)lua.L_CheckNumber(2));
-        else if(targetKey == 0)
+        else if(targetKey == 0 && !PlayerController.Instance.stats.invincible)
             StartCoroutine(PlayerController.Instance.TakeDamage((float)lua.L_CheckNumber(2)));
 
         return 0;
@@ -1580,6 +1581,31 @@ public class LuaScriptController : MonoBehaviour
         source.clip = clipIndex < audioClips.Count ? audioClips[(int)clipIndex] : null;
         source.Play();
 
+        return 0;
+    }
+
+    private int SetMusic(ILuaState lua)
+    {
+        if (!lua.IsNoneOrNil(1) && lua.IsTable(1))
+        {
+            lua.PushString("volume");
+            lua.GetTable(-2);
+            if (!lua.IsNoneOrNil(-1))
+            {
+                float value = (float)lua.L_CheckNumber(-1);
+                MusicPlayer.audioSource.volume = Mathf.Clamp(value, 0f, 1f);
+            }
+            lua.Pop(1);
+
+            lua.PushString("pitch");
+            lua.GetTable(-2);
+            if (!lua.IsNoneOrNil(-1))
+            {
+                float pitch = (float)lua.L_CheckNumber(-1);
+                MusicPlayer.audioSource.pitch = pitch;
+            }
+            lua.Pop(1);
+        }
         return 0;
     }
 

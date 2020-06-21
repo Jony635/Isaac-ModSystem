@@ -3,6 +3,7 @@ numCharges = 6
 
 active = false
 activeDuration = 6
+activeTimer = activeDuration
 
 damageSecond = 40
 
@@ -12,8 +13,15 @@ function OnUsed()
 
 	SetInvincible(true)
 
-	Wait(activeDuration, function() active = false damageTimer = damageCooldown SetInvincible(false) end)
+	Wait(activeDuration, function() active = false damageTimer = damageCooldown SetInvincible(false) activeTimer = activeDuration end)
 
+end
+
+function Update()
+	if active then
+		activeTimer = activeTimer - GetDT()
+		SetMusic({pitch = activeTimer / activeDuration + 1})
+	end
 end
 
 function OnCharacterCollidedWithMonster(enemy)
@@ -37,4 +45,5 @@ return
 	OnUsed = OnUsed,
 	OnCharacterCollidedWithMonster = OnCharacterCollidedWithMonster,
 	OnCharacterCollidingWithMonster = OnCharacterCollidingWithMonster,
+	Update = Update,
 }

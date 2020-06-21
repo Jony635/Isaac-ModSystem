@@ -154,7 +154,7 @@ MonoBehaviour:
   roomsContainer: {fileID: 134514541}
   currentRoom: {fileID: 0}
   initialRoom: {fileID: 5753106078741565312}
-  amountRooms: 6
+  amountRooms: 10
 --- !u!4 &77994073
 Transform:
   m_ObjectHideFlags: 0
@@ -1103,6 +1103,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 886378422}
+  - component: {fileID: 886378423}
   - component: {fileID: 886378421}
   m_Layer: 0
   m_Name: MusicPlayer
@@ -1221,6 +1222,18 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 10
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &886378423
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 886378420}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c0bb36374aed8534ca337873cb344085, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1037717215
 GameObject:
   m_ObjectHideFlags: 0
