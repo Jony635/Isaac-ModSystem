@@ -83,7 +83,7 @@ function AttackAnimation()
 	end
 
 	attackTimer = attackTimer + GetDT()
-	if attackTimer > 0.05 then
+	if attackTimer > 0.07 then
 		attackIndex = attackIndex + 1
 		if attackIndex > 14 then attackIndex = 1 end
 		SetComponent(This(), "SpriteRenderer", {sprite = 1, rect = attack[attackIndex]})
