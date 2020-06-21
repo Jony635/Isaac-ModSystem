@@ -1008,6 +1008,8 @@ public class LuaScriptController : MonoBehaviour
                         AudioSource audioSource = child.GetComponent<AudioSource>();
                         if (audioSource == null)
                             audioSource = child.AddComponent<AudioSource>();
+                        audioSource.spatialBlend = 0f;
+                        audioSource.playOnAwake = false;
 
                         if (lua.IsTable(3))
                         {
@@ -1026,7 +1028,7 @@ public class LuaScriptController : MonoBehaviour
                             lua.GetTable(-2);
                             if(!lua.IsNoneOrNil(-1))
                             {
-                                int clipIndex = lua.L_CheckInteger(-1);
+                                int clipIndex = lua.L_CheckInteger(-1) - 1;
                                 audioSource.clip = clipIndex < audioClips.Count ? audioClips[clipIndex] : null;
                             }
                             lua.Pop(1);
@@ -1037,6 +1039,15 @@ public class LuaScriptController : MonoBehaviour
                             {
                                 float value = (float)lua.L_CheckNumber(-1);
                                 audioSource.volume = Mathf.Clamp(value, 0f, 1f);
+                            }
+                            lua.Pop(1);
+
+                            lua.PushString("loop");
+                            lua.GetTable(-2);
+                            if (!lua.IsNoneOrNil(-1))
+                            {
+                                bool value = lua.ToBoolean(-1);
+                                audioSource.loop = value;
                             }
                             lua.Pop(1);
 
@@ -1565,7 +1576,7 @@ public class LuaScriptController : MonoBehaviour
         source.spatialBlend = 0f;
         source.playOnAwake = false;
 
-        uint clipIndex = lua.L_CheckUnsigned(2);
+        uint clipIndex = lua.L_CheckUnsigned(2) - 1;
         source.clip = clipIndex < audioClips.Count ? audioClips[(int)clipIndex] : null;
         source.Play();
 

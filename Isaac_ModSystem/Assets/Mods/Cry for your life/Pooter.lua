@@ -1,5 +1,5 @@
 extraTextures = { "monster_001_pooter.png", "tears.png" }
-audioClips = {"justice 3.wav"}
+audioClips = {"insect swarm.wav", "tear block.wav", "tear fire 5.wav"}
 
 --Init all the animation rects
 fly = 
@@ -28,13 +28,6 @@ attack =
 
 enabled = true
 
-function PlaySound()
-
-	PlayFX(This(), 0)
-	Wait(1, function() PlaySound() end)
-
-end
-
 function OnBulletCollision(bullet, collided)
 	if collided == 0 then 
 		--Inflict damage to Isaac
@@ -44,9 +37,14 @@ function OnBulletCollision(bullet, collided)
 
 	for i = #bullets, 1, -1 do
 		if bullets[i].bulletID == bullet then
+			
+			PlayFX(bullets[i].bulletID, 2)
 			UnSubscribeEvent(bullets[i].event)
-			DeleteChild(bullets[i].bulletID)
-			table.remove(bullets, i)
+			bullets[i].update = false
+			Wait(0.15, function()						
+						DeleteChild(bullets[i].bulletID)	
+						table.remove(bullets, i)
+					  end)
 			break
 		end
 	end
@@ -85,7 +83,7 @@ function AttackAnimation()
 	end
 
 	attackTimer = attackTimer + GetDT()
-	if attackTimer > 0.14 then
+	if attackTimer > 0.05 then
 		attackIndex = attackIndex + 1
 		if attackIndex > 14 then attackIndex = 1 end
 		SetComponent(This(), "SpriteRenderer", {sprite = 1, rect = attack[attackIndex]})
@@ -171,7 +169,9 @@ function Attack()
 	direction = Normalize(direction)
 
 	--Store it in the bullets table
-	table.insert(bullets, {bulletID = bullet, time = 0, direction = direction, event = event})
+	table.insert(bullets, {bulletID = bullet, time = 0, direction = direction, event = event, update = true})
+
+	PlayFX(bullet, 3)
 end
 
 function UpdateBullets()
@@ -186,7 +186,10 @@ function UpdateBullets()
 		local newPosition = {}
 		newPosition.x = bulletPos.x + bullet.direction.x * dt * 3
 		newPosition.y = bulletPos.y + bullet.direction.y * dt * 3
-		SetPosition(bullet.bulletID, newPosition)
+
+		if bullets[i].update then
+			SetPosition(bullet.bulletID, newPosition)
+		end
 
 		--Destroy the bullet depending on its life time
 		bullets[i].time = bullets[i].time + dt
@@ -199,7 +202,9 @@ function Awake()
 	SetStats({hp = 40, maxHP = 40, damage = 1, speed = 2})
 	SetComponent(This(), "SpriteRenderer", {sprite = 1, rect = fly[flyIndex]})
 	SetRandomWanderDestination()
-	PlaySound()
+	
+	SetComponent(This(), "AudioSource", {volume = 0.5, loop = true, clip = 1})
+	PlayFX(This(), 1)
 end
 
 function Update()
